@@ -1,0 +1,70 @@
+image: maven:latest
+
+stages:
+  - build
+  - test
+  - develop
+
+variables:
+  RULES_CHANGES_PATH: "**/*"
+
+.base-rules:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - $RULES_CHANGES_PATH
+    - when: manual
+      allow_failure: true
+
+.backend:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "backend/**/*"
+
+.frontend:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "frontend/**/*"
+
+build-backend:
+  stage: build
+  extends: .backend
+  needs: []
+  tags:
+    - ugrad
+  script:
+    - cd backend
+    - mvn clean compile
+
+test-backend:
+  stage: test
+  extends: .backend
+  needs: ["build-backend"]
+  tags:
+    - ugrad
+  script:
+    - cd backend
+    - mvn clean test
+
+develop:
+  stage: develop
+  rules:                                                                                                                                    
+    - if: '$CI_COMMIT_BRANCH =~ /^master$/'
+  needs: ["test-backend"]
+  tags:
+    - ugrad
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add -
+  script:
+    - cd backend
+    - mvn clean install -DskipTests
+    - echo "$CI_COMMIT_REF_NAME"
+    - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
+    - ls -lrth ${CI_COMMIT_SHORT_SHA}.zip
+    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
