@@ -65,6 +65,6 @@ develop:
     - cd backend
     - mvn clean install -DskipTests
     - echo "$CI_COMMIT_REF_NAME"
-    - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
-    - ls -lrth ${CI_COMMIT_SHORT_SHA}.zip
-    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
+    - zip -r $CI_COMMIT_SHORT_SHA.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
+    - ls -lrth $CI_COMMIT_SHORT_SHA.zip
+    - scp -r -o StrictHostKeyChecking=no $CI_COMMIT_SHORT_SHA.zip "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_DIR/$CI_COMMIT_SHORT_SHA.zip"
