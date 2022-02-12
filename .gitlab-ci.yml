@@ -40,13 +40,13 @@ frontend-build:
     - cd frontend
     - yarn install
     - yarn build
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - node_modules
-    policy: pull
+  # cache:
+  #   key:
+  #     files:
+  #       - yarn.lock
+  #   paths:
+  #     - node_modules
+  #   policy: pull
 
 
 build-backend:
@@ -80,7 +80,7 @@ frontend-test:
   script:
     - echo "Testing the frontend code..."
     - cd frontend
-    - yarn add @angular/cli
+    - yarn install
     - yarn test
 
 # develop:
