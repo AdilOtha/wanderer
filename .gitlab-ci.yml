@@ -30,6 +30,25 @@ variables:
   variables:
     RULES_CHANGES_PATH: "frontend/**/*"
 
+frontend-build:
+  image: node:12-alpine
+  stage: build
+  extends: .frontend
+  needs: []
+  script:
+    - echo "building the frontend code..."
+    - cd frontend
+    - yarn install
+    - yarn build
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - node_modules
+    policy: pull
+
+
 build-backend:
   stage: build
   extends: .backend
@@ -50,21 +69,35 @@ test-backend:
     - cd backend
     - mvn clean test
 
-develop:
-  stage: develop
-  rules:                                                                                                                                    
-    - if: '$CI_COMMIT_BRANCH =~ /^master$/'
-  needs: ["test-backend"]
-  tags:
-    - ugrad
+frontend-test:
+  stage: test
+  image: node:12-alpine
+  extends: .frontend
+  needs: ["frontend-build"]
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add -
+    - apk add chromium
+    - export CHROME_BIN=/usr/bin/chromium-browser
   script:
-    - cd backend
-    - mvn clean install -DskipTests
-    - echo "$CI_COMMIT_REF_NAME"
-    - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
-    - ls -lrth ${CI_COMMIT_SHORT_SHA}.zip
-    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
+    - echo "Testing the frontend code..."
+    - cd frontend
+    - yarn add @angular/cli
+    - yarn test
+
+# develop:
+#   stage: develop
+#   rules:                                                                                                                                    
+#     - if: '$CI_COMMIT_BRANCH =~ /^master$/'
+#   needs: ["test-backend"]
+#   tags:
+#     - ugrad
+#   before_script:
+#     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - eval $(ssh-agent -s)
+#     - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add -
+#   script:
+#     - cd backend
+#     - mvn clean install -DskipTests
+#     - echo "$CI_COMMIT_REF_NAME"
+#     - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
+#     - ls -lrth ${CI_COMMIT_SHORT_SHA}.zip
+#     - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
