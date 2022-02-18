@@ -6,7 +6,7 @@ stages:
   - develop
 
 variables:
-  RULES_CHANGES_PATH: "*/"
+  RULES_CHANGES_PATH: "**/*"
 
 .base-rules:
   rules:
