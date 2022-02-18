@@ -12,9 +12,9 @@ variables:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
-    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: $CI_PIPELINE_SOURCE == "push"
       when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - $RULES_CHANGES_PATH
     - when: manual
@@ -86,12 +86,12 @@ frontend-test:
 develop:
   stage: develop
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^master$/'
+    - if: $CI_COMMIT_BRANCH =~ /^master$/
   needs: ["test-backend"]
   tags:
     - ugrad
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )
     - eval $(ssh-agent -s)
     - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add -
   script:
