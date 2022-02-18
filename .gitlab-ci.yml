@@ -83,21 +83,21 @@ frontend-test:
     - yarn install
     - yarn test
 
-# develop:
-#   stage: develop
-#   rules:                                                                                                                                    
-#     - if: '$CI_COMMIT_BRANCH =~ /^master$/'
-#   needs: ["test-backend"]
-#   tags:
-#     - ugrad
-#   before_script:
-#     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-#     - eval $(ssh-agent -s)
-#     - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add -
-#   script:
-#     - cd backend
-#     - mvn clean install -DskipTests
-#     - echo "$CI_COMMIT_REF_NAME"
-#     - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
-#     - ls -lrth ${CI_COMMIT_SHORT_SHA}.zip
-#     - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
+ develop:
+   stage: develop
+   rules:
+     - if: '$CI_COMMIT_BRANCH =~ /^master$/'
+   needs: ["test-backend"]
+   tags:
+     - ugrad
+   before_script:
+     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+     - eval $(ssh-agent -s)
+     - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add -
+   script:
+     - cd backend
+     - mvn clean install -DskipTests
+     - echo "$CI_COMMIT_REF_NAME"
+     - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
+     - ls -lrth ${CI_COMMIT_SHORT_SHA}.zip
+     - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
