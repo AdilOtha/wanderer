@@ -94,10 +94,11 @@ develop:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - chmod og-rwx ${DEPLOY_SSH_KEY}
+
   script:
     - cd backend
     - mvn clean install -DskipTests
-    -echo "dbURL=$DATABASE_URL" > config.properties
+    - echo "dbURL=$DATABASE_URL" > config.properties
     - echo "dbUserName=$TEST_DATABASE_USERNAME" >> config.properties
     - echo "dbPassword=$TEST_DATABASE_PASSWORD" >> config.properties
     - echo "dbDriver=$TEST_DATABASE" >> config.properties
