@@ -8,13 +8,13 @@ stages:
 variables:
   RULES_CHANGES_PATH: "**/*"
 
-.base-rules:
+.workflow:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
-    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: $CI_PIPELINE_SOURCE == "push"
       when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - $RULES_CHANGES_PATH
     - when: manual
@@ -23,12 +23,12 @@ variables:
 .backend:
   extends: .base-rules
   variables:
-    RULES_CHANGES_PATH: "backend/*/"
+    RULES_CHANGES_PATH: "backend/**/*"
 
 .frontend:
   extends: .base-rules
   variables:
-    RULES_CHANGES_PATH: "frontend/*/"
+    RULES_CHANGES_PATH: "frontend/**/*"
 
 frontend-build:
   image: node:12-alpine
