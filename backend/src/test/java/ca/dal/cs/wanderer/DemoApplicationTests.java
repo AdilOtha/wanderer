@@ -1,4 +1,4 @@
-package ca.dal.cs.wanderer;
+/*package ca.dal.cs.wanderer;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,4 +13,4 @@ class DemoApplicationTests {
 		Assertions.assertEquals(6, 1+5);
 	}
 
-}
+}*/

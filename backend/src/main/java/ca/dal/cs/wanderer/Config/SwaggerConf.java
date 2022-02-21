@@ -1,19 +1,34 @@
-package ca.dal.cs.wanderer;
+package ca.dal.cs.wanderer.Config;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @EnableSwagger2
 @Configuration
 public class SwaggerConf {
-private ApiInfo apiInfo(){
-    return new ApiInfoBuilder()
-            .title("Wanderer")
-            .description("Dev team is Group 21 abd client team is Group 6")
-            .termsOfServiceUrl("open")
-            .contact(new Contact("Group 21","need to mention our email ids here"))
-            .build();
-}
+    public static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = new
+            HashSet<>(Arrays.asList("application/json"));
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("Wanderer")
+                .description("Map based web-app developed by Group 21")
+                .termsOfServiceUrl("open")
+                .contact(new Contact("Group 21", "wanderer.com", "dal.ca"))
+                .version("Version 1")
+                .build();
+    }
 
     @Bean
     public Docket api() {
@@ -21,12 +36,9 @@ private ApiInfo apiInfo(){
                 .apiInfo(apiInfo())
                 .produces(DEFAULT_PRODUCES_AND_CONSUMES)
                 .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
     }
-
 }
