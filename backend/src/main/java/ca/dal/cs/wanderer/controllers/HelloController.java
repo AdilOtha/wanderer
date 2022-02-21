@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/book")
 public class HelloController {
     @ApiOperation(value = "Get a book by its id")
     @ApiResponses(value = {
@@ -17,7 +17,7 @@ public class HelloController {
             @ApiResponse(code = 404, message = "Book not found")})
 
 
-    @GetMapping("hello")
+    @GetMapping("/hello")
     public String getHelloWord() {
         return "Hello World";
     }
