@@ -1,0 +1,10 @@
+<div class="grid">
+  <div class="col">
+    <ul>
+      <li *ngFor="let item of item$ | async">
+        {{ item.name }}
+      </li>
+    </ul>
+    <mgl-map [style]="styleUrl" [zoom]="[9]" [center]="[-74.5, 40]"> </mgl-map>
+  </div>
+</div>
