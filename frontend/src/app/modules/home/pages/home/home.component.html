@@ -1,10 +1,15 @@
-<div class="grid">
-  <div class="col">
-    <ul>
-      <li *ngFor="let item of item$ | async">
-        {{ item.name }}
-      </li>
-    </ul>
-    <mgl-map [style]="styleUrl" [zoom]="[9]" [center]="[-74.5, 40]"> </mgl-map>
-  </div>
-</div>
+<agm-map [latitude]="currentCenter.geopoint.latitude" [longitude]="currentCenter.geopoint.longitude" [zoom]="8">
+
+    <agm-marker 
+      *ngFor="let c of coords;" 
+      [latitude]="c.geopoint.latitude" 
+      [longitude]="c.geopoint.longitude" [visible]="true">
+
+        <agm-info-window>
+
+            <h1>This point is {{ c.geopoint.latitude }} latitudes</h1>
+
+        </agm-info-window>
+    </agm-marker>
+
+</agm-map>
