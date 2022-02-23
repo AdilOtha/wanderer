@@ -20,7 +20,11 @@ export const environment = {
     measurementId: 'G-PJNEBC17EC',
   },
 
-  googleMaps: ''
+  googleMaps: 'AIzaSyBHkVH8NiHsuH4cU-GsZC38GXLvxoxXSjo',
+
+  APIENDPOINT: 'http://localhost:8080/',
+
+  TOKENENDPOINT: ''
 };
 
 /*
