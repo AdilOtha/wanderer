@@ -1,4 +1,8 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterOutlet } from '@angular/router';
+import { FooterComponent } from '../footer/footer.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 import { MainLayoutComponent } from './main-layout.component';
 
@@ -8,7 +12,8 @@ describe('MainLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MainLayoutComponent ]
+      declarations: [ MainLayoutComponent ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });
