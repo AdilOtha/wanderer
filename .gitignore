@@ -19,6 +19,12 @@
 /backend/*.ipr
 /backend/target/
 
+/.idea
+/*.iws
+/*.iml
+/*.ipr
+/target/
+
 ### VS Code ###
 .vscode/
 
