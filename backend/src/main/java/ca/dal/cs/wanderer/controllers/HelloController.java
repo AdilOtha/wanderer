@@ -3,12 +3,13 @@ package ca.dal.cs.wanderer.controllers;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/v1/home")
 public class HelloController {
     @ApiOperation(value = "Get a book by its id")
     @ApiResponses(value = {
@@ -17,8 +18,8 @@ public class HelloController {
             @ApiResponse(code = 404, message = "Book not found")})
 
 
-    @GetMapping("/hello")
-    public String getHelloWord() {
-        return "Hello World";
+    @GetMapping
+    public String helloWorld() {
+        return "hello world";
     }
 }
