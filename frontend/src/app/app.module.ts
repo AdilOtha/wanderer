@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,21 +16,28 @@ import { AgmCoreModule } from '@agm/core';
 // PrimeNg Imports
 import {MenubarModule} from 'primeng/menubar';
 import {CardModule} from 'primeng/card';
+import {ButtonModule} from 'primeng/button';
+
+
 import { environment } from 'src/environments/environment';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainLayoutComponent,
     FooterComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    SharedModule,
     MenubarModule,
     CardModule,
+    ButtonModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AgmCoreModule.forRoot({

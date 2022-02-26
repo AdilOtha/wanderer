@@ -11,7 +11,8 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {  
+export class HomeComponent implements OnInit {
+   
   pinCreationUpdates!: Observable<any>;
   coords:any[] = [];  
 
@@ -49,7 +50,8 @@ export class HomeComponent implements OnInit {
 
   radius: number = 5;
 
-  constructor(private firestore: Firestore, private pinService: PinService) {         
+  constructor(private firestore: Firestore, private pinService: PinService) {  
+    let name: string = 'Adil';  
     const dataList = collection(this.firestore, 'pin_updates');
     this.pinCreationUpdates = collectionData(dataList);
     this.pinCreationUpdates.subscribe(update=>{

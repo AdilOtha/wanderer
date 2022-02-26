@@ -5,12 +5,11 @@ import { HomeComponent } from './pages/home/home.component';
 const routes: Routes = [
   {
     path: '',
-    children: [
-      {
-        path: '',
-        component: HomeComponent,
-      },
-    ],
+    component: HomeComponent
+  },
+  {
+    path: '/home2',
+    component: HomeComponent
   },
 ];
 

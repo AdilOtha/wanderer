@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MenuItem} from 'primeng/api';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -10,10 +12,13 @@ export class NavbarComponent implements OnInit {
 
   items: MenuItem[] = [];
 
+  constructor(private router: Router){}
+
     ngOnInit() {
         this.items = [
             {
                 label: 'Home',
+                routerLink: '/'
                 // items: [{
                 //         label: 'New', 
                 //         icon: 'pi pi-fw pi-plus',
@@ -35,6 +40,10 @@ export class NavbarComponent implements OnInit {
                 ]
             }
         ];
+    }
+
+    onAvatarClick(){
+        this.router.navigate(['/user-profile']);
     }
 
 }
