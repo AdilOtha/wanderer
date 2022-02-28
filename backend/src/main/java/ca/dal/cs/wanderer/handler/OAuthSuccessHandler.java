@@ -17,7 +17,8 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                                        Authentication authentication) throws IOException {
         redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "http://localhost:4200/");
     }
 }

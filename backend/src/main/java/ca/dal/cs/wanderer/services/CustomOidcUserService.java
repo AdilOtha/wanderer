@@ -32,8 +32,10 @@ public class CustomOidcUserService extends OidcUserService {
             user.setEmailId(email);
             user.setFirstName(userRequest.getIdToken().getGivenName());
             user.setLastName(userRequest.getIdToken().getFamilyName());
+            //user.setImage(userRequest.getIdToken().getPicture());
             userRepository.save(user);
         }
+
         //principle
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new OidcUserAuthority(userRequest.getIdToken()));

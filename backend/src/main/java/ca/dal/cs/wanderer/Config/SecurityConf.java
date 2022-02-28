@@ -46,6 +46,8 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .and()
                 .successHandler(oAuthSuccessHandler)
                 .and()
-                .exceptionHandling();
+                .exceptionHandling()
+                .and()
+                .csrf().disable();
     }
 }
