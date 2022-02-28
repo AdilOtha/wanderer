@@ -2,5 +2,6 @@ export interface Pin {
     pinId?: number,
     locationName: string,
     latitude: number,
-    longitude: number
+    longitude: number,
+    isSaved: boolean
 }

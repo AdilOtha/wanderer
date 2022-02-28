@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,6 +12,8 @@ import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import { AgmCoreModule } from '@agm/core';
+
+import { NgxSpinnerModule } from "ngx-spinner";
 
 // PrimeNg Imports
 import {MenubarModule} from 'primeng/menubar';
@@ -38,6 +40,7 @@ import { SharedModule } from './shared/shared.module';
     MenubarModule,
     CardModule,
     ButtonModule,
+    NgxSpinnerModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AgmCoreModule.forRoot({
@@ -45,6 +48,7 @@ import { SharedModule } from './shared/shared.module';
     })
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

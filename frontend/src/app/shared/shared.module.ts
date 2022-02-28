@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -32,7 +32,7 @@ import {FileUploadModule} from 'primeng/fileupload';
     ReactiveFormsModule,
     InputTextModule,
     AvatarModule,
-    FileUploadModule
+    FileUploadModule,
   ],
   exports: [
     HttpClientModule,
@@ -47,7 +47,8 @@ import {FileUploadModule} from 'primeng/fileupload';
     MessageModule,
     InputTextModule,
     AvatarModule,
-    FileUploadModule
-  ]
+    FileUploadModule,    
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }

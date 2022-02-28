@@ -4,7 +4,7 @@
   [zoom]="zoom"
   (mapClick)="createPin($event)"
   [disableDefaultUI]="false"
-  [zoomControl]="false"  
+  [zoomControl]="false"
 >
   <!-- <agm-marker
     *ngFor="let c of coords"
@@ -18,13 +18,13 @@
   </agm-marker> -->
 
   <agm-marker
-    *ngFor="let m of markers; let i = index"    
-    [latitude]="m.lat"
-    [longitude]="m.lng"
-    [label]="m.label"
-    [markerDraggable]="m.draggable"
-    (markerClick)="clickedPin(m, i)"
-    (dragEnd)="pinDragEnd(m, $event)"
+    *ngFor="let m of savedPins; let i = index; trackBy: identifyPin"    
+    [latitude]="m.latitude"
+    [longitude]="m.longitude"
+    [label]="m.locationName"
+    [markerDraggable]="!m.isSaved"
+    (markerClick)="savePin(m, i)"
+    (dragEnd)="pinDragEnd(m, i, $event)"
   >
     <agm-info-window>
       <strong>Pin Saved!</strong>

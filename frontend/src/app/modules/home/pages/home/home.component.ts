@@ -19,39 +19,37 @@ export class HomeComponent implements OnInit {
   // google maps zoom level
   zoom: number = 8;
 
+  // default radius (in kms)
+  radius: number = 50;
+
   // initial center position for the map
   latitude: number = 51.678418;
-  longitude: number = 7.809007;
-  pinLocationChosen: boolean = false;
+  longitude: number = 7.809007;  
 
-  markers: marker[] = [
+  savedPins: Pin[] = [
 	  {
-		  lat: 44.6476,
-		  lng: 63.5728,
-		  label: 'A',
-		  draggable: true,
+		  latitude: 44.6476,
+		  longitude: 63.5728,
+		  locationName: 'A',		  
       isSaved: true
 	  },
 	  {
-		  lat: 51.373858,
-		  lng: 7.215982,
-		  label: 'B',
-		  draggable: false,
+		  latitude: 51.373858,
+		  longitude: 7.215982,
+		  locationName: 'B',		  
       isSaved: true
 	  },
 	  {
-		  lat: 51.723858,
-		  lng: 7.895982,
-		  label: 'C',
-		  draggable: true,
+		  latitude: 51.723858,
+		  longitude: 7.895982,
+		  locationName: 'C',
       isSaved: true
 	  }
-  ]
+  ];
 
-  radius: number = 5;
+  newlyCreatedPins: Pin[] = [];
 
-  constructor(private firestore: Firestore, private pinService: PinService) {  
-    let name: string = 'Adil';  
+  constructor(private firestore: Firestore, private pinService: PinService) {
     const dataList = collection(this.firestore, 'pin_updates');
     this.pinCreationUpdates = collectionData(dataList);
     this.pinCreationUpdates.subscribe(update=>{
@@ -59,25 +57,18 @@ export class HomeComponent implements OnInit {
       this.pinService.getPinsByRadius(this.radius, this.latitude, this.longitude)
         .subscribe({
           next: (data:any)=>{
-            console.log(data);            
+            console.log(data);
+            for(let pin of data){
+              pin.isSaved = true;
+            }
+            this.savedPins = data;
+            this.savedPins = [...this.savedPins, ...this.newlyCreatedPins]
           },
           error: (err:HttpErrorResponse) => {
             console.log(err);
           }
         });
     });
-    // this.points = collectionData(collect);
-    // this.points.subscribe(d=>{
-    //   console.log(d);
-      
-    //   this.coords.push({
-    //     geopoint: {
-    //       latitude: parseInt(d[0].geopoint.latitude),
-    //       longitude: parseInt(d[0].geopoint.longitude)
-    //     }
-    //   });
-    //   this.currentCenter = this.coords[0];     
-    // });
   }
 
   ngOnInit(): void {
@@ -86,42 +77,43 @@ export class HomeComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(position => {        
        this.latitude = position.coords.latitude;
        this.longitude = position.coords.longitude;       
-       this.pinLocationChosen = true;
        console.log({
          latitude: position.coords.latitude,
          longitude: position.coords.longitude
        });
-       
      });
    }
   }
 
   createPin($event: MouseEvent){
     console.log($event);
-    if(this.markers[this.markers.length-1].isSaved===false){
-      this.markers.splice(this.markers.length-1, 1);      
+    if(this.savedPins[this.savedPins.length-1].isSaved===false){
+      this.savedPins.splice(this.savedPins.length-1, 1);      
     }    
-    this.markers.push({
-      lat: $event.coords.lat,
-      lng: $event.coords.lng,
-      label: '',
-      draggable: true,
-      isSaved: false
+    this.savedPins.push({
+      latitude: $event.coords.lat,
+      longitude: $event.coords.lng,
+      locationName: '',
+      isSaved: false,
+      pinId: -1
     });
   }
 
-  clickedPin(selectedMarker: marker, index: number) {
-    this.markers[index].isSaved=true;
-    console.log(`clicked the marker: ${selectedMarker.label || index}`);
+  savePin(selectedPin: any, index: number) {
+    this.savedPins[index].isSaved=true;
+    console.log(`clicked the marker: ${selectedPin.locationName || index}`);
     let pin: Pin = {
-      latitude: selectedMarker.lat,
-      longitude: selectedMarker.lng,
-      locationName: ''
+      latitude: selectedPin.latitude,
+      longitude: selectedPin.longitude,
+      locationName: '',
+      isSaved: true,
     };
 
-    this.pinService.insert(pin).subscribe({
+    this.pinService.insertPin(pin).subscribe({
       next: (data: any)=>{
-        console.log(data);        
+        console.log(data);
+        data.isSaved = true;
+        this.newlyCreatedPins.push(data);
       },
       error: (err: HttpErrorResponse)=>{
         console.log(err);
@@ -132,16 +124,22 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  pinDragEnd(m: marker, $event: MouseEvent) {
-    console.log('dragEnd', m, $event);
+  pinDragEnd(m: Pin, index: number, event: MouseEvent) {
+    console.log('dragEnd', m, event);
+    m.latitude = event.coords.lat;
+    m.longitude = event.coords.lng;
+  }
+
+  identifyPin(index: number, pin: Pin){
+    return pin.pinId;
   }
 
 }
 
-interface marker {
-	lat: number;
-	lng: number;
-	label: string;
-	draggable: boolean;
-  isSaved: boolean;
-}
+// interface marker {
+// 	lat: number;
+// 	lng: number;
+// 	label: string;
+// 	draggable: boolean;
+//   isSaved: boolean;
+// }

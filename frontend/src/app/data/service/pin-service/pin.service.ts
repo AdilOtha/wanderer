@@ -1,21 +1,24 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { Pin } from '../../schema/pin';
-import { CoreHttpService } from '../httpinterceptor/core-http.service';
 @Injectable({
   providedIn: 'root'
 })
 export class PinService {
-  apiControllerName: string = 'pin';
+  apiEndpoint: string = environment.APIENDPOINT + 'pin';
 
-  constructor(private http: CoreHttpService) { }
+  constructor(private http: HttpClient) { }
 
-  insert(pin: Pin){
-      return this.http.postRequest(this.apiControllerName + '/create', pin);
+  insertPin(pin: Pin){
+      return this.http.post(this.apiEndpoint +'/createPin', pin);
   }
 
   getPinsByRadius(radius: number, centerLat: number, centerLng: number){    
-    return this.http.getRequestWithParameters(this.apiControllerName + '/getPinsByRadius', {
-      radius, centerLat, centerLng
+    return this.http.get(this.apiEndpoint + '/getPinsByRadius', {
+      params: {
+        radius, centerLat, centerLng
+      }
     });
   }
 }
