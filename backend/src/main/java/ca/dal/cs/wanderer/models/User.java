@@ -1,8 +1,17 @@
 package ca.dal.cs.wanderer.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRawValue;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
+import java.sql.Blob;
 
 @Entity
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -17,35 +26,10 @@ public class User {
     @Column(name = "email_id")
     private String emailId;
 
-    public Long getId() {
-        return id;
-    }
+    @Lob
+    @Column(name= "photo",columnDefinition = "MEDIUMBLOB")
+    @JsonIgnore
+    private byte[] image;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
 }
