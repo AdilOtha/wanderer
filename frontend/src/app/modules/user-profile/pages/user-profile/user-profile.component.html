@@ -4,8 +4,7 @@
   color="#fff"
   type="ball-atom"
   [fullScreen]="true"
-  ></ngx-spinner
->
+></ngx-spinner>
 <p-dialog
   [header]="editProfileButtonLabel"
   [(visible)]="modalDisplay"
@@ -108,28 +107,24 @@
           styleClass="avatar-image"
         ></p-image>
       </div>
-      <div class="grid justify-content-center mt-3">
-        <div class="sm:col-12 md:col-6">
-          <p-card styleClass="user-profile-card">
-            <ng-template pTemplate="header" styleClass="mb-2">
-              <button
-                pButton
-                type="button"
-                [label]="editProfileButtonLabel"
-                class="p-button-raised p-button-rounded p-button-sm p-button-outlined"
-                (click)="showModal()"
-              ></button>
-            </ng-template>
-            <div class="user-profile-detail py-2">
-              <strong>Name: {{ firstName }} {{ lastName }}</strong>
-            </div>
-            <p-divider></p-divider>
-            <div class="user-profile-detail py-2">
-              <strong>Email: {{ email }}</strong>
-            </div>
-          </p-card>
+      <p-card styleClass="user-profile-card">
+        <ng-template pTemplate="header" styleClass="mb-2">
+          <button
+            pButton
+            type="button"
+            [label]="editProfileButtonLabel"
+            class="p-button-raised p-button-rounded p-button-sm p-button-outlined"
+            (click)="showModal()"
+          ></button>
+        </ng-template>
+        <div class="user-profile-detail py-2">
+          <strong>Name: {{ firstName }} {{ lastName }}</strong>
         </div>
-      </div>
+        <p-divider></p-divider>
+        <div class="user-profile-detail py-2">
+          <strong>Email: {{ email }}</strong>
+        </div>
+      </p-card>
     </p-panel>
   </div>
 </div>

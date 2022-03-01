@@ -1,7 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
@@ -21,6 +21,7 @@ import {CardModule} from 'primeng/card';
 import { environment } from 'src/environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './modules/login/login.module';
+import { AuthInterceptor } from './data/service/httpinterceptor/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,13 @@ import { LoginModule } from './modules/login/login.module';
       apiKey: environment.googleMaps
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

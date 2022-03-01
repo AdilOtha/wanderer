@@ -2,10 +2,8 @@ package ca.dal.cs.wanderer.service;
 
 import ca.dal.cs.wanderer.controllers.PinUpdateController;
 import ca.dal.cs.wanderer.entity.Pin;
-import ca.dal.cs.wanderer.repository.PinRepository;
+import ca.dal.cs.wanderer.repositories.PinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -44,6 +44,15 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('User-profile component loaded');
+    this.userProfileService.getUserDetails()
+    .subscribe({
+      next: (data: any)=>{
+        console.log(data);        
+      },
+      error: (err: any)=>{
+        console.log(err);        
+      }
+    });
   }
 
   get f() {

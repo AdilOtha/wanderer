@@ -8,12 +8,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UserProfileService {
-  apiControllerName: string = 'users';
+  apiEndPoint: string = environment.APIENDPOINT + 'wanderer/user/';
 
   constructor(private http: HttpClient) { }
 
   getUserDetails(): Observable<any> {
-    return this.http.get('')
+    return this.http.get(this.apiEndPoint + 'getDetails?claims=%7B%7D&idToken.claims=%7B%7D&userInfo.claims=%7B%7D');
   }
 
   updateUserDetails(userProfile: UserProfile): Observable<any>{
@@ -21,6 +21,6 @@ export class UserProfileService {
     formData.append('firstName', userProfile.firstName);
     formData.append('profileImage', userProfile.profileImage);
 
-    return this.http.post(environment.APIENDPOINT + this.apiControllerName, formData);
+    return this.http.post(this.apiEndPoint, formData);
   }
 }

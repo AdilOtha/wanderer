@@ -49,6 +49,8 @@ export class HomeComponent implements OnInit {
 
   newlyCreatedPins: Pin[] = [];
 
+  mapPanelHeader: string = 'Navigator';
+
   constructor(private firestore: Firestore, private pinService: PinService) {
     const dataList = collection(this.firestore, 'pin_updates');
     this.pinCreationUpdates = collectionData(dataList);

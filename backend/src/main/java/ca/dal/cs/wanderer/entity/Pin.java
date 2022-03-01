@@ -2,20 +2,20 @@ package ca.dal.cs.wanderer.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "pins_information")
+@Table(name = "pininformation")
 
 // Class
 public class Pin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pin_id", unique = true, nullable = false)
+    @Column(name = "PinID", unique = true, nullable = false)
     private int pinId;
-    @Column(name="location_name")
+    @Column(name="LocationName")
     private String locationName;
-    @Column(name="latitude")
+    @Column(name="Latitude")
     private double latitude;
-    @Column(name="longitude")
+    @Column(name="Longitude")
     private double longitude;
 
     public Pin() {

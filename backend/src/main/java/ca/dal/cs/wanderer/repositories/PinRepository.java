@@ -1,4 +1,4 @@
-package ca.dal.cs.wanderer.repository;
+package ca.dal.cs.wanderer.repositories;
 
 import ca.dal.cs.wanderer.entity.Pin;
 import org.springframework.data.jpa.repository.JpaRepository;

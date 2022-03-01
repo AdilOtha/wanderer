@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './pages/home/home.component';
 import { AgmCoreModule } from '@agm/core';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { AgmCoreModule } from '@agm/core';
   imports: [
     CommonModule,
     HomeRoutingModule,
-    AgmCoreModule
+    AgmCoreModule,
+    SharedModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

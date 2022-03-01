@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Objects;
 
@@ -23,16 +28,16 @@ public class DemoApplication{
 
 		File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
 
-		BufferedReader br = new BufferedReader(new FileReader("C:\\ME\\DAL\\Term 2\\CSCI 5308 ASDC\\Group Project\\Development\\Gitlab\\backend\\src\\main\\resources\\serviceAccountKey.json"));
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-		}
+//		BufferedReader br = new BufferedReader(new FileReader("C:\\ME\\DAL\\Term 2\\CSCI 5308 ASDC\\Group Project\\Development\\Gitlab\\backend\\src\\main\\resources\\serviceAccountKey.json"));
+//		String line;
+//		while ((line = br.readLine()) != null) {
+//			System.out.println(line);
+//		}
 
 		FileInputStream serviceAccount =
 				new FileInputStream("C:\\ME\\DAL\\Term 2\\CSCI 5308 ASDC\\Group Project\\Development\\Gitlab\\backend\\src\\main\\resources\\serviceAccountKey.json");
 
-		System.out.println(serviceAccount.toString());
+//		System.out.println(serviceAccount.toString());
 
 		FirebaseOptions options = new FirebaseOptions.Builder()
 				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -41,14 +46,14 @@ public class DemoApplication{
 		FirebaseApp.initializeApp(options);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("*");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**").allowedOrigins("localhost:4200").allowedHeaders("*");
+//			}
+//		};
+//	}
 
 }
