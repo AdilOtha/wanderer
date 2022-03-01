@@ -30,6 +30,4 @@ public class User {
     @Column(name= "photo",columnDefinition = "MEDIUMBLOB")
     @JsonIgnore
     private byte[] image;
-
-
 }

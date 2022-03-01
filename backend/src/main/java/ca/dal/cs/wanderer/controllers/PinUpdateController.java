@@ -1,10 +1,8 @@
 package ca.dal.cs.wanderer.controllers;
 
-import ca.dal.cs.wanderer.entity.PinUpdate;
-import ca.dal.cs.wanderer.service.PinUpdateService;
+import ca.dal.cs.wanderer.services.PinUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.ExecutionException;

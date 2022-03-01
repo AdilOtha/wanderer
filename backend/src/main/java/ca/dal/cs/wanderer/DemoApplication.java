@@ -35,7 +35,7 @@ public class DemoApplication{
 //		}
 
 		FileInputStream serviceAccount =
-				new FileInputStream("C:\\ME\\DAL\\Term 2\\CSCI 5308 ASDC\\Group Project\\Development\\Gitlab\\backend\\src\\main\\resources\\serviceAccountKey.json");
+				new FileInputStream("src\\main\\resources\\serviceAccountKey.json");
 
 //		System.out.println(serviceAccount.toString());
 
