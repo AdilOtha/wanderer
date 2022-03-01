@@ -16,6 +16,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import {AvatarModule} from 'primeng/avatar';
 import {FileUploadModule} from 'primeng/fileupload';
 
+//ngx-spinner import
+import { NgxSpinnerModule } from "ngx-spinner";
+
 @NgModule({
   declarations: [],
   imports: [
@@ -33,6 +36,7 @@ import {FileUploadModule} from 'primeng/fileupload';
     InputTextModule,
     AvatarModule,
     FileUploadModule,
+    NgxSpinnerModule
   ],
   exports: [
     HttpClientModule,
@@ -47,7 +51,8 @@ import {FileUploadModule} from 'primeng/fileupload';
     MessageModule,
     InputTextModule,
     AvatarModule,
-    FileUploadModule,    
+    FileUploadModule,
+    NgxSpinnerModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

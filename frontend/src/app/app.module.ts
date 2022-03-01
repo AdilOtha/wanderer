@@ -13,8 +13,6 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import { AgmCoreModule } from '@agm/core';
 
-import { NgxSpinnerModule } from "ngx-spinner";
-
 // PrimeNg Imports
 import {MenubarModule} from 'primeng/menubar';
 import {CardModule} from 'primeng/card';
@@ -39,8 +37,7 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     MenubarModule,
     CardModule,
-    ButtonModule,
-    NgxSpinnerModule,
+    ButtonModule,    
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AgmCoreModule.forRoot({

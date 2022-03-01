@@ -20,7 +20,7 @@ export class UserProfileComponent implements OnInit {
 
   submitted: boolean = false;
 
-  profileImage: SafeResourceUrl | string =
+  profileImage: any =
     'https://images.unsplash.com/photo-1645785538675-f81e7dbab4b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80';
   firstName: string = 'Adil';
   lastName: string = 'Otha';
@@ -60,25 +60,39 @@ export class UserProfileComponent implements OnInit {
   onSubmitClick() {
     this.submitted = true;
     if (this.saveForm.valid) {
+      this.spinner.show();
       console.log('form submitted');
       const userProfile: UserProfile = {
         firstName: this.saveForm.controls['firstName'].value,
         lastName: this.saveForm.controls['lastName'].value,
         profileImage: this.saveForm.controls['profileImage'].value,
-      };      
-      this.userProfileService.updateUserDetails(userProfile).subscribe({
-        next: (data: any) => {
+      };
+      this.userProfileService.updateUserDetails(userProfile)      
+      .subscribe({
+        next: (data: any) => {          
           this.profileImage = this.saveForm.controls['profileImage'].value;
+          this.submitted = false;
+          this.modalDisplay = false;
         },
         error: (err: any) => {
-          console.log(err);          
-          const unsafeImageUrl = URL.createObjectURL(
-            this.saveForm.controls['profileImage'].value
-          );
-          this.profileImage =
-            this.sanitizer.bypassSecurityTrustResourceUrl(unsafeImageUrl);
+          console.log(err);
+          // const unsafeImageUrl = URL.createObjectURL(
+          //   this.saveForm.controls['profileImage'].value
+          // );
+          // this.profileImage =
+          //   this.sanitizer.bypassSecurityTrustResourceUrl(unsafeImageUrl);
+          //   this.submitted = false;
+          //   this.modalDisplay = false;
+          const reader = new FileReader();
+          reader.readAsDataURL(this.saveForm.controls['profileImage'].value);
+          reader.onloadend = ()=>{
+            this.profileImage = reader.result;
+            this.spinner.hide();
+          }
+          this.submitted = false;
+          this.modalDisplay = false;
         },
-      });
+      })
     }
   }
 

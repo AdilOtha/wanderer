@@ -13,7 +13,7 @@ public class PinController {
     @Autowired
     PinService pinService;
 
-    @PostMapping("/create")
+    @PostMapping("/createPin")
     public Pin createPin(@RequestBody Pin pin){
         return pinService.savePin(pin);
     }

@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
 	  {
 		  latitude: 44.6476,
 		  longitude: 63.5728,
-		  locationName: 'A',		  
+		  locationName: 'A',
       isSaved: true
 	  },
 	  {
@@ -58,11 +58,12 @@ export class HomeComponent implements OnInit {
         .subscribe({
           next: (data:any)=>{
             console.log(data);
-            for(let pin of data){
-              pin.isSaved = true;
-            }
+            
             this.savedPins = data;
-            this.savedPins = [...this.savedPins, ...this.newlyCreatedPins]
+            // for(let pin of data){
+            //   pin.isSaved = true;
+            // }
+            // this.savedPins = [...this.savedPins, ...this.newlyCreatedPins]
           },
           error: (err:HttpErrorResponse) => {
             console.log(err);
@@ -113,6 +114,7 @@ export class HomeComponent implements OnInit {
       next: (data: any)=>{
         console.log(data);
         data.isSaved = true;
+        this.savedPins[index] = data;
         this.newlyCreatedPins.push(data);
       },
       error: (err: HttpErrorResponse)=>{
@@ -135,11 +137,3 @@ export class HomeComponent implements OnInit {
   }
 
 }
-
-// interface marker {
-// 	lat: number;
-// 	lng: number;
-// 	label: string;
-// 	draggable: boolean;
-//   isSaved: boolean;
-// }

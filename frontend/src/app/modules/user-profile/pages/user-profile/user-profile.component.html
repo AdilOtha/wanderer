@@ -1,3 +1,11 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-atom"
+  [fullScreen]="true"
+  ></ngx-spinner
+>
 <p-dialog
   [header]="editProfileButtonLabel"
   [(visible)]="modalDisplay"
@@ -5,7 +13,7 @@
 >
   <!-- [style]="{ height: '50vw' }" -->
   <form [formGroup]="saveForm" (ngSubmit)="onSubmitClick()">
-    <div class="p-field mb-2">
+    <div class="p-field mb-3">
       <label for="firstName"><strong>First Name: </strong></label>
       <input
         pInputText
@@ -31,34 +39,36 @@
         </div>
       </ng-container>
     </div>
-    <div class="p-field mb-2">
-        <label for="lastName"><strong>Last Name: </strong></label>
-        <input
-          pInputText
-          type="text"
-          class="form-control"
-          name="lastName"
-          id="lastName"
-          formControlName="lastName"
-          required
-        />
-        <!-- Error Message -->
-        <ng-container
-          *ngIf="
-            (submitted && f['lastName']?.errors) ||
-            (f['lastName']?.errors && f['lastName']?.dirty)
-          "
+    <div class="p-field mb-3">
+      <label for="lastName"><strong>Last Name: </strong></label>
+      <input
+        pInputText
+        type="text"
+        class="form-control"
+        name="lastName"
+        id="lastName"
+        formControlName="lastName"
+        required
+      />
+      <!-- Error Message -->
+      <ng-container
+        *ngIf="
+          (submitted && f['lastName']?.errors) ||
+          (f['lastName']?.errors && f['lastName']?.dirty)
+        "
+      >
+        <div
+          *ngIf="f['lastName']?.errors?.['required']"
+          class="flex justify-content-center mt-3"
         >
-          <div
-            *ngIf="f['lastName']?.errors?.['required']"
-            class="flex justify-content-center mt-3"
-          >
-            <p-message severity="error" text="Last Name is required"></p-message>
-          </div>
-        </ng-container>
-      </div>
-    <div class="p-field mb-2">
-      <label for="profileImage"><strong> Profile Image: </strong> {{ uploadedFilename }}</label>
+          <p-message severity="error" text="Last Name is required"></p-message>
+        </div>
+      </ng-container>
+    </div>
+    <div class="p-field mb-3">
+      <label for="profileImage"
+        ><strong>New Profile Image: </strong> {{ uploadedFilename }}</label
+      >
       <p-fileUpload
         name="profileImage"
         accept="image/*"
@@ -70,11 +80,18 @@
         (onClear)="onProfileImageClear($event)"
         (onRemove)="onProfileImageClear($event)"
         styleClass="mt-1"
-      ></p-fileUpload>      
+      ></p-fileUpload>
     </div>
     <div class="flex justify-content-end mt-3">
       <div>
-        <button pButton type="submit" class="p-button-sm">Update</button>
+        <button
+          pButton
+          type="submit"
+          [disabled]="!saveForm.valid"
+          class="p-button-sm"
+        >
+          Update
+        </button>
       </div>
     </div>
   </form>
@@ -91,24 +108,28 @@
           styleClass="avatar-image"
         ></p-image>
       </div>
-      <p-card styleClass="user-profile-card">
-        <ng-template pTemplate="header" styleClass="mb-2">
-          <button
-            pButton
-            type="button"
-            [label]="editProfileButtonLabel"
-            class="p-button-raised p-button-rounded p-button-sm p-button-outlined"
-            (click)="showModal()"
-          ></button>
-        </ng-template>
-        <div class="user-profile-detail py-2">
-          <strong>Name: {{ firstName }} {{lastName}}</strong>
+      <div class="grid justify-content-center mt-3">
+        <div class="sm:col-12 md:col-6">
+          <p-card styleClass="user-profile-card">
+            <ng-template pTemplate="header" styleClass="mb-2">
+              <button
+                pButton
+                type="button"
+                [label]="editProfileButtonLabel"
+                class="p-button-raised p-button-rounded p-button-sm p-button-outlined"
+                (click)="showModal()"
+              ></button>
+            </ng-template>
+            <div class="user-profile-detail py-2">
+              <strong>Name: {{ firstName }} {{ lastName }}</strong>
+            </div>
+            <p-divider></p-divider>
+            <div class="user-profile-detail py-2">
+              <strong>Email: {{ email }}</strong>
+            </div>
+          </p-card>
         </div>
-        <p-divider></p-divider>
-        <div class="user-profile-detail py-2">
-          <strong>Email: {{ email }}</strong>
-        </div>
-      </p-card>
+      </div>
     </p-panel>
   </div>
 </div>
