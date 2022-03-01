@@ -16,19 +16,21 @@ import { AgmCoreModule } from '@agm/core';
 import {MenubarModule} from 'primeng/menubar';
 import {CardModule} from 'primeng/card';
 import { environment } from 'src/environments/environment';
+import { LoginModule } from './modules/login/login.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainLayoutComponent,
     FooterComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MenubarModule,
     CardModule,
+    LoginModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AgmCoreModule.forRoot({
