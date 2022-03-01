@@ -21,7 +21,7 @@ import {CardModule} from 'primeng/card';
 import { environment } from 'src/environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './modules/login/login.module';
-import { AuthInterceptor } from './data/service/httpinterceptor/auth.interceptor';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -45,14 +45,7 @@ import { AuthInterceptor } from './data/service/httpinterceptor/auth.interceptor
       apiKey: environment.googleMaps
     })
   ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  providers: [CookieService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

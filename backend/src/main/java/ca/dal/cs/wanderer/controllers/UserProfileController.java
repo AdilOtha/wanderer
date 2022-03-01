@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/wanderer/user")
+@RequestMapping("/api/v1/wanderer/user")
 public class UserProfileController {
 
     @Autowired

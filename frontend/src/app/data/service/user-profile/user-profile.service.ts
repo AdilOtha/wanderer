@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { UserProfile } from '../../schema/user-profile';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+
+const httpOption = {
+  headers: new HttpHeaders({
+    'Access-Control-Allow-Origin' : 'http://localhost:4200',
+  })
+}
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +25,7 @@ export class UserProfileService {
   updateUserDetails(userProfile: UserProfile): Observable<any>{
     let formData: FormData = new FormData();
     formData.append('firstName', userProfile.firstName);
-    formData.append('profileImage', userProfile.profileImage);
+    // formData.append('profileImage', userProfile.profileImage);
 
     return this.http.post(this.apiEndPoint, formData);
   }

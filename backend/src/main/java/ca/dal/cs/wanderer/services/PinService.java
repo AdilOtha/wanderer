@@ -1,4 +1,4 @@
-package ca.dal.cs.wanderer.service;
+package ca.dal.cs.wanderer.services;
 
 import ca.dal.cs.wanderer.controllers.PinUpdateController;
 import ca.dal.cs.wanderer.entity.Pin;

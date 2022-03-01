@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MenuItem} from 'primeng/api';
+import { AuthService } from 'src/app/services/auth.service';
 
 import { Router } from '@angular/router';
 
@@ -12,7 +13,7 @@ export class NavbarComponent implements OnInit {
 
   items: MenuItem[] = [];
 
-  constructor(private router: Router){}
+  constructor (private authService: AuthService, private router: Router) {}
 
     ngOnInit() {
         this.items = [
@@ -20,7 +21,7 @@ export class NavbarComponent implements OnInit {
                 label: 'Home',
                 routerLink: '/'
                 // items: [{
-                //         label: 'New', 
+                //         label: 'New',
                 //         icon: 'pi pi-fw pi-plus',
                 //         items: [
                 //             {label: 'Project'},
@@ -38,8 +39,19 @@ export class NavbarComponent implements OnInit {
                     {label: 'Delete', icon: 'pi pi-fw pi-trash'},
                     {label: 'Refresh', icon: 'pi pi-fw pi-refresh'}
                 ]
+            },
+            {
+                label: 'Logout',
+                command: (event) => {
+                    console.log("Command Called");
+                    this.authService.logout();
+                }
             }
         ];
+    }
+
+    logout() {
+
     }
 
     onAvatarClick(){

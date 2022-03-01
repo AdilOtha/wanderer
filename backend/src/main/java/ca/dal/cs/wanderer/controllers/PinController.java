@@ -1,7 +1,7 @@
 package ca.dal.cs.wanderer.controllers;
 
 import ca.dal.cs.wanderer.entity.Pin;
-import ca.dal.cs.wanderer.service.PinService;
+import ca.dal.cs.wanderer.services.PinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
