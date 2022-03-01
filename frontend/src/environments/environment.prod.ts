@@ -1,4 +1,5 @@
 export const environment = {
+  production: true,
   mapbox: {
     accessToken:
       'pk.eyJ1IjoiYWRpbG90aGEiLCJhIjoiY2s2dnY4ZW5wMDFnejNucW9ncnF2c3hwcyJ9.-NzSatK_aFkiLpKXsd6BAA',

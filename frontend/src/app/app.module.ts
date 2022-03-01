@@ -16,11 +16,11 @@ import { AgmCoreModule } from '@agm/core';
 // PrimeNg Imports
 import {MenubarModule} from 'primeng/menubar';
 import {CardModule} from 'primeng/card';
-import {ButtonModule} from 'primeng/button';
 
 
 import { environment } from 'src/environments/environment';
 import { SharedModule } from './shared/shared.module';
+import { LoginModule } from './modules/login/login.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +37,7 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     MenubarModule,
     CardModule,
-    ButtonModule,    
+    LoginModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AgmCoreModule.forRoot({
