@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     const httpHeaders: HttpHeaders = new HttpHeaders();
-    httpHeaders.set('Access-Control-Allow-Origin', '*')
+    httpHeaders.set('Access-Control-Allow-Origin', 'http://localhost:4200')
     httpHeaders.set('Access-Control-Allow-Credentials', 'true');
     request = request.clone({
       withCredentials: true,

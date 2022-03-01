@@ -8,12 +8,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UserProfileService {
-  apiEndPoint: string = environment.APIENDPOINT + 'wanderer/user/';
+  apiEndPoint: string = environment.APIENDPOINT + 'api/v1/wanderer/user/';
 
   constructor(private http: HttpClient) { }
 
   getUserDetails(): Observable<any> {
-    return this.http.get(this.apiEndPoint + 'getDetails?claims=%7B%7D&idToken.claims=%7B%7D&userInfo.claims=%7B%7D');
+    return this.http.get(this.apiEndPoint + 'getDetails');
   }
 
   updateUserDetails(userProfile: UserProfile): Observable<any>{

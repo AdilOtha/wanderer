@@ -9,7 +9,9 @@ import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("wanderer/user")
+@RequestMapping("api/v1/wanderer/user")
 public class UserProfileController {
 
     @Autowired
@@ -35,10 +37,12 @@ public class UserProfileController {
     //uncomment this for right output, it wont have google url as of now
     @GetMapping("/getDetails")
     public User fetchSingle(@AuthenticationPrincipal OidcUser principal) throws JsonProcessingException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal());
         email = principal.getEmail();
-//        String pic= principal.getPicture();
-//       Object json = mapper.readValue(pic, Object.class);
-//       String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+        String pic= principal.getPicture();
+       Object json = mapper.readValue(pic, Object.class);
+       String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
        return service.fetchByEmail(email);
     }
 
