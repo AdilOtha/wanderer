@@ -100,7 +100,7 @@
     <p-panel [header]="title">
       <div class="flex justify-content-center mb-2">
         <p-image
-          [src]="profileImage"
+          [src]="f['profileImage'].value"
           alt="Image"
           height="200"
           width="200"
@@ -118,11 +118,11 @@
           ></button>
         </ng-template>
         <div class="user-profile-detail py-2">
-          <strong>Name: {{ firstName }} {{ lastName }}</strong>
+          <strong>Name: {{ f['firstName'].value }} {{ f['lastName'].value }}</strong>
         </div>
         <p-divider></p-divider>
         <div class="user-profile-detail py-2">
-          <strong>Email: {{ email }}</strong>
+          <strong>Email: {{ f['emailId'].value }}</strong>
         </div>
       </p-card>
     </p-panel>

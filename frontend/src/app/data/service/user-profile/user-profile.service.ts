@@ -14,19 +14,21 @@ const httpOption = {
   providedIn: 'root'
 })
 export class UserProfileService {
-  apiEndPoint: string = environment.APIENDPOINT + 'api/v1/wanderer/user/';
+  apiEndPoint: string = 'api/v1/wanderer/user/';
 
   constructor(private http: HttpClient) { }
 
   getUserDetails(): Observable<any> {
-    return this.http.get(this.apiEndPoint + 'getDetails');
+    return this.http.get(this.apiEndPoint + 'getDetails', httpOption);
   }
 
   updateUserDetails(userProfile: UserProfile): Observable<any>{
     let formData: FormData = new FormData();
     formData.append('firstName', userProfile.firstName);
+    formData.append('lastName', userProfile.lastName);
+    formData.append('image',userProfile.profileImage);
     // formData.append('profileImage', userProfile.profileImage);
 
-    return this.http.post(this.apiEndPoint, formData);
+    return this.http.put(this.apiEndPoint + 'updateProfile', formData);
   }
 }
