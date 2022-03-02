@@ -90,7 +90,9 @@ export class HomeComponent implements OnInit {
 
   createPin($event: MouseEvent){
     console.log($event);
-    if(this.savedPins[this.savedPins.length-1].isSaved===false){
+    console.log(this.savedPins);
+    
+    if(this.savedPins.length>0 && !this.savedPins[this.savedPins.length-1].isSaved){
       this.savedPins.splice(this.savedPins.length-1, 1);      
     }    
     this.savedPins.push({

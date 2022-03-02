@@ -6,7 +6,7 @@ import { Pin } from '../../schema/pin';
   providedIn: 'root'
 })
 export class PinService {
-  apiEndpoint: string = environment.APIENDPOINT + 'pin';
+  apiEndpoint: string = 'api/v1/pin';
 
   constructor(private http: HttpClient) { }
 
