@@ -19,7 +19,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 
 class CustomOidcUserServiceTest {

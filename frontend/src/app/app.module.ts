@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
@@ -15,8 +16,12 @@ import { AgmCoreModule } from '@agm/core';
 // PrimeNg Imports
 import {MenubarModule} from 'primeng/menubar';
 import {CardModule} from 'primeng/card';
+
+
 import { environment } from 'src/environments/environment';
+import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './modules/login/login.module';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -27,7 +32,10 @@ import { LoginModule } from './modules/login/login.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
+    HttpClientModule,
+    SharedModule,
     MenubarModule,
     CardModule,
     LoginModule,
@@ -37,7 +45,7 @@ import { LoginModule } from './modules/login/login.module';
       apiKey: environment.googleMaps
     })
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

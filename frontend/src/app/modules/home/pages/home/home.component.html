@@ -1,15 +1,26 @@
-<agm-map [latitude]="currentCenter.geopoint.latitude" [longitude]="currentCenter.geopoint.longitude" [zoom]="8">
-
-    <agm-marker 
-      *ngFor="let c of coords;" 
-      [latitude]="c.geopoint.latitude" 
-      [longitude]="c.geopoint.longitude" [visible]="true">
-
+<p-panel [header]="mapPanelHeader">
+  <div class="map">
+    <agm-map
+      [latitude]="latitude"
+      [longitude]="longitude"
+      [zoom]="zoom"
+      (mapClick)="createPin($event)"
+      [disableDefaultUI]="false"
+      [zoomControl]="false"
+    >
+      <agm-marker
+        *ngFor="let m of savedPins; let i = index; trackBy: identifyPin"
+        [latitude]="m.latitude"
+        [longitude]="m.longitude"
+        [label]="m.locationName"
+        [markerDraggable]="!m.isSaved"
+        (markerClick)="savePin(m, i)"
+        (dragEnd)="pinDragEnd(m, i, $event)"
+      >
         <agm-info-window>
-
-            <h1>This point is {{ c.geopoint.latitude }} latitudes</h1>
-
+          <strong>Pin Saved!</strong>
         </agm-info-window>
-    </agm-marker>
-
-</agm-map>
+      </agm-marker>
+    </agm-map>
+  </div>
+</p-panel>
