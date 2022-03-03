@@ -119,7 +119,7 @@ staging:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
-    - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_API_KEY --cleanup
+    - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND --cleanup
   only:
     - develop
 
