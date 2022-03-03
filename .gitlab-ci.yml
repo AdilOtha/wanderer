@@ -111,9 +111,10 @@ frontend-test:
 #    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
 
 staging:
+  image: node:12-alpine
   stage: develop
   before_script:
-    - apt-get install heroku
+    - npm install -g heroku
     - heroku login -u patel.janvi23798@gmail.com -p $HEROKU_STAGING_API_KEY
   script:
     - heroku whoami
