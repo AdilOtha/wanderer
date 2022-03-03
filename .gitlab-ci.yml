@@ -111,13 +111,15 @@ frontend-test:
 #    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
 
 staging:
-  image: node:12-alpine
-  stage: develop
+  image: ruby:latest
+  stage: develop    
   before_script:
-    - npm install -g heroku
-    - heroku login -u patel.janvi23798@gmail.com -p $HEROKU_STAGING_API_KEY
+    - cd backend
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
   script:
-    - heroku whoami
+    - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_API_KEY --cleanup
   only:
     - develop
 
