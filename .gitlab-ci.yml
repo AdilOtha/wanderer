@@ -113,7 +113,7 @@ frontend-test:
 staging:
   stage: develop
   before_script:
-    - sudo apt-get install heroku
+    - apt-get install heroku
     - heroku login -u patel.janvi23798@gmail.com -p $HEROKU_STAGING_API_KEY
   script:
     - heroku whoami
