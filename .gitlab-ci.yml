@@ -150,7 +150,7 @@ frontend-test:
 #    - develop
 
 frontend-staging:
-  stage: deploy
+  stage: develop
   image: ruby:latest
   before_script:
     - cd ui
