@@ -123,3 +123,16 @@ staging:
   only:
     - develop
 
+frontend-staging:
+  image: ruby:latest
+  stage: develop    
+  before_script:
+    - cd frontend
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+  only:
+    - develop
+
