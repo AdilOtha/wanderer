@@ -153,7 +153,7 @@ frontend-staging:
   stage: develop
   image: ruby:latest
   before_script:
-    - cd ui
+    - cd frontend
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
