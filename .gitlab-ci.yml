@@ -110,18 +110,18 @@ frontend-test:
 #    - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
 #    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
 
-staging:
-  image: ruby:latest
-  stage: develop    
-  before_script:
-    - cd backend
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-  script:
-    - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
-  only:
-    - develop
+# staging:
+#   image: ruby:latest
+#   stage: develop    
+#   before_script:
+#     - cd backend
+#     - apt-get update -qy
+#     - apt-get install -y ruby-dev
+#     - gem install dpl
+#   script:
+#     - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+#   only:
+#     - develop
 
 frontend-staging:
   image: ruby:latest
