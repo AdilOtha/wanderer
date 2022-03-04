@@ -18,7 +18,7 @@ variables:
       changes:
         - $RULES_CHANGES_PATH
     - when: manual
-      allow_failure: true
+      allow_failure: false
 
 .backend:
   extends: .base-rules
@@ -83,75 +83,23 @@ frontend-test:
     - yarn install
     - yarn test
 
-#develop:
-#  stage: develop
-#  rules:
-#    - if: $CI_COMMIT_BRANCH =~ /^master$/
-#  needs: ["test-backend"]
-#  tags:
-#    - ugrad
-#  before_script:
-#    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-#    - eval $(ssh-agent -s)
-#    - chmod og-rwx ${DEPLOY_SSH_KEY}
-
-#  script:
-#    - cd backend
-#    - mvn clean install -DskipTests
-#    - echo "dbURL=$DATABASE_URL" > config.properties
-#    - echo "dbUserName=$TEST_DATABASE_USERNAME" >> config.properties
-#    - echo "dbPassword=$TEST_DATABASE_PASSWORD" >> config.properties
-#    - echo "dbDriver=$TEST_DATABASE" >> config.properties
-#    - pwd
-#    - ls -lrth
-#    - ls target/
-#    - ls -lrth ~/.ssh
-#    - echo "Deploying the develop pipeline"
-#    - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
-#    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
-
-# staging:
-#   image: ruby:latest
-#   stage: develop    
-#   before_script:
-#     - cd backend
-#     - apt-get update -qy
-#     - apt-get install -y ruby-dev
-#     - gem install dpl
-#   script:
-#     - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
-#   only:
-#     - develop
-
-
-#frontend-staging:
-#  image: ruby:latest
-#  stage: develop
-#  before_script:
-#    - cd frontend
-#    - apt-get update -y
-#    - apt-get install -y libssl-dev build-essential wget
-#    - wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash
-#    - source /root/.bashrc
-#    - nvm install 16.14.0
-#    - nvm use 16.14.0
-#    - node -v
-#    - npm -v
-#    - npm install --global yarn
-#    - yarn
-#    - yarn add @angular/cli
-#    - yarn run build
-#    - apt-get update -y
-#    - apt-get install rubygems -y
-#    - gem install dpl
-#  script:
-#    - dpl --skip_cleanup --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
-#  only:
-#    - develop
+backend-staging:
+   image: ruby:latest
+   stage: develop
+   before_script:
+     - cd backend
+     - apt-get update -qy
+     - apt-get install -y ruby-dev
+     - gem install dpl
+   script:
+     - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+   only:
+     - develop
 
 frontend-staging:
   stage: develop
   image: ruby:latest
+  needs: ["backend-staging"]
   before_script:
     - cd frontend
     - apt-get update -qy
