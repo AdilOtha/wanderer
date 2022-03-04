@@ -123,11 +123,15 @@ frontend-test:
 #   only:
 #     - develop
 
+
 frontend-staging:
   image: ruby:latest
   stage: develop    
   before_script:
     - cd frontend
+    - npm install --global yarn
+    - yarn
+    - yarn run build
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
