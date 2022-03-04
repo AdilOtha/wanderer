@@ -139,8 +139,8 @@ frontend-staging:
     - npm -v
     - npm install --global yarn
     - yarn
-    - yarn run build
     - yarn add @angular/cli
+    - yarn run build
     - apt-get update -y
     - apt-get install rubygems -y
     - gem install dpl
