@@ -127,7 +127,6 @@ frontend-test:
 frontend-staging:
   image: ruby:latest
   stage: develop    
-  skip_cleanup: true
   before_script:
     - cd frontend
     - apt-get update -y
@@ -146,7 +145,7 @@ frontend-staging:
     - apt-get install rubygems -y
     - gem install dpl
   script:
-    - dpl --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+    - dpl --skip_cleanup --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
   only:
     - develop
 
