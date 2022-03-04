@@ -127,6 +127,7 @@ frontend-test:
 frontend-staging:
   image: ruby:latest
   stage: develop    
+  skip_cleanup: true
   before_script:
     - cd frontend
     - apt-get update -y
