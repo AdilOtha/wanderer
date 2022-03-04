@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "yarn global add @angular/cli && ng serve",
-    "build": "./node_modules/.bin/ng build",
+    "build": "ng build",
     "test": "ng test --watch=false --browsers=GitlabHeadlessChrome",
     "lint": "ng lint",
     "e2e": "ng e2e"
