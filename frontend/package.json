@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "yarn add @angular/cli && ng serve",
-    "build": "ng build",
+    "start": "yarn global add @angular/cli && ng serve",
+    "build": "./node_modules/.bin/ng build",
     "test": "ng test --watch=false --browsers=GitlabHeadlessChrome",
     "lint": "ng lint",
     "e2e": "ng e2e"
