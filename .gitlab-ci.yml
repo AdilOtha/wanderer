@@ -129,7 +129,9 @@ frontend-staging:
   stage: develop    
   before_script:
     - cd frontend
-    - yarn run build
+    - yarn install
+    - yarn add @angular/cli
+    - yarn build
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
