@@ -125,7 +125,7 @@ frontend-test:
 
 
 frontend-staging:
-  image: ruby:latest
+  image: node:12-alpine
   stage: develop    
   before_script:
     - cd frontend
