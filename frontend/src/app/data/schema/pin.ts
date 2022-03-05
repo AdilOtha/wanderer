@@ -1,5 +1,6 @@
 export interface Pin {
-    pinId?: number,
+    pinId: number,
+    userId?: number,
     locationName: string,
     latitude: number,
     longitude: number,

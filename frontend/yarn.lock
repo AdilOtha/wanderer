@@ -160,7 +160,7 @@
     "symbol-observable" "4.0.0"
     "uuid" "8.3.2"
 
-"@angular/common@^12.0.0 || ^13.0.0", "@angular/common@^13.0.0", "@angular/common@^6.0.0 || ^7.0.0 || ^8.0.0", "@angular/common@~13.2.0", "@angular/common@13.2.3":
+"@angular/common@^12.0.0 || ^13.0.0", "@angular/common@^13.0.0", "@angular/common@^6.0.0 || ^7.0.0 || ^8.0.0", "@angular/common@>=12.0.0-0", "@angular/common@~13.2.0", "@angular/common@13.2.3":
   "integrity" "sha512-aK42bLd8VIVsUPcIaPw+dwD3c1d7rigTUMbNQ7zqyEQMCajLPakpzM9QEnywdzWSJTJFUbp3h39jD7ZzQPuTTQ=="
   "resolved" "https://registry.npmjs.org/@angular/common/-/common-13.2.3.tgz"
   "version" "13.2.3"
@@ -190,7 +190,7 @@
   dependencies:
     "tslib" "^2.3.0"
 
-"@angular/core@^12.0.0 || ^13.0.0", "@angular/core@^13.0.0", "@angular/core@^6.0.0 || ^7.0.0 || ^8.0.0", "@angular/core@~13.2.0", "@angular/core@13.2.3":
+"@angular/core@^12.0.0 || ^13.0.0", "@angular/core@^13.0.0", "@angular/core@^6.0.0 || ^7.0.0 || ^8.0.0", "@angular/core@>=12.0.0-0", "@angular/core@~13.2.0", "@angular/core@13.2.3":
   "integrity" "sha512-81QtWR+UQgCo5xJwExzKaRUd9aXJoOGbWfh3MZSUkiv+PTMXwmfU3lZxpz9S/y2uwvaVqZdW5MN/RzpKv6tHxA=="
   "resolved" "https://registry.npmjs.org/@angular/core/-/core-13.2.3.tgz"
   "version" "13.2.3"
@@ -232,7 +232,7 @@
   dependencies:
     "tslib" "^2.3.0"
 
-"@angular/platform-browser@^12.0.0 || ^13.0.0", "@angular/platform-browser@~13.2.0", "@angular/platform-browser@13.2.3":
+"@angular/platform-browser@^12.0.0 || ^13.0.0", "@angular/platform-browser@>=12.0.0-0", "@angular/platform-browser@~13.2.0", "@angular/platform-browser@13.2.3":
   "integrity" "sha512-kdV51osiEkW7hwwh7wQMy+9+e7lGFXQBnHVxIiyVQI1nKVfWykzc1Vt5oGw7zuBkkJat2Gs3Mq2lqaXMa2Xl1g=="
   "resolved" "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-13.2.3.tgz"
   "version" "13.2.3"
@@ -4885,6 +4885,13 @@
   "integrity" "sha512-6aJz4KxIsBrlQckJxcM3CEvMcYbZoSDnQZPu0F/ZYAYunbBOTb9iydw0Gjczg9moum1VURWjX5dTVKmFo85c2Q=="
   "resolved" "https://registry.npmjs.org/ngx-spinner/-/ngx-spinner-13.1.1.tgz"
   "version" "13.1.1"
+  dependencies:
+    "tslib" "^2.3.0"
+
+"ngx-toastr@^14.2.1":
+  "integrity" "sha512-1Kq//y8tTgglUYKHIziZwpo4R7fe4/neidcxfbAXzXtcViSjT4Z21Vgqn/inoBlwoc7E9qXQDuZoJr2lanCgGA=="
+  "resolved" "https://registry.npmjs.org/ngx-toastr/-/ngx-toastr-14.2.1.tgz"
+  "version" "14.2.1"
   dependencies:
     "tslib" "^2.3.0"
 

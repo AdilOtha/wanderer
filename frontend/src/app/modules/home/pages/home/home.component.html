@@ -1,4 +1,72 @@
-<p-panel [header]="mapPanelHeader">
+<p-dialog
+  [header]="pinModalHeaderLabel"
+  [(visible)]="displayPinModal"
+  position="top-left"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+  [maximizable]="true"
+>
+  <form [formGroup]="pinForm" (ngSubmit)="savePin()" id="pinForm">
+    <div class="grid p-fluid p-3">
+      <div class="col-12">
+        <label for="locationName">Location Name:</label>
+        <input
+          pInputText
+          type="text"
+          class="form-control inputfield mt-2"
+          name="locationName"
+          id="locationName"
+          formControlName="locationName"
+          required
+        />
+        <ng-container
+          *ngIf="
+            (submitted && pinFormControls['locationName']?.errors) ||
+            (pinFormControls['locationName']?.errors &&
+              pinFormControls['locationName']?.dirty)
+          "
+        >
+          <div
+            *ngIf="pinFormControls['locationName']?.errors?.['required']"
+            class="flex justify-content-center mt-3"
+          >
+            <p-message
+              severity="error"
+              text="Location Name is required"
+            ></p-message>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <!-- <p-button
+      type="submit"
+      form="pinForm"
+      icon="pi pi-check"
+      label="Save Pin"
+      class="p-button-text"
+    ></p-button> -->
+    <button
+      pButton
+      icon="pi pi-check"
+      form="pinForm"
+      label="Save"
+      type="submit"
+      [disabled]="!pinForm.valid"
+      class="p-button-md"
+    ></button>
+    <p-button
+      icon="pi pi-times"
+      (click)="displayPinModal = false"
+      label="Cancel"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+<p-panel styleClass="my-3" [header]="mapPanelHeader">
   <div class="map">
     <agm-map
       [latitude]="latitude"
@@ -6,21 +74,89 @@
       [zoom]="zoom"
       (mapClick)="createPin($event)"
       [disableDefaultUI]="false"
-      [zoomControl]="false"
+      [streetViewControl]="false"
     >
       <agm-marker
         *ngFor="let m of savedPins; let i = index; trackBy: identifyPin"
         [latitude]="m.latitude"
-        [longitude]="m.longitude"
-        [label]="m.locationName"
+        [longitude]="m.longitude"        
         [markerDraggable]="!m.isSaved"
-        (markerClick)="savePin(m, i)"
+        (markerDblClick)="openPinModal(m, i)"
         (dragEnd)="pinDragEnd(m, i, $event)"
       >
-        <agm-info-window>
+        <!-- <agm-info-window>
           <strong>Pin Saved!</strong>
-        </agm-info-window>
+        </agm-info-window> -->
       </agm-marker>
+
+      <agm-circle
+        [latitude]="latitude"
+        [longitude]="longitude"
+        [radius]="radius"
+        [circleDraggable]="true"
+        [editable]="true"
+        [fillOpacity]="0.1"
+        [clickable]="false"
+        (centerChange)="centerChange($event)"
+        (radiusChange)="radiusChange($event)"
+      >
+      </agm-circle>
     </agm-map>
   </div>
 </p-panel>
+<div class="p-card my-3">
+  <div class="grid p-fluid p-3">
+    <div class="col-8 xl:col-2">
+      <label for="radius" class="mb-2">Radius:</label>
+      <p-inputNumber
+        [ngModel]="radius | meterToKilometer"
+        (ngModelChange)="convertKilometerToMeter($event)"
+        suffix=" kms"
+        styleClass="inputfield"
+        [showButtons]="true"
+        buttonLayout="horizontal"
+        inputId="radius"
+        spinnerMode="horizontal"
+        [step]="10"
+        decrementButtonClass="p-button-primary"
+        incrementButtonClass="p-button-primary"
+        incrementButtonIcon="pi pi-plus"
+        decrementButtonIcon="pi pi-minus"
+      >
+      </p-inputNumber>
+    </div>
+    <div class="col-6 xl:col-2">
+      <label for="latitude" class="mb-2">Latitude:</label>
+      <p-inputNumber
+        [(ngModel)]="latitude"
+        inputId="latitude"
+        styleClass="inputfield"
+        mode="decimal"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+      ></p-inputNumber>
+    </div>
+    <div class="col-6 xl:col-2">
+      <label for="longitude" class="mb-2">Longitude:</label>
+      <p-inputNumber
+        [(ngModel)]="longitude"
+        inputId="longitude"
+        styleClass="inputfield"
+        mode="decimal"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+      ></p-inputNumber>
+    </div>
+    <div class="col-2 xl:col-2">
+      <button
+        pButton
+        pRipple
+        type="button"
+        title="Go to Current Location"
+        icon="pi pi-compass"
+        class="p-button-rounded p-button-primary xl:mt-3"
+        (click)="setCurrentLocation()"
+      ></button>
+    </div>
+  </div>
+</div>

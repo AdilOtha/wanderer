@@ -17,11 +17,14 @@ import { AgmCoreModule } from '@agm/core';
 import {MenubarModule} from 'primeng/menubar';
 import {CardModule} from 'primeng/card';
 
-
 import { environment } from 'src/environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './modules/login/login.module';
 import { CookieService } from 'ngx-cookie-service';
+import { MessageService } from 'primeng/api';
+
+//ngx-toastr import
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -43,9 +46,10 @@ import { CookieService } from 'ngx-cookie-service';
     provideFirestore(() => getFirestore()),
     AgmCoreModule.forRoot({
       apiKey: environment.googleMaps
-    })
+    }),
+    ToastrModule.forRoot()
   ],
-  providers: [CookieService],
-  bootstrap: [AppComponent]
+  providers: [CookieService, MessageService],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

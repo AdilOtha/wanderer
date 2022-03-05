@@ -1,133 +1,238 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { debounceTime, Observable, Subject } from 'rxjs';
 import { MouseEvent } from '@agm/core';
 import { PinService } from 'src/app/data/service/pin-service/pin.service';
 import { Pin } from 'src/app/data/schema/pin';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers: [],
 })
 export class HomeComponent implements OnInit {
-   
+  //Firestore Data
   pinCreationUpdates!: Observable<any>;
-  coords:any[] = [];  
+  pinUpdateCollection: string = 'pin_updates';
+
+  // Pin Center and Radius Subjects for 2-way communication between UI and Keyboard input
+  centerChangeSubject: Subject<any> = new Subject();
+  radiusChangeSubject: Subject<any> = new Subject();
 
   // google maps zoom level
   zoom: number = 8;
 
-  // default radius (in kms)
-  radius: number = 50;
+  // default radius (in meters)
+  radius: number = 50000;
 
   // initial center position for the map
-  latitude: number = 51.678418;
-  longitude: number = 7.809007;  
+  latitude: number = 21.7645;
+  longitude: number = 72.1519;
 
+  // Saved Pins
   savedPins: Pin[] = [
-	  {
-		  latitude: 44.6476,
-		  longitude: 63.5728,
-		  locationName: 'A',
-      isSaved: true
-	  },
-	  {
-		  latitude: 51.373858,
-		  longitude: 7.215982,
-		  locationName: 'B',		  
-      isSaved: true
-	  },
-	  {
-		  latitude: 51.723858,
-		  longitude: 7.895982,
-		  locationName: 'C',
-      isSaved: true
-	  }
+    // {
+    //   latitude: 44.6476,
+    //   longitude: 63.5728,
+    //   locationName: 'A',
+    //   isSaved: true,
+    // },
+    // {
+    //   latitude: 51.373858,
+    //   longitude: 7.215982,
+    //   locationName: 'B',
+    //   isSaved: true,
+    // },
+    // {
+    //   latitude: 51.723858,
+    //   longitude: 7.895982,
+    //   locationName: 'C',
+    //   isSaved: true,
+    // },
   ];
 
+  // Pins created by User
   newlyCreatedPins: Pin[] = [];
 
+  // User Identity Data
+  userId!: number;
+
+  // Pin Modal Data
   mapPanelHeader: string = 'Navigator';
 
-  constructor(private firestore: Firestore, private pinService: PinService) {
-    const dataList = collection(this.firestore, 'pin_updates');
-    this.pinCreationUpdates = collectionData(dataList);
-    this.pinCreationUpdates.subscribe(update=>{
-      console.log(update);
-      this.pinService.getPinsByRadius(this.radius, this.latitude, this.longitude)
-        .subscribe({
-          next: (data:any)=>{
-            console.log(data);
-            
-            this.savedPins = data;
-            // for(let pin of data){
-            //   pin.isSaved = true;
-            // }
-            // this.savedPins = [...this.savedPins, ...this.newlyCreatedPins]
-          },
-          error: (err:HttpErrorResponse) => {
-            console.log(err);
-          }
-        });
-    });
-  }
+  pinModalHeaderLabel: string = 'Add/Edit Pin Details';
+  displayPinModal: boolean = false;
+
+  currentPin!: Pin;
+  currentPinIndex!: number;
+
+  pinForm: FormGroup = this.fb.group({
+    locationName: ['', [Validators.required]],
+    // latitude: ['', [Validators.required]],
+    // longitude: [{ value: '', disabled: true }],
+    // userId: [''],
+  });
+  submitted: boolean = false;
+
+  constructor(
+    private firestore: Firestore,
+    private pinService: PinService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
+    this.userId = 3;
     // get user's current location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {        
-       this.latitude = position.coords.latitude;
-       this.longitude = position.coords.longitude;       
-       console.log({
-         latitude: position.coords.latitude,
-         longitude: position.coords.longitude
-       });
-     });
-   }
+    this.setCurrentLocation();
+
+    const dataList = collection(this.firestore, this.pinUpdateCollection);
+    this.pinCreationUpdates = collectionData(dataList);
+    this.pinCreationUpdates.subscribe((update) => {
+      console.log(update);
+      this.getPinsByRadiusFromService();
+    });
+
+    this.centerChangeSubject.pipe(debounceTime(1000)).subscribe((data: any) => {
+      this.latitude = data.lat;
+      this.longitude = data.lng;
+      this.getPinsByRadiusFromService();
+    });
+
+    this.radiusChangeSubject
+      .pipe(debounceTime(1000))
+      .subscribe((newRadius: any) => {
+        console.log(newRadius);
+
+        this.radius = parseInt(newRadius.toString());
+
+        this.getPinsByRadiusFromService();
+      });
   }
 
-  createPin($event: MouseEvent){
+  createPin($event: MouseEvent) {
     console.log($event);
     console.log(this.savedPins);
-    
-    if(this.savedPins.length>0 && !this.savedPins[this.savedPins.length-1].isSaved){
-      this.savedPins.splice(this.savedPins.length-1, 1);      
-    }    
+
+    if (
+      this.savedPins.length > 0 &&
+      !this.savedPins[this.savedPins.length - 1].isSaved
+    ) {
+      this.savedPins.splice(this.savedPins.length - 1, 1);
+    }
     this.savedPins.push({
       latitude: $event.coords.lat,
       longitude: $event.coords.lng,
       locationName: '',
       isSaved: false,
-      pinId: -1
+      pinId: -1,
+      userId: this.userId,
     });
   }
 
-  savePin(selectedPin: any, index: number) {
-    this.savedPins[index].isSaved=true;
-    console.log(`clicked the marker: ${selectedPin.locationName || index}`);
-    let pin: Pin = {
-      latitude: selectedPin.latitude,
-      longitude: selectedPin.longitude,
-      locationName: '',
-      isSaved: true,
-    };
+  openPinModal(pin: Pin, index: number) {
+    this.setCurrentPin(pin, index);
+    this.displayPinModal = true;
+  }
 
-    this.pinService.insertPin(pin).subscribe({
-      next: (data: any)=>{
-        console.log(data);
-        data.isSaved = true;
-        this.savedPins[index] = data;
-        this.newlyCreatedPins.push(data);
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
-      },
-      complete: ()=>{
-        
+  setCurrentPin(pin: Pin, index: number) {
+    this.currentPin = pin;
+    this.currentPinIndex = index;
+    this.pinForm.controls['locationName'].patchValue(
+      this.savedPins[index].locationName
+    );
+    console.log('Current Pin Index: ' + this.currentPinIndex);
+  }
+
+  get pinFormControls() {
+    return this.pinForm.controls;
+  }
+
+  savePin() {
+    this.submitted = true;
+
+    if (this.pinForm.valid) {
+      console.log('Saved Pin Index: ' + this.currentPinIndex);
+
+      this.savedPins[this.currentPinIndex].isSaved = true;
+      console.log(
+        `clicked the marker: ${
+          this.currentPin.locationName || this.currentPinIndex
+        }`
+      );
+      let pin: Pin = {
+        latitude: this.currentPin.latitude,
+        longitude: this.currentPin.longitude,
+        locationName: this.pinForm.controls['locationName'].value,
+        userId: this.currentPin.userId,
+        pinId: -1,
+        isSaved: true,
+      };
+
+      // if Pin exists then update Pin
+      if (this.currentPin.pinId !== -1) {
+        pin.pinId = this.currentPin.pinId;
+        this.pinService
+          .updatePin(pin.pinId, pin.locationName, pin.latitude, pin.longitude)
+          .subscribe({
+            next: (data: any) => {
+              if (data === null) {
+                console.log('Error while updating pin');
+              } else {
+                data.isSaved = true;
+                this.savedPins[this.currentPinIndex] = data;
+              }
+              this.displayPinModal = false;
+              this.submitted = false;
+            },
+            error: (err: any) => {
+              console.log(err);
+              this.displayPinModal = false;
+              this.submitted = false;
+            },
+          });
+      } else { // else if Pin does not exist then save Pin
+        this.pinService.insertPin(pin).subscribe({
+          next: (data: any) => {
+            console.log(data);
+            data.isSaved = true;
+            if (pin.pinId && pin.pinId !== -1) {
+              this.newlyCreatedPins.push(data);
+            }
+            this.savedPins[this.currentPinIndex] = data;
+            this.displayPinModal = false;
+            this.submitted = false;
+          },
+          error: (err: HttpErrorResponse) => {
+            console.log(err);
+            this.displayPinModal = false;
+            this.submitted = false;
+          },
+        });
       }
-    });
+    }
+  }
+
+  getPinsByRadiusFromService() {
+    const radiusInKms: number = this.radius / 1000;
+    this.pinService
+      .getPinsByRadius(radiusInKms, this.latitude, this.longitude)
+      .subscribe({
+        next: (data: any) => {
+          this.savedPins = data;
+          for (let pin of data) {
+            pin.isSaved = true;
+          }
+          this.savedPins = [...this.savedPins, ...this.newlyCreatedPins];
+
+          console.log(this.savedPins);
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        },
+      });
   }
 
   pinDragEnd(m: Pin, index: number, event: MouseEvent) {
@@ -136,8 +241,56 @@ export class HomeComponent implements OnInit {
     m.longitude = event.coords.lng;
   }
 
-  identifyPin(index: number, pin: Pin){
+  identifyPin(index: number, pin: Pin) {
     return pin.pinId;
   }
 
+  centerChange(event: any) {
+    this.centerChangeSubject.next(event);
+  }
+
+  radiusChange(event: any) {
+    console.log(event);
+
+    this.radiusChangeSubject.next(event);
+  }
+
+  convertKilometerToMeter(valueInKilometers: number) {
+    const unit = 1000.0;
+    console.log(valueInKilometers);
+    this.radius = valueInKilometers * unit;
+  }
+
+  setCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+        console.log({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      });
+    }
+  }
+
+  // showError(error: any) {
+  //   console.log(error);
+
+  //   switch(error.code) {
+  //     case error.PERMISSION_DENIED:
+  //       this.toastr.warning('User denied the request for Geolocation');
+  //       // this.messageService.add({severity:'warn', summary: 'Warn', detail: 'User denied the request for Geolocation.'});
+  //       break;
+  //     case error.POSITION_UNAVAILABLE:
+  //       // this.messageService.add({severity:'warn', summary: 'Warn', detail: 'Location information is unavailable.'});
+  //       break;
+  //     case error.TIMEOUT:
+  //       // this.messageService.add({severity:'warn', summary: 'Warn', detail: 'The request to get user location timed out.'});
+  //       break;
+  //     case error.UNKNOWN_ERROR:
+  //       // this.messageService.add({severity:'warn', summary: 'Warn', detail: 'An unknown error occurred.'});
+  //       break;
+  //   }
+  // }
 }
