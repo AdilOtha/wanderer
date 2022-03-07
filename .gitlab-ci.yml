@@ -117,7 +117,8 @@ code_quality:
   variables:
     UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "username:patel.janvi23798@gmail.com -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=1&project_name=wanderer-backend" -F "file=@Designite_output/DesigniteAnalysis.xml"'
   script:
-    - apt-get install wget
+    - apt-get update
+    - apt-get install -y wget
     - wget -O DesigniteJava.jar https://www.dropbox.com/s/hrfuiesdb9o6cg5/DesigniteJava.jar?dl=1
     - java -jar DesigniteJava.jar -ci -repo $CI_PROJECT_PATH -pat $PAT -host "https://git.cs.dal.ca/"
     - eval "$UPLOAD_QUALITY_REPORT"
