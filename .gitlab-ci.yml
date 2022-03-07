@@ -1,4 +1,4 @@
-image: maven:latest
+# image: maven:latest
 
 # stages:
 #   - build
@@ -114,6 +114,7 @@ stages:
 
 code_quality:
   stage: code_quality
+  image: openjdk:11-alpine
   variables:
     UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "username:patel.janvi23798@gmail.com -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=1&project_name=wanderer-backend" -F "file=@Designite_output/DesigniteAnalysis.xml"'
   script:
