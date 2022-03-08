@@ -1,138 +1,120 @@
-# image: maven:latest
-
-# stages:
-#   - build
-#   - test
-#   - develop
-
-# variables:
-#   RULES_CHANGES_PATH: "**/*"
-
-# .base-rules:
-#   rules:
-#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#       when: always
-#     - if: $CI_PIPELINE_SOURCE == "push"
-#       when: never
-#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-#       changes:
-#         - $RULES_CHANGES_PATH
-#     - when: manual
-#       allow_failure: false
-
-# .backend:
-#   extends: .base-rules
-#   variables:
-#     RULES_CHANGES_PATH: "backend/**/*"
-
-# .frontend:
-#   extends: .base-rules
-#   variables:
-#     RULES_CHANGES_PATH: "frontend/**/*"
-
-# frontend-build:
-#   image: node:16-alpine
-#   stage: build
-#   extends: .frontend
-#   needs: []
-#   script:
-#     - echo "building the frontend code..."
-#     - cd frontend
-#     - yarn install
-#     - yarn build
-#   # cache:
-#   #   key:
-#   #     files:
-#   #       - yarn.lock
-#   #   paths:
-#   #     - node_modules
-#   #   policy: pull
-
-
-# build-backend:
-#   stage: build
-#   extends: .backend
-#   needs: []
-#   tags:
-#     - ugrad
-#   script:
-#     - cd backend
-#     - mvn clean compile
-
-# test-backend:
-#   stage: test
-#   extends: .backend
-#   needs: ["build-backend"]
-#   tags:
-#     - ugrad
-#   script:
-#     - cd backend
-#     - mvn clean test
-
-# frontend-test:
-#   stage: test
-#   image: node:16-alpine
-#   extends: .frontend
-#   needs: ["frontend-build"]
-#   before_script:
-#     - apk add chromium
-#     - export CHROME_BIN=/usr/bin/chromium-browser
-#   script:
-#     - echo "Testing the frontend code..."
-#     - cd frontend
-#     - yarn install
-#     - yarn test
-
-# backend-staging:
-#    image: ruby:latest
-#    stage: develop
-#    before_script:
-#      - cd backend
-#      - apt-get update -qy
-#      - apt-get install -y ruby-dev
-#      - gem install dpl
-#    script:
-#      - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
-#    only:
-#      - develop
-
-# frontend-staging:
-#   stage: develop
-#   image: ruby:latest
-#   needs: ["backend-staging"]
-#   before_script:
-#     - cd frontend
-#     - apt-get update -qy
-#     - apt-get install -y ruby-dev
-#     - gem install dpl
-#   script:
-#     - dpl --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
-#   only:
-#     - develop
-# stages:
-#   - code_quality
-
-# code_quality:
-#   stage: code_quality
-#   image: openjdk:11-alpine
-#   variables:
-#     UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "username:patel.janvi23798@gmail.com -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=1&project_name=wanderer-backend" -F "file=@Designite_output/DesigniteAnalysis.xml"'
-#   script:
-#     - apt-get update
-#     - apt-get install -y wget
-#     - wget -O DesigniteJava.jar https://www.dropbox.com/s/hrfuiesdb9o6cg5/DesigniteJava.jar?dl=1
-#     - java -jar DesigniteJava.jar -ci -repo $CI_PROJECT_PATH -pat $PAT -host "https://git.cs.dal.ca/"
-#     - eval "$UPLOAD_QUALITY_REPORT"
-
-#   only:
-#     - develop
+image: maven:latest
 
 stages:
+  - build
+  - test
+  - code-quality
   - deploy
 
-code-quality:
+variables:
+  RULES_CHANGES_PATH: "**/*"
+
+.base-rules:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - $RULES_CHANGES_PATH
+    - when: manual
+      allow_failure: false
+
+.backend:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "backend/**/*"
+
+.frontend:
+  extends: .base-rules
+  variables:
+    RULES_CHANGES_PATH: "frontend/**/*"
+
+frontend-build:
+  image: node:16-alpine
+  stage: build
+  extends: .frontend
+  needs: []
+  script:
+    - echo "building the frontend code..."
+    - cd frontend
+    - yarn install
+    - yarn build
+  # cache:
+  #   key:
+  #     files:
+  #       - yarn.lock
+  #   paths:
+  #     - node_modules
+  #   policy: pull
+
+
+build-backend:
+  stage: build
+  extends: .backend
+  needs: []
+  tags:
+    - ugrad
+  script:
+    - cd backend
+    - mvn clean compile
+
+test-backend:
+  stage: test
+  extends: .backend
+  needs: ["build-backend"]
+  tags:
+    - ugrad
+  script:
+    - cd backend
+    - mvn clean test
+
+frontend-test:
+  stage: test
+  image: node:16-alpine
+  extends: .frontend
+  needs: ["frontend-build"]
+  before_script:
+    - apk add chromium
+    - export CHROME_BIN=/usr/bin/chromium-browser
+  script:
+    - echo "Testing the frontend code..."
+    - cd frontend
+    - yarn install
+    - yarn test
+
+backend-staging:
+   image: ruby:latest
+   stage: deploy
+   before_script:
+     - cd backend
+     - apt-get update -qy
+     - apt-get install -y ruby-dev
+     - gem install dpl
+   script:
+     - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+   only:
+     - develop
+
+frontend-staging:
   stage: deploy
+  image: ruby:latest
+  needs: ["backend-staging"]
+  before_script:
+    - cd frontend
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+  only:
+    - develop
+
+backend-code-quality:
+  stage: code-quality
   image: maven:3-jdk-11
+  needs: ["test-backend"]
   variables:
     UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" + -H "username:patel.janvi23798@gmail.com" -H "Content-Type: application/xml" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=$CI_PIPELINE_IID&project_name=wanderer_backend" -F "file=@DesigniteAnalysis.xml"'
 
