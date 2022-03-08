@@ -134,7 +134,7 @@ code-quality:
   stage: deploy
   image: maven:3-jdk-11
   variables:
-    UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "username:patel.janvi23798@gmail.com" -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=1&project_name=wanderer-backend" -F "file=code-quality/DesigniteAnalysis.xml"'
+    UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "username:patel.janvi23798@gmail.com" -H "Content-Type: application/xml" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=1&project_name=wanderer_backend" -F "file=code-quality/DesigniteAnalysis.xml"'
 
   before_script:
     - cd backend
@@ -146,5 +146,6 @@ code-quality:
     - ls -l
     - ls code-quality
     - eval "$UPLOAD_QUALITY_REPORT"
+    - echo "$UPLOAD_QUALITY_REPORT"
   only:
     - develop
