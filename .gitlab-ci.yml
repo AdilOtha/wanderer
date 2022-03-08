@@ -145,7 +145,7 @@ code-quality:
     - java -jar DesigniteJava.jar -i ./ -o code-quality/ -f XML
     - ls -l
     - ls code-quality
-    - cd code_quality
+    - cd code-quality
     - eval "$UPLOAD_QUALITY_REPORT"
     - echo "$UPLOAD_QUALITY_REPORT"
   only:
