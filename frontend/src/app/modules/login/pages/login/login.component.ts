@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/data/service/auth-service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit {
   }
 
   onClick() {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = "https://wanderergroup21.herokuapp.com/oauth2/authorization/google";
   }
-
 }

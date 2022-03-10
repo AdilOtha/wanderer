@@ -22,6 +22,7 @@ import { environment } from 'src/environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './modules/login/login.module';
 import { CookieService } from 'ngx-cookie-service';
+import { authInterceptorProviders } from './data/service/httpinterceptor/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import { CookieService } from 'ngx-cookie-service';
       apiKey: environment.googleMaps
     })
   ],
-  providers: [CookieService],
+  providers: [CookieService, authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
