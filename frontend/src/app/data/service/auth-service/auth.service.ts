@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 const httpOption = {
@@ -15,7 +16,7 @@ const httpOption = {
 export class AuthService {
 
 
-  constructor(private cookieService: CookieService, private httpClient: HttpClient) { }
+  constructor(private cookieService: CookieService, private httpClient: HttpClient, private router:Router) { }
 
   isLoggedIn() {
     const token = this.cookieService.get('token'); // get token from local storage
@@ -35,6 +36,11 @@ export class AuthService {
 
   logout() {
     this.cookieService.delete('token');
-    this.httpClient.get('http://localhost:8080/logout', httpOption).subscribe(p=> console.log("Redirected to logout"));
+    this.router.navigate(['login']);
+  }
+
+  getToken() {
+    console.log('inside token method', this.cookieService.get('token'));
+    return this.cookieService.get('token');
   }
 }
