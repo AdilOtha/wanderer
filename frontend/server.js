@@ -11,10 +11,10 @@ const apiProxy = middleware.createProxyMiddleware({ target: process.env.API_HOST
 app.use('/api/v1', apiProxy);
 
 // Serve only the static files form the dist directory
-app.use(express.static('./dist/ui'));
+app.use(express.static('./dist/frontend'));
 
 app.get('/*', (req, res) =>
-    res.sendFile('index.html', { root: 'dist/ui/' }),
+    res.sendFile('index.html', { root: 'dist/frontend/' }),
 );
 
 // Start the app by listening on the default Heroku port
