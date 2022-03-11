@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/wanderer/user")
@@ -35,32 +32,40 @@ public class UserProfileController {
     private String email = "";
 
     //uncomment this for right output, it wont have google url as of now
+//    @GetMapping("/getDetails")
+//    public User fetchSingle(@AuthenticationPrincipal OidcUser principal) throws JsonProcessingException {
+//        email = principal.getEmail();
+////        String pic= principal.getPicture();
+////       Object json = mapper.readValue(pic, Object.class);
+////       String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+//       return service.fetchByEmail(email);
+//    }
+
     @GetMapping("/getDetails")
-    public User fetchSingle(@AuthenticationPrincipal OidcUser principal) throws JsonProcessingException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getPrincipal());
+    public Map<String,String> fetchSingle(@AuthenticationPrincipal OidcUser principal) throws JsonProcessingException {
+        Map<String,String> map=new HashMap<>();
+        System.out.println(principal);
         email = principal.getEmail();
         String pic= principal.getPicture();
-       Object json = mapper.readValue(pic, Object.class);
-       String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-       return service.fetchByEmail(email);
+        User user = service.fetchByEmail(email);
+        map.put("firstName",user.getFirstName());
+        map.put("lastName",user.getLastName());
+        map.put("emailId", email);
+        map.put("googlePhotoUrl", principal.getPicture());
+        if(user.getImage()!=null){
+            String encodedImage = Base64.getEncoder().encodeToString(user.getImage());
+            map.put("image","data:image/png;base64, "+ encodedImage);
+        } else {
+            map.put("image", null);
+        }
+        return map;
     }
-
-//    @GetMapping("/getDetails")
-//    public Map<User,String> fetchSingle(@AuthenticationPrincipal OidcUser principal) throws JsonProcessingException {
-//        Map<User,String> map=new HashMap<>();
-//        System.out.println(principal);
-//        email = principal.getEmail();
-//        String pic= principal.getPicture();
-//        map.put(service.fetchByEmail(email),pic);
-//        return map;
-//    }
 
     @PutMapping(value = "/updateProfile")
     public ResponseEntity<Object> updateUser(@AuthenticationPrincipal OidcUser principal,
-                                             @RequestParam(value = "file",required = false) MultipartFile file,
-                                             @RequestParam(value = "First Name",required = false) String fName,
-                                             @RequestParam(value = "Last Name",required = false) String lName) throws IOException {
+                                             @RequestParam(value = "image",required = false) MultipartFile file,
+                                             @RequestParam(value = "firstName",required = false) String fName,
+                                             @RequestParam(value = "lastName",required = false) String lName) throws IOException {
         email = principal.getEmail();
         User user= service.fetchByEmail(email);
         if(fName==null)

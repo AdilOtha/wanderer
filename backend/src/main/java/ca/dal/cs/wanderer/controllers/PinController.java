@@ -19,8 +19,16 @@ public class PinController {
     }
 
     @GetMapping("/getPinsByRadius")
-    public List<Pin> getPinsByRadius(@RequestParam double radius, @RequestParam double centerLat, @RequestParam double centerLng){
+    public List<Pin> getPinsByRadius(@RequestParam Double radius, @RequestParam Double centerLat, @RequestParam Double centerLng){
+        System.out.println(radius + " "+ centerLat + " "+ centerLng);
         List<Pin> pinList = pinService.getPinsByRadius(radius, centerLat, centerLng);
         return pinList;
+    }
+
+    @PutMapping("/updatePin")
+    public Pin updatePin(@RequestParam Integer pinId, @RequestParam String locationName, @RequestParam Double latitude, @RequestParam Double longitude){
+        System.out.println("Pin ID: " + pinId + "Location Name: " + locationName + " Latitude: "+ latitude + " Longitude: " + longitude);
+        Pin updatedPin = pinService.updatePin(pinId, locationName, latitude, longitude);
+        return updatedPin;
     }
 }

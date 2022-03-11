@@ -14,27 +14,11 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class PinUpdateService {
+    String DOCUMENT_ID = "0dZ4madili5WE9g9iIqn";
     public String sendPinUpdate() throws ExecutionException, InterruptedException {
-//        Firestore dbFirestore = FirestoreClient.getFirestore();
-//        PinUpdate pinUpdate;
-//        DocumentReference documentReference = dbFirestore.collection("pin_updates").document("0dZ4madili5WE9g9iIqn");
-//
-//        ApiFuture<DocumentSnapshot> future = documentReference.get();
-//
-//        DocumentSnapshot document = future.get();
-//
-//        if(document.exists()){
-//            pinUpdate = document.toObject(PinUpdate.class);
-//            System.out.println(pinUpdate);
-//            pinUpdate.setLast_updated(new Date());
-//            ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection("pin_updates").document("0dZ4madili5WE9g9iIqn").set(pinUpdate);
-//            return collectionApiFuture.get().getUpdateTime().toString();
-//        } else {
-//            return "Error while publishing the pin update";
-//        }
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        PinUpdate pinUpdate = new PinUpdate("0dZ4madili5WE9g9iIqn", new Date());
-        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection("pin_updates").document("0dZ4madili5WE9g9iIqn").set(pinUpdate);
+        PinUpdate pinUpdate = new PinUpdate(DOCUMENT_ID, new Date());
+        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection("pin_updates").document(DOCUMENT_ID).set(pinUpdate);
         return collectionApiFuture.get().getUpdateTime().toString();
     }
 }

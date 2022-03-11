@@ -33,7 +33,6 @@ import java.util.logging.Handler;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     private ObjectMapper objectMapper;
