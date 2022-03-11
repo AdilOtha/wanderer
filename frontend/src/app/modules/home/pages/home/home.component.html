@@ -1,3 +1,10 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="fire"
+  [fullScreen]="true"
+></ngx-spinner>
 <p-dialog
   [header]="pinModalHeaderLabel"
   [(visible)]="displayPinModal"
@@ -42,21 +49,14 @@
       </div>
     </div>
   </form>
-  <ng-template pTemplate="footer">
-    <!-- <p-button
-      type="submit"
-      form="pinForm"
-      icon="pi pi-check"
-      label="Save Pin"
-      class="p-button-text"
-    ></p-button> -->
+  <ng-template pTemplate="footer">    
     <button
       pButton
       icon="pi pi-check"
       form="pinForm"
       label="Save"
       type="submit"
-      [disabled]="!pinForm.valid"
+      [disabled]="!pinForm.valid || !enablePinModalButton"
       class="p-button-md"
     ></button>
     <p-button
@@ -73,13 +73,14 @@
       [longitude]="longitude"
       [zoom]="zoom"
       (mapClick)="createPin($event)"
+      (mapRightClick)="shiftCenter($event)"
       [disableDefaultUI]="false"
       [streetViewControl]="false"
     >
       <agm-marker
         *ngFor="let m of savedPins; let i = index; trackBy: identifyPin"
         [latitude]="m.latitude"
-        [longitude]="m.longitude"        
+        [longitude]="m.longitude"
         [markerDraggable]="!m.isSaved"
         (markerDblClick)="openPinModal(m, i)"
         (dragEnd)="pinDragEnd(m, i, $event)"

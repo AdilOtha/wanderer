@@ -16,14 +16,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import {AvatarModule} from 'primeng/avatar';
 import {FileUploadModule} from 'primeng/fileupload';
 import {InputNumberModule} from 'primeng/inputnumber';
-import {ToastModule} from 'primeng/toast';
 
 //ngx-spinner import
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MeterToKilometerPipe } from './pipes/meter-to-kilometer/meter-to-kilometer.pipe';
-
-//ngx-toastr import
-import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -47,7 +43,6 @@ import { ToastrModule } from 'ngx-toastr';
     NgxSpinnerModule,
     InputNumberModule,
     FormsModule,
-    ToastModule
   ],
   exports: [
     HttpClientModule,
@@ -66,8 +61,7 @@ import { ToastrModule } from 'ngx-toastr';
     NgxSpinnerModule,
     InputNumberModule,
     FormsModule,
-    MeterToKilometerPipe,
-    ToastModule  
+    MeterToKilometerPipe,    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: []
