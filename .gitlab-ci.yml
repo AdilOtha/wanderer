@@ -68,7 +68,7 @@ test-backend:
     - ugrad
   script:
     - cd backend
-    - mvn clean test
+    - mvn clean test -Dspring.profiles.active=test
 
 frontend-test:
   stage: test
