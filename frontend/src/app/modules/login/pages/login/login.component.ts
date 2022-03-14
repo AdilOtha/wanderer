@@ -11,7 +11,6 @@ export class LoginComponent implements OnInit {
 
   constructor(private route:ActivatedRoute, private authServie: AuthService, private router: Router) { }
 
-
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
     if(token!=null) {

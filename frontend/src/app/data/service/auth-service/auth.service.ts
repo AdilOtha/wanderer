@@ -15,7 +15,6 @@ const httpOption = {
 
 export class AuthService {
 
-
   constructor(private cookieService: CookieService, private httpClient: HttpClient, private router:Router) { }
 
   isLoggedIn() {
