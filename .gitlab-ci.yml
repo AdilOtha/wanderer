@@ -36,7 +36,7 @@ frontend-build:
   stage: build
   extends: .frontend
   tags:
-    - ugrad
+    - grad
   needs: []
   script:
     - echo "building the frontend code..."
@@ -50,7 +50,7 @@ build-backend:
   extends: .backend
   needs: []
   tags:
-    - ugrad
+    - grad
   script:
     - cd backend
     - mvn clean compile
@@ -60,7 +60,7 @@ test-backend:
   extends: .backend
   needs: ["build-backend"]
   tags:
-    - ugrad
+    - grad
   script:
     - cd backend
     - mvn clean test -Dspring.profiles.active=test
@@ -71,7 +71,7 @@ frontend-test:
   extends: .frontend
   needs: ["frontend-build"]
   tags:
-    - ugrad
+    - grad
   before_script:
     - apk add chromium
     - export CHROME_BIN=/usr/bin/chromium-browser
@@ -85,7 +85,7 @@ backend-staging:
    image: ruby:latest
    stage: deploy
    tags:
-    - ugrad
+    - grad
    before_script:
      - cd backend
      - apt-get update -qy
@@ -101,7 +101,7 @@ frontend-staging:
   image: ruby:latest
   needs: ["backend-staging"]
   tags:
-    - ugrad
+    - grad
   before_script:
     - cd frontend
     - apt-get update -qy
@@ -118,7 +118,7 @@ backend-code-quality:
   variables:
     UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" + -H "username:patel.janvi23798@gmail.com" -H "Content-Type: application/xml" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=$CI_PIPELINE_IID&project_name=wanderer_backend" -F "file=@DesigniteAnalysis.xml"'
   tags:
-    - ugrad
+    - grad
   before_script:
     - cd backend
     - apt-get update
