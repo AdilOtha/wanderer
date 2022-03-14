@@ -28,32 +28,14 @@ public class WandererApplication {
 
 		File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
 
-//		BufferedReader br = new BufferedReader(new FileReader("C:\\ME\\DAL\\Term 2\\CSCI 5308 ASDC\\Group Project\\Development\\Gitlab\\backend\\src\\main\\resources\\serviceAccountKey.json"));
-//		String line;
-//		while ((line = br.readLine()) != null) {
-//			System.out.println(line);
-//		}
-
 		FileInputStream serviceAccount =
 				new FileInputStream("src\\main\\resources\\serviceAccountKey.json");
-
-//		System.out.println(serviceAccount.toString());
-
+		
 		FirebaseOptions options = new FirebaseOptions.Builder()
 				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
 				.build();
 
 		FirebaseApp.initializeApp(options);
-
-//	@Bean
-//	public WebMvcConfigurer corsConfigurer() {
-//		return new WebMvcConfigurer() {
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/**").allowedOrigins("localhost:4200").allowedHeaders("*");
-//			}
-//		};
-//	}
 
 	}
 }
