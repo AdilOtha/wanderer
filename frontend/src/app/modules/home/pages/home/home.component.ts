@@ -99,11 +99,11 @@ export class HomeComponent implements OnInit {
   }
 
   // render pin on map
-  createPin($event: MouseEvent) {
+  createPin(event: MouseEvent) {
     // console.log($event);
     // console.log(this.savedPins);
 
-    // remove last renedered pin from map
+    // remove last rendered pin from map
     if (
       this.savedPins.length > 0 &&
       !this.savedPins[this.savedPins.length - 1].isSaved
@@ -113,8 +113,8 @@ export class HomeComponent implements OnInit {
 
     // render new pin on map
     this.savedPins.push({
-      latitude: $event.coords.lat,
-      longitude: $event.coords.lng,
+      latitude: event.coords.lat,
+      longitude: event.coords.lng,
       locationName: '',
       isSaved: false,
       pinId: -1,
