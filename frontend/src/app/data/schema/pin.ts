@@ -4,5 +4,7 @@ export interface Pin {
     locationName: string,
     latitude: number,
     longitude: number,
-    isSaved: boolean
+    isSaved: boolean,
+    isDraggable: boolean,
+    iconUrl: string
 }
