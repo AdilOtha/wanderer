@@ -1,35 +1,24 @@
 package ca.dal.cs.wanderer.Config;
 
+import ca.dal.cs.wanderer.filter.TokenAuthenticationFilter;
 import ca.dal.cs.wanderer.handler.OAuthSuccessHandler;
+import ca.dal.cs.wanderer.services.UserProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Handler;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +28,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private OidcUserService oidcUserService;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String clientId;
+
+    @Autowired
+    private UserProfileService profileService;
 
     @Autowired
     private OAuthSuccessHandler oAuthSuccessHandler;
@@ -58,10 +53,8 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .and()
                 .csrf().disable()
-                .logout().logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                    RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-                    redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "http://localhost:4200/login");
-                });
+                .addFilterAfter(new TokenAuthenticationFilter("/api/v1/**", clientId, profileService), LogoutFilter.class);
+
     }
 
     @Bean

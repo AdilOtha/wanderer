@@ -14,7 +14,8 @@ import java.sql.Blob;
 @Data
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "UserID", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "first_name")
@@ -30,4 +31,6 @@ public class User {
     @Column(name= "photo",columnDefinition = "MEDIUMBLOB")
     @JsonIgnore
     private byte[] image;
+
+
 }

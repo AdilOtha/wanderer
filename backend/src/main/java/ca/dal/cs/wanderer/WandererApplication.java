@@ -19,12 +19,12 @@ import java.io.*;
 import java.util.Objects;
 
 @SpringBootApplication
-public class DemoApplication{
+public class WandererApplication {
 
 	public static void main(String[] args) throws IOException {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(WandererApplication.class, args);
 
-		ClassLoader classLoader = DemoApplication.class.getClassLoader();
+		ClassLoader classLoader = WandererApplication.class.getClassLoader();
 
 //		File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
 
@@ -36,6 +36,6 @@ public class DemoApplication{
 				.build();
 
 		FirebaseApp.initializeApp(options);
-	}
 
+	}
 }

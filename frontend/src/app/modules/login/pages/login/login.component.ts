@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/data/service/auth-service/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,6 @@ export class LoginComponent implements OnInit {
 
   constructor(private route:ActivatedRoute, private authServie: AuthService, private router: Router) { }
 
-
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
     if(token!=null) {
@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit {
   }
 
   onClick() {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = environment.OAUTH_REDIRECT_URL;
   }
-
 }

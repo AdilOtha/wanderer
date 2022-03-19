@@ -24,7 +24,7 @@ export const environment = {
 
   APIENDPOINT: 'http://localhost:8080/',
 
-  TOKENENDPOINT: ''
+  OAUTH_REDIRECT_URL: 'http://localhost:8080/oauth2/authorization/google',
 };
 
 /*

@@ -21,6 +21,7 @@ import { environment } from 'src/environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { LoginModule } from './modules/login/login.module';
 import { CookieService } from 'ngx-cookie-service';
+import { authInterceptorProviders } from './data/service/httpinterceptor/auth.interceptor';
 
 //ngx-toastr import
 import { ToastrModule, ToastrService } from 'ngx-toastr';
@@ -48,7 +49,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     }),    
     ToastrModule.forRoot()
   ],
-  providers: [CookieService, ToastrService],
-  bootstrap: [AppComponent],
+  providers: [CookieService, authInterceptorProviders, ToastrService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

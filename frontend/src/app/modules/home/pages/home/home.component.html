@@ -16,122 +16,148 @@
   [resizable]="false"
   [maximizable]="true"
 >
-  <form [formGroup]="pinForm" (ngSubmit)="savePin()" id="pinForm">
-    <div class="formgrid grid p-fluid p-3">
-      <div class="col-12 field">
-        <label for="locationName">Location Name:</label>
-        <input
-          pInputText
-          type="text"
-          class="form-control inputfield"
-          name="locationName"
-          id="locationName"
-          formControlName="locationName"
-          required
-        />
-        <ng-container
-          *ngIf="
-            (submitted && pinFormControls['locationName']?.errors) ||
-            (pinFormControls['locationName']?.errors &&
-              pinFormControls['locationName']?.dirty)
-          "
-        >
-          <div
-            *ngIf="pinFormControls['locationName']?.errors?.['required']"
-            class="flex justify-content-center mt-3"
-          >
-            <p-message
-              severity="error"
-              text="Location Name is required"
-            ></p-message>
+  <p-tabView styleClass="tabview-custom">
+    <p-tabPanel>
+      <ng-template pTemplate="header">
+        <i class="pi pi-map-marker mr-2"></i>
+        <span>Pin Info</span>
+      </ng-template>
+      <form [formGroup]="pinForm" (ngSubmit)="savePin()" id="pinForm">
+        <div class="formgrid grid p-fluid p-3">
+          <div class="col-12 field">
+            <label for="locationName">Location Name:</label>
+            <input
+              pInputText
+              type="text"
+              class="form-control inputfield"
+              name="locationName"
+              id="locationName"
+              formControlName="locationName"
+              required
+            />
+            <ng-container
+              *ngIf="
+                (submitted && pinFormControls['locationName']?.errors) ||
+                (pinFormControls['locationName']?.errors &&
+                  pinFormControls['locationName']?.dirty)
+              "
+            >
+              <div
+                *ngIf="pinFormControls['locationName']?.errors?.['required']"
+                class="flex justify-content-center mt-3"
+              >
+                <p-message
+                  severity="error"
+                  text="Location Name is required"
+                ></p-message>
+              </div>
+            </ng-container>
           </div>
-        </ng-container>
-      </div>
-      <div class="col-6 field">
-        <label for="pinLatitude">Latitude:</label>
-        <input
-          pInputText
-          type="text"
-          class="form-control inputfield"
-          name="pinLatitude"
-          id="pinLatitude"
-          formControlName="pinLatitude"
-          required
-        />
-        <ng-container
-          *ngIf="
-            (submitted && pinFormControls['pinLatitude']?.errors) ||
-            (pinFormControls['pinLatitude']?.errors &&
-              pinFormControls['pinLatitude']?.dirty)
-          "
-        >
-          <div
-            *ngIf="pinFormControls['pinLatitude']?.errors?.['required']"
-            class="flex justify-content-center mt-3"
-          >
-            <p-message
-              severity="error"
-              text="Pin Latitude is required"
-            ></p-message>
+          <div class="col-6 field">
+            <label for="pinLatitude">Latitude:</label>
+            <input
+              pInputText
+              type="text"
+              class="form-control inputfield"
+              name="pinLatitude"
+              id="pinLatitude"
+              formControlName="pinLatitude"
+              required
+            />
+            <ng-container
+              *ngIf="
+                (submitted && pinFormControls['pinLatitude']?.errors) ||
+                (pinFormControls['pinLatitude']?.errors &&
+                  pinFormControls['pinLatitude']?.dirty)
+              "
+            >
+              <div
+                *ngIf="pinFormControls['pinLatitude']?.errors?.['required']"
+                class="flex justify-content-center mt-3"
+              >
+                <p-message
+                  severity="error"
+                  text="Pin Latitude is required"
+                ></p-message>
+              </div>
+            </ng-container>
           </div>
-        </ng-container>
-      </div>
-      <div class="col-6 field">
-        <label for="pinLongitude">Latitude:</label>
-        <input
-          pInputText
-          type="text"
-          class="form-control inputfield"
-          name="pinLongitude"
-          id="pinLongitude"
-          formControlName="pinLongitude"
-          required
-        />
-        <ng-container
-          *ngIf="
-            (submitted && pinFormControls['pinLongitude']?.errors) ||
-            (pinFormControls['pinLongitude']?.errors &&
-              pinFormControls['pinLongitude']?.dirty)
-          "
-        >
-          <div
-            *ngIf="pinFormControls['pinLongitude']?.errors?.['required']"
-            class="flex justify-content-center mt-3"
-          >
-            <p-message
-              severity="error"
-              text="Pin Longitude is required"
-            ></p-message>
+          <div class="col-6 field">
+            <label for="pinLongitude">Longitude:</label>
+            <input
+              pInputText
+              type="text"
+              class="form-control inputfield"
+              name="pinLongitude"
+              id="pinLongitude"
+              formControlName="pinLongitude"
+              required
+            />
+            <ng-container
+              *ngIf="
+                (submitted && pinFormControls['pinLongitude']?.errors) ||
+                (pinFormControls['pinLongitude']?.errors &&
+                  pinFormControls['pinLongitude']?.dirty)
+              "
+            >
+              <div
+                *ngIf="pinFormControls['pinLongitude']?.errors?.['required']"
+                class="flex justify-content-center mt-3"
+              >
+                <p-message
+                  severity="error"
+                  text="Pin Longitude is required"
+                ></p-message>
+              </div>
+            </ng-container>
           </div>
-        </ng-container>
-      </div>
-    </div>
-  </form>
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      icon="pi pi-pencil"
-      form="pinForm"
-      label="Edit Coordinates"
-      type="button"
-      class="p-button-md"
-      (click)="editPinCoordinates()"
-    ></button>
-    <button
-      pButton
-      icon="pi pi-check"
-      form="pinForm"
-      label="Save"
-      type="submit"
-      [disabled]="!pinForm.valid || !enablePinModalSaveButton"
-      class="p-button-md"
-    ></button>
-    <p-button
-      icon="pi pi-times"
-      (click)="displayPinModal = false"
-      label="Cancel"
-    ></p-button>
-  </ng-template>
+        </div>
+        <div class="field col-6">
+          <button
+            pButton
+            icon="pi pi-pencil"
+            form="pinForm"
+            label="Edit Coordinates"
+            type="button"
+            class="p-button-md"
+            (click)="editPinCoordinates()"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-check"
+            form="pinForm"
+            label="Save"
+            type="submit"
+            [disabled]="!pinForm.valid || !enablePinModalSaveButton"
+            class="p-button-md"
+          ></button>
+          <p-button
+            icon="pi pi-times"
+            (click)="displayPinModal = false"
+            label="Cancel"
+          ></p-button>
+        </div>
+      </form>
+      <!-- <ng-template pTemplate="footer"> -->
+
+      <!-- </ng-template> -->
+    </p-tabPanel>
+    <p-tabPanel header="Future Trips">
+      <ng-template pTemplate="header">
+        <i class="pi pi-calendar mr-2"></i>
+        <span>Future Trips</span>
+      </ng-template>
+      <p>
+        At vero eos et accusamus et iusto odio dignissimos ducimus qui
+        blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
+        et quas molestias excepturi sint occaecati cupiditate non provident,
+        similique sunt in culpa qui officia deserunt mollitia animi, id est
+        laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita
+        distinctio. Nam libero tempore, cum soluta nobis est eligendi optio
+        cumque nihil impedit quo minus.
+      </p>
+    </p-tabPanel>
+  </p-tabView>
 </p-dialog>
 <p-panel styleClass="my-3" [header]="mapPanelHeader">
   <div class="map">
@@ -151,7 +177,7 @@
         [markerDraggable]="!m.isSaved || m.isDraggable"
         [iconUrl]="m.iconUrl"
         (markerDblClick)="openPinModal(m, i)"
-        (dragEnd)="pinDragEnd(m, i, $event)"        
+        (dragEnd)="pinDragEnd(m, i, $event)"
       >
         <!-- <agm-info-window>
           <strong>Pin Saved!</strong>

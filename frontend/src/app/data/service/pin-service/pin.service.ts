@@ -6,20 +6,20 @@ import { Pin } from '../../schema/pin';
   providedIn: 'root',
 })
 export class PinService {
-  controllerEndPoint: string = 'pin';
+  controllerEndPoint: string = 'api/v1/pin';
 
   constructor(private http: HttpClient) {}
 
   insertPin(pin: Pin) {
     return this.http.post(
-      environment.APIENDPOINT + this.controllerEndPoint + '/createPin',
+      this.controllerEndPoint + '/createPin',
       pin
     );
   }
 
   getPinsByRadius(radius: number, centerLat: number, centerLng: number) {
     return this.http.get(
-      environment.APIENDPOINT + this.controllerEndPoint + '/getPinsByRadius',
+      this.controllerEndPoint + '/getPinsByRadius',
       {
         params: {
           radius,
@@ -42,10 +42,21 @@ export class PinService {
     .set('latitude', latitude)
     .set('longitude', longitude)
     return this.http.put(
-      environment.APIENDPOINT + this.controllerEndPoint + '/updatePin',
+      this.controllerEndPoint + '/updatePin',
       null,
       {
         params: params
+      }
+    );
+  }
+
+  getPinsByIds(pinIds: number[]) {
+    return this.http.get(
+      this.controllerEndPoint + '/getPinsByIds',
+      {
+        params: {
+          pinIds: pinIds.join(','),
+        },
       }
     );
   }

@@ -18,7 +18,6 @@ public class UserProfileService {
         return repo.findByEmailId(email);
     }
 
-
     public void updateProfile(MultipartFile file, User user, String fName, String lName) throws IOException {
         // user.setImage();
 
@@ -27,6 +26,10 @@ public class UserProfileService {
         user.setFirstName(fName);
         user.setLastName(lName);
         repo.save(user);
+    }
+
+    public boolean existsUserByEmailId(String email) {
+        return repo.existsUserByEmailIdIgnoreCase(email);
     }
 
 }

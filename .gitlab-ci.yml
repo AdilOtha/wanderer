@@ -3,7 +3,8 @@ image: maven:latest
 stages:
   - build
   - test
-  - develop
+  - code-quality
+  - deploy
 
 variables:
   RULES_CHANGES_PATH: "**/*"
@@ -18,7 +19,7 @@ variables:
       changes:
         - $RULES_CHANGES_PATH
     - when: manual
-      allow_failure: true
+      allow_failure: false
 
 .backend:
   extends: .base-rules
@@ -31,7 +32,7 @@ variables:
     RULES_CHANGES_PATH: "frontend/**/*"
 
 frontend-build:
-  image: node:12-alpine
+  image: node:16-alpine
   stage: build
   extends: .frontend
   needs: []
@@ -40,21 +41,12 @@ frontend-build:
     - cd frontend
     - yarn install
     - yarn build
-  # cache:
-  #   key:
-  #     files:
-  #       - yarn.lock
-  #   paths:
-  #     - node_modules
-  #   policy: pull
 
 
 build-backend:
   stage: build
   extends: .backend
   needs: []
-  tags:
-    - ugrad
   script:
     - cd backend
     - mvn clean compile
@@ -63,15 +55,13 @@ test-backend:
   stage: test
   extends: .backend
   needs: ["build-backend"]
-  tags:
-    - ugrad
   script:
     - cd backend
-    - mvn clean test
+    - mvn clean test -Dspring.profiles.active=test
 
 frontend-test:
   stage: test
-  image: node:12-alpine
+  image: node:16-alpine
   extends: .frontend
   needs: ["frontend-build"]
   before_script:
@@ -83,31 +73,49 @@ frontend-test:
     - yarn install
     - yarn test
 
-#develop:
-#  stage: develop
-#  rules:
-#    - if: $CI_COMMIT_BRANCH =~ /^master$/
-#  needs: ["test-backend"]
-#  tags:
-#    - ugrad
-#  before_script:
-#    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-#    - eval $(ssh-agent -s)
-#    - chmod og-rwx ${DEPLOY_SSH_KEY}
+backend-staging:
+   image: ruby:latest
+   stage: deploy
+   before_script:
+     - cd backend
+     - apt-get update -qy
+     - apt-get install -y ruby-dev
+     - gem install dpl
+   script:
+     - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+   only:
+     - develop
 
-#  script:
-#    - cd backend
-#    - mvn clean install -DskipTests
-#    - echo "dbURL=$DATABASE_URL" > config.properties
-#    - echo "dbUserName=$TEST_DATABASE_USERNAME" >> config.properties
-#    - echo "dbPassword=$TEST_DATABASE_PASSWORD" >> config.properties
-#    - echo "dbDriver=$TEST_DATABASE" >> config.properties
-#    - pwd
-#    - ls -lrth
-#    - ls target/
-#    - ls -lrth ~/.ssh
-#    - echo "Deploying the develop pipeline"
-#    - zip -r ${CI_COMMIT_SHORT_SHA}.zip . -i target/wanderer-0.0.1-SNAPSHOT.jar
-#    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_SHORT_SHA}.zip"
+frontend-staging:
+  stage: deploy
+  image: ruby:latest
+  needs: ["backend-staging"]
+  before_script:
+    - cd frontend
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+  only:
+    - develop
 
-
+backend-code-quality:
+  stage: code-quality
+  image: maven:3-jdk-11
+  variables:
+    UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" + -H "username:patel.janvi23798@gmail.com" -H "Content-Type: application/xml" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=$CI_PIPELINE_IID&project_name=wanderer_backend" -F "file=@DesigniteAnalysis.xml"'
+  before_script:
+    - cd backend
+    - apt-get update
+    - apt-get install -y wget curl
+    - wget -O DesigniteJava.jar https://www.dropbox.com/s/mwizkj8uhplz4x3/DesigniteJava.jar?dl=1
+  script:
+    - java -jar DesigniteJava.jar -i ./ -o code-quality/ -f XML
+    - ls -l
+    - ls code-quality
+    - cd code-quality
+    - eval "$UPLOAD_QUALITY_REPORT"
+    - echo "$UPLOAD_QUALITY_REPORT"
+  only:
+    - develop

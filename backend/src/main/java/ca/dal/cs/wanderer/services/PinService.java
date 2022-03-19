@@ -45,4 +45,8 @@ public class PinService {
             return updatedPin;
         }
     }
+
+    public List<Pin> getPinsByIds(List<Integer> pinIds){
+        return pinRepository.findAllById(pinIds);
+    }
 }
