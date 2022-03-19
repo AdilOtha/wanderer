@@ -15,6 +15,7 @@ public class UserProfileService {
     private UserRepository repo;
 
     public User fetchByEmail(String email) {
+
         return repo.findByEmailId(email);
     }
 
