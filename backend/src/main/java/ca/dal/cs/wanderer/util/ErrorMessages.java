@@ -7,10 +7,11 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorMessages {
-    //add you fields here
-    EMAIL_NOT_FOUND("Email can not be found, please check the principal", HttpStatus.NOT_FOUND),
+    //add your fields here
+    EMAIL_NOT_FOUND("Email can not be found, please check the principal", HttpStatus.FORBIDDEN),
     PRINCIPAL_NOT_FOUND("Principal not found, please login", HttpStatus.FORBIDDEN),
-    Blog_NF("gfuyewbfiewu",HttpStatus.BAD_REQUEST);
+    PIN_NOT_SAVED("Error while saving Pin",HttpStatus.INTERNAL_SERVER_ERROR),
+    PIN_NOT_FOUND("Unable to retrieve Pins", HttpStatus.INTERNAL_SERVER_ERROR);
 
     //below should be always fixed
     private final String errorMessage;

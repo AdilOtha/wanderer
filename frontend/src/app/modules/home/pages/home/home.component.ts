@@ -107,6 +107,8 @@ export class HomeComponent implements OnInit {
 
     // listen to center change events
     this.centerChangeSubject.pipe(debounceTime(0)).subscribe((data: any) => {
+      console.log('Center Change: ' + data);
+      
       this.latitude = data.lat;
       this.longitude = data.lng;
       this.getPinsByRadiusFromService();
@@ -116,7 +118,7 @@ export class HomeComponent implements OnInit {
     this.radiusChangeSubject
       .pipe(debounceTime(1000))
       .subscribe((newRadius: any) => {
-        // console.log(newRadius);
+        console.log(newRadius);
 
         this.radius = parseInt(newRadius.toString());
 
@@ -210,28 +212,29 @@ export class HomeComponent implements OnInit {
           )
           .subscribe({
             next: (data: any) => {
-              if (data === null) {
-                console.log('Error while updating pin');
-              } else {
-                console.log({
-                  updatedPin: data,
-                });
-                data.isSaved = true;
-                data.isDraggable = false;
-                data.iconUrl = this.pinIconUrl.savedPinIcon;
-                // this.newlyCreatedPins.push(data);
-                this.savedPins[this.currentPinIndex] = data;
-                // find index of updated pin in newlyCreatedPins array and update it with new data
-                const index = this.newlyCreatedPins.findIndex(
-                  (pin) => pin.pinId === data.pinId
-                );
-                this.newlyCreatedPins[index] = data;
-                delete this.updatingPinsMap[data.pinId];
-                console.log(this.savedPins[this.currentPinIndex]);
-              }
+              const updatedPin = data.payload;
+              console.log({
+                updatedPin: data,
+              });
+              updatedPin.isSaved = true;
+              updatedPin.isDraggable = false;
+              updatedPin.iconUrl = this.pinIconUrl.savedPinIcon;
+              // this.newlyCreatedPins.push(data);
+              this.savedPins[this.currentPinIndex] = updatedPin;
+              // find index of updated pin in newlyCreatedPins array and update it with new data
+              const index = this.newlyCreatedPins.findIndex(
+                (pin) => pin.pinId === updatedPin.pinId
+              );
+              this.newlyCreatedPins[index] = updatedPin;
+              delete this.updatingPinsMap[updatedPin.pinId];
+              this.toast.info(data?.message);
+              console.log(this.savedPins[this.currentPinIndex]);
             },
             error: (err: any) => {
               console.log(err);
+              const error = err.error;
+              this.toast.error(error?.payload?.message);
+              this.currentPin.iconUrl = this.pinIconUrl.savedPinIcon;
             },
           });
       } else {
@@ -252,19 +255,20 @@ export class HomeComponent implements OnInit {
           )
           .subscribe({
             next: (data: any) => {
-              if (data === null) {
-                console.log('Error while saving pin');
-              } else {
-                console.log({ newPin: data });
-                data.isSaved = true;
-                data.isDraggable = false;
-                data.iconUrl = this.pinIconUrl.savedPinIcon;
-                this.newlyCreatedPins.push(data);
-                this.savedPins[this.currentPinIndex] = data;
-              }
+              const newPin = data.payload;
+              console.log({ newPin: data });
+              newPin.isSaved = true;
+              newPin.isDraggable = false;
+              newPin.iconUrl = this.pinIconUrl.savedPinIcon;
+              this.newlyCreatedPins.push(newPin);
+              this.savedPins[this.currentPinIndex] = newPin;
+              this.toast.success(data?.message);
             },
             error: (err: HttpErrorResponse) => {
               console.log(err);
+              const error = err.error;
+              this.toast.error(error?.payload?.message);
+              this.savedPins.splice(this.currentPinIndex, 1);
             },
           });
       }
@@ -286,7 +290,8 @@ export class HomeComponent implements OnInit {
     if (this.radius < 0) {
       this.radius = Math.abs(this.radius);
     }
-    const radiusInKms: number = this.radius / 1000;
+    const meterToKmUnit = 1000;
+    const radiusInKms: number = this.radius / meterToKmUnit;
     this.pinService
       .getPinsByRadius(radiusInKms, this.latitude, this.longitude)
       .pipe(
@@ -295,21 +300,16 @@ export class HomeComponent implements OnInit {
         })
       )
       .subscribe({
-        next: (data: any) => {
-          // for (let pin of data) {
-          //   pin.isSaved = true;
-          //   pin.iconUrl = this.pinIconUrl.savedPinIcon;
-          // }
-          console.log({ data, newlyCreatedPins: this.newlyCreatedPins });
-
-          this.savedPins = data;
-          // this.savedPins = [...this.savedPins, ...this.newlyCreatedPins];
+        next: (pinsByRadiusData: any) => {
+          console.log({
+            pinsByRadiusData,
+            newlyCreatedPins: this.newlyCreatedPins,
+          });
 
           console.log({ updatedPins: this.updatingPinsMap });
 
           // refresh data of newly created pins
           if (this.newlyCreatedPins.length > 0) {
-
             // get pinIds from newlyCreatedPins array and pass to getPinsByIds service
             const pinIds = this.newlyCreatedPins.map((pin) => pin.pinId);
 
@@ -318,52 +318,62 @@ export class HomeComponent implements OnInit {
               .pipe(
                 map((data: any) => {
                   return this.performPinPostProcessing(data);
+                }),
+                finalize(() => {
+                  this.mergePins(pinsByRadiusData);
                 })
               )
               .subscribe({
                 next: (data: any) => {
                   console.log({ refreshedPins: data });
-                  this.newlyCreatedPins = data;
-
-                  const savedPinsMap: any = {};
-                  for (let pin of this.savedPins.concat(
-                    this.newlyCreatedPins
-                  )) {
-                    if (pin.pinId in this.updatingPinsMap) {
-                      pin = this.updatingPinsMap[pin.pinId];
-                    }
-                    if (!(pin.pinId in savedPinsMap)) {
-                      savedPinsMap[pin.pinId] = pin;
-                    }
-                  }
-
-                  this.savedPins = Object.values(savedPinsMap);
-
-                  console.log(this.savedPins);
+                  this.newlyCreatedPins = data.payload;
                 },
-                error: (err: any) => {
+                error: (err: HttpErrorResponse) => {
                   console.log(err);
+                  const error = err.error;
+                  this.toast.error(error?.payload?.message || 'Unable to retrieve pins');
                 },
               });
+          } else {
+            this.mergePins(pinsByRadiusData);
           }
         },
         error: (err: HttpErrorResponse) => {
           console.log(err);
+          const error = err.error;
+          this.toast.clear();
+          this.toast.error(error?.payload?.message || 'Unable to retrieve pins');
         },
       });
   }
 
   performPinPostProcessing(data: any) {
-    if (data != null) {
-      return data.map((pin: any) => {
+    if (data.isSuccessful) {
+      const processedPayload = data.payload.map((pin: any) => {
         pin.isSaved = true;
         pin.isDraggable = false;
         pin.iconUrl = this.pinIconUrl.savedPinIcon;
         return pin;
       });
-    } else {
-      return [];
+      data.payload = processedPayload;
     }
+    return data;
+  }
+
+  mergePins(pinsByRadiusData: any) {
+    const savedPinsMap: any = {};
+    for (let pin of pinsByRadiusData?.payload.concat(this.newlyCreatedPins)) {
+      if (pin.pinId in this.updatingPinsMap) {
+        pin = this.updatingPinsMap[pin.pinId];
+      }
+      if (!(pin.pinId in savedPinsMap)) {
+        savedPinsMap[pin.pinId] = pin;
+      }
+    }
+
+    this.savedPins = Object.values(savedPinsMap);
+
+    console.log(this.savedPins);
   }
 
   pinDragEnd(m: Pin, index: number, event: MouseEvent) {
