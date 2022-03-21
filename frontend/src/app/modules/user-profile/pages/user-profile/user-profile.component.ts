@@ -5,6 +5,7 @@ import { UserProfile } from 'src/app/data/schema/user-profile';
 import { UserProfileService } from 'src/app/data/service/user-profile/user-profile.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-profile',
@@ -39,7 +40,8 @@ export class UserProfileComponent implements OnInit {
     private fb: FormBuilder,
     private userProfileService: UserProfileService,
     private sanitizer: DomSanitizer,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -47,22 +49,25 @@ export class UserProfileComponent implements OnInit {
     this.userProfileService.getUserDetails().subscribe({
       next: (data: any) => {
         console.log(data);
-        this.saveForm.controls['firstName'].patchValue(data.firstName);
-        this.saveForm.controls['lastName'].patchValue(data.lastName);
-        this.saveForm.controls['emailId'].patchValue(data.emailId);
-        if (data.image) {
-          const unsafeImageUrl = data.image;
+        const userData = data.payload;
+        this.saveForm.controls['firstName'].patchValue(userData.firstName);
+        this.saveForm.controls['lastName'].patchValue(userData.lastName);
+        this.saveForm.controls['emailId'].patchValue(userData.emailId);
+        if (userData.image) {
+          const unsafeImageUrl = userData.image;
           this.saveForm.controls['profileImage'].patchValue(
             this.sanitizer.bypassSecurityTrustResourceUrl(unsafeImageUrl)
           );
         } else {
           this.saveForm.controls['profileImage'].patchValue(
-            data.googlePhotoUrl
+            userData.googlePhotoUrl
           );
         }
       },
       error: (err: any) => {
         console.log(err);
+        const error = err.error;
+        this.toast.error(error?.payload?.message);
       },
     });
   }
@@ -87,16 +92,18 @@ export class UserProfileComponent implements OnInit {
       };
       this.userProfileService.updateUserDetails(userProfile).subscribe({
         next: (data: any) => {
-          if (data.success !== null) {
-            const reader = new FileReader();
-            reader.readAsDataURL(this.profileImage);
-            reader.onloadend = () => {
-              this.saveForm.controls['profileImage'].patchValue(reader.result);
-              this.spinner.hide();
-            };
-            this.submitted = false;
-            this.modalDisplay = false;
-          }
+          const updatedUser = data.payload;
+
+          console.log(data);
+          
+          const reader = new FileReader();
+          reader.readAsDataURL(this.profileImage);
+          reader.onloadend = () => {
+            this.saveForm.controls['profileImage'].patchValue(reader.result);
+            this.spinner.hide();
+          };
+          this.submitted = false;
+          this.modalDisplay = false;
         },
         error: (err: any) => {
           console.log(err);

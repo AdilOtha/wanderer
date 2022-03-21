@@ -221,7 +221,7 @@ export class HomeComponent implements OnInit {
               updatedPin.iconUrl = this.pinIconUrl.savedPinIcon;
               // this.newlyCreatedPins.push(data);
               this.savedPins[this.currentPinIndex] = updatedPin;
-              // find index of updated pin in newlyCreatedPins array and update it with new data
+              
               const index = this.newlyCreatedPins.findIndex(
                 (pin) => pin.pinId === updatedPin.pinId
               );
