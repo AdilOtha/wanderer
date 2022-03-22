@@ -1,23 +1,23 @@
-package ca.dal.cs.wanderer.entity;
+package ca.dal.cs.wanderer.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "pininformation")
+@Table(name = "pin_information")
 
 // Class
 public class Pin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PinID", unique = true, nullable = false)
+    @Column(name = "pin_id", unique = true, nullable = false)
     private Integer pinId;
-    @Column(name="UserID", nullable = true)
+    @Column(name="user_id", nullable = true)
     private Integer userId;
-    @Column(name="LocationName")
+    @Column(name="pin_location_name")
     private String locationName;
-    @Column(name="Latitude")
+    @Column(name="pin_latitude")
     private Double latitude;
-    @Column(name="Longitude")
+    @Column(name="pin_longitude")
     private Double longitude;
 
     public Pin() {

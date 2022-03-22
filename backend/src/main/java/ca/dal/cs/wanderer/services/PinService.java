@@ -1,7 +1,7 @@
 package ca.dal.cs.wanderer.services;
 
 import ca.dal.cs.wanderer.controllers.PinUpdateController;
-import ca.dal.cs.wanderer.entity.Pin;
+import ca.dal.cs.wanderer.models.Pin;
 import ca.dal.cs.wanderer.repositories.PinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

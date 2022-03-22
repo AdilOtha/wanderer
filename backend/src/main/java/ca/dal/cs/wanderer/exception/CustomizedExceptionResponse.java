@@ -1,6 +1,7 @@
 package ca.dal.cs.wanderer.exception;
 
 import ca.dal.cs.wanderer.exception.category.EmailNotFound;
+import ca.dal.cs.wanderer.exception.category.InvalidCoordinates;
 import ca.dal.cs.wanderer.exception.category.PinNotFound;
 import ca.dal.cs.wanderer.exception.category.PinNotSaved;
 import ca.dal.cs.wanderer.util.ErrorMessages;
@@ -44,6 +45,13 @@ public class CustomizedExceptionResponse extends ResponseEntityExceptionHandler 
         ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         GenericResponse<ExceptionResponse> genericResponse = new GenericResponse<>(false, ErrorMessages.PIN_NOT_FOUND.getHttpStatus().name(), response);
         return handleExceptionInternal(ex, genericResponse, new HttpHeaders(), ErrorMessages.PIN_NOT_FOUND.getHttpStatus(), request);
+    }
+
+    @ExceptionHandler(InvalidCoordinates.class)
+    public final ResponseEntity<Object> invalidCoordinates(InvalidCoordinates ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        GenericResponse<ExceptionResponse> genericResponse = new GenericResponse<>(false, ErrorMessages.INVALID_COORDINATES.getHttpStatus().name(), response);
+        return handleExceptionInternal(ex, genericResponse, new HttpHeaders(), ErrorMessages.INVALID_COORDINATES.getHttpStatus(), request);
     }
 
 

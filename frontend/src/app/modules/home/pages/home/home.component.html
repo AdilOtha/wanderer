@@ -57,7 +57,7 @@
             <label for="pinLatitude">Latitude:</label>
             <input
               pInputText
-              type="text"
+              type="number"
               class="form-control inputfield"
               name="pinLatitude"
               id="pinLatitude"
@@ -86,7 +86,7 @@
             <label for="pinLongitude">Longitude:</label>
             <input
               pInputText
-              type="text"
+              type="number"
               class="form-control inputfield"
               name="pinLongitude"
               id="pinLongitude"
@@ -231,6 +231,8 @@
         mode="decimal"
         [minFractionDigits]="2"
         [maxFractionDigits]="2"
+        [min]="-90.00"
+        [max]="90.00"
       ></p-inputNumber>
     </div>
     <div class="col-6 xl:col-2 field">
@@ -242,6 +244,8 @@
         mode="decimal"
         [minFractionDigits]="2"
         [maxFractionDigits]="2"
+        [min]="-180.00"
+        [max]="180.00"
       ></p-inputNumber>
     </div>
     <div class="col-2 xl:col-2 field mt-2">

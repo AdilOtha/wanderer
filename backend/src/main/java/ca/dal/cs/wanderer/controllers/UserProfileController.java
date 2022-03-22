@@ -35,34 +35,8 @@ public class UserProfileController {
 
     private String email = "";
 
-    //uncomment this for right output, it wont have google url as of now
-//    @GetMapping("/getDetails")
-//    public User fetchSingle(@AuthenticationPrincipal OidcUser principal) throws JsonProcessingException {
-//        email = principal.getEmail();
-////        String pic= principal.getPicture();
-////       Object json = mapper.readValue(pic, Object.class);
-////       String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-//       return service.fetchByEmail(email);
-//    }
-
     @GetMapping("/getDetails")
-    public ResponseEntity<GenericResponse<JSONObject>> fetchSingle(@AuthenticationPrincipal OidcUser principal) throws JsonProcessingException {
-//        Map<String,String> map=new HashMap<>();
-//        System.out.println(principal);
-//        email = principal.getEmail();
-//        String pic= principal.getPicture();
-//        User user = service.fetchByEmail(email);
-//        map.put("firstName",user.getFirstName());
-//        map.put("lastName",user.getLastName());
-//        map.put("emailId", email);
-//        map.put("googlePhotoUrl", principal.getPicture());
-//        if(user.getImage()!=null){
-//            String encodedImage = Base64.getEncoder().encodeToString(user.getImage());
-//            map.put("image","data:image/png;base64, "+ encodedImage);
-//        } else {
-//            map.put("image", null);
-//        }
-//        return map;
+    public ResponseEntity<GenericResponse<JSONObject>> fetchSingle(@AuthenticationPrincipal OidcUser principal) {
         System.out.println(principal);
         if (principal == null) {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
@@ -119,11 +93,6 @@ public class UserProfileController {
         }
         User savedUser = service.updateProfile(file, user, fName, lName);
 
-//        List<JSONObject> jsonObjectList = new ArrayList<JSONObject>();
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("success", "Profile updated successfully");
-//        jsonObjectList.add(jsonObject);
-//        return new ResponseEntity<>(jsonObjectList, HttpStatus.OK);
         GenericResponse<User> userGenericResponse = new GenericResponse<>(true, "User Profile Updated Successfully", savedUser);
 
         return new ResponseEntity<>(userGenericResponse, HttpStatus.OK);

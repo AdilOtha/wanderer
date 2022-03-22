@@ -5,10 +5,10 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class PinNotFound extends RuntimeException{
+public class InvalidCoordinates extends RuntimeException{
     private final String message;
     private final HttpStatus status;
-    public PinNotFound(ErrorMessages messages)
+    public InvalidCoordinates(ErrorMessages messages)
     {
         this.message=messages.getErrorMessage();
         this.status=messages.getHttpStatus();

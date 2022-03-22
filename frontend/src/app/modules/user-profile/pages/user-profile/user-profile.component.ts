@@ -95,7 +95,7 @@ export class UserProfileComponent implements OnInit {
           const updatedUser = data.payload;
 
           console.log(data);
-          
+
           const reader = new FileReader();
           reader.readAsDataURL(this.profileImage);
           reader.onloadend = () => {
@@ -107,6 +107,8 @@ export class UserProfileComponent implements OnInit {
         },
         error: (err: any) => {
           console.log(err);
+          const error = err.error;
+          this.toast.error(error?.payload?.message);
         },
       });
     }

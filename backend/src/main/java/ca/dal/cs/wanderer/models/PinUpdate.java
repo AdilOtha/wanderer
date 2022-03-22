@@ -1,4 +1,4 @@
-package ca.dal.cs.wanderer.entity;
+package ca.dal.cs.wanderer.models;
 
 import java.util.Date;
 

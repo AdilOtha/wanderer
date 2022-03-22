@@ -1,11 +1,8 @@
 package ca.dal.cs.wanderer.controllers;
 
-import ca.dal.cs.wanderer.entity.Pin;
+import ca.dal.cs.wanderer.models.Pin;
 import ca.dal.cs.wanderer.exception.GenericResponse;
-import ca.dal.cs.wanderer.exception.category.EmailNotFound;
-import ca.dal.cs.wanderer.exception.category.PinNotFound;
-import ca.dal.cs.wanderer.exception.category.PinNotSaved;
-import ca.dal.cs.wanderer.exception.category.PrincipalNotFound;
+import ca.dal.cs.wanderer.exception.category.*;
 import ca.dal.cs.wanderer.models.User;
 import ca.dal.cs.wanderer.services.PinService;
 import ca.dal.cs.wanderer.services.UserProfileService;
@@ -33,7 +30,15 @@ public class PinController {
 
     @PostMapping("/createPin")
     public ResponseEntity<GenericResponse<Pin>> createPin(@AuthenticationPrincipal OidcUser principal, @RequestBody Pin pin) throws Exception {
-        System.out.println(principal);
+
+        if(pin.getLocationName()==null || pin.getLocationName().trim().isEmpty()){
+            throw new Exception("Invalid Location Name: Cannot be empty");
+        }
+
+        if(pin.getLatitude()<-90 || pin.getLatitude()>90 || pin.getLongitude()<-180 || pin.getLongitude()>180){
+            throw new InvalidCoordinates(ErrorMessages.INVALID_COORDINATES);
+        }
+
         System.out.println(principal);
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
@@ -44,7 +49,7 @@ public class PinController {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
         }
         User authenticatedUser = userProfileService.fetchByEmail(email);
-        Integer userId = Math.toIntExact(authenticatedUser.getId());
+        Integer userId = authenticatedUser.getId();
         System.out.println("Authenticated User ID: " + userId);
         pin.setUserId(userId);
         Pin savedPin = pinService.savePin(pin);
@@ -56,8 +61,17 @@ public class PinController {
     }
 
     @GetMapping("/getPinsByRadius")
-    public ResponseEntity<GenericResponse<List<Pin>>> getPinsByRadius(@AuthenticationPrincipal OidcUser principal, @RequestParam Double radius, @RequestParam Double centerLat, @RequestParam Double centerLng){
+    public ResponseEntity<GenericResponse<List<Pin>>> getPinsByRadius(@AuthenticationPrincipal OidcUser principal, @RequestParam Double radius, @RequestParam Double centerLat, @RequestParam Double centerLng) throws Exception {
         System.out.println(radius + " "+ centerLat + " "+ centerLng);
+
+        if(radius<0){
+            throw new Exception("Invalid Radius");
+        }
+
+        if(centerLat<-90 || centerLat>90 || centerLng<-180 || centerLng>180){
+            throw new InvalidCoordinates(ErrorMessages.INVALID_COORDINATES);
+        }
+
         System.out.println(principal);
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
@@ -78,8 +92,21 @@ public class PinController {
     }
 
     @PutMapping("/updatePin")
-    public ResponseEntity<GenericResponse<Pin>> updatePin(@AuthenticationPrincipal OidcUser principal, @RequestParam Integer pinId, @RequestParam String locationName, @RequestParam Double latitude, @RequestParam Double longitude){
+    public ResponseEntity<GenericResponse<Pin>> updatePin(@AuthenticationPrincipal OidcUser principal, @RequestParam Integer pinId, @RequestParam String locationName, @RequestParam Double latitude, @RequestParam Double longitude) throws Exception {
         System.out.println("Pin ID: " + pinId + "Location Name: " + locationName + " Latitude: "+ latitude + " Longitude: " + longitude);
+
+        if(pinId<0){
+            throw new Exception("Invalid Pin ID");
+        }
+
+        if(locationName==null || locationName.trim().isEmpty()){
+            throw new Exception("Invalid Location Name");
+        }
+
+        if(latitude<-90 || latitude>90 || longitude<-180 || longitude>180){
+            throw new InvalidCoordinates(ErrorMessages.INVALID_COORDINATES);
+        }
+
         System.out.println(principal);
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
@@ -102,6 +129,7 @@ public class PinController {
     @GetMapping("/getPinsByIds")
     public ResponseEntity<GenericResponse<List<Pin>>> getPinsByIds(@AuthenticationPrincipal OidcUser principal, @RequestParam Integer[] pinIds){
         System.out.println(pinIds);
+
         System.out.println(principal);
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);

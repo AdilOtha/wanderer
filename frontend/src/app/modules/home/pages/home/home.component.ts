@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   pinCreationUpdates!: Observable<any>;
   readonly PIN_UPDATE_COLLECTION: string = 'pin_updates';
 
-  // Pin Center and Radius Subjects for 2-way communication between UI and Keyboard input
+  // Pin Center and Radius Subjects for 2-way communication between Map UI and Keyboard input
   centerChangeSubject: Subject<any> = new Subject();
   radiusChangeSubject: Subject<any> = new Subject();
 
@@ -31,8 +31,11 @@ export class HomeComponent implements OnInit {
   radius: number = 50000;
 
   // initial/default center position for the map
-  latitude: number = 21.7645;
-  longitude: number = 72.1519;
+  readonly DEFAULT_LAT: number = 21.7645;
+  readonly DEFAULT_LNG: number = 72.1519;
+
+  latitude: number = this.DEFAULT_LAT;
+  longitude: number = this.DEFAULT_LNG;
 
   // Saved Pins
   savedPins: Pin[] = [];
@@ -106,9 +109,9 @@ export class HomeComponent implements OnInit {
     });
 
     // listen to center change events
-    this.centerChangeSubject.pipe(debounceTime(0)).subscribe((data: any) => {
-      console.log('Center Change: ' + data);
-      
+    this.centerChangeSubject.pipe(debounceTime(1000)).subscribe((data: any) => {
+      console.log('Center Change: ',data);
+
       this.latitude = data.lat;
       this.longitude = data.lng;
       this.getPinsByRadiusFromService();
@@ -118,7 +121,7 @@ export class HomeComponent implements OnInit {
     this.radiusChangeSubject
       .pipe(debounceTime(1000))
       .subscribe((newRadius: any) => {
-        console.log(newRadius);
+        // console.log(newRadius);
 
         this.radius = parseInt(newRadius.toString());
 
@@ -173,6 +176,19 @@ export class HomeComponent implements OnInit {
 
   // save or update pin to database
   savePin() {
+    this.currentPin.latitude = this.pinForm.controls['pinLatitude'].value;
+    this.currentPin.longitude = this.pinForm.controls['pinLongitude'].value;
+    this.currentPin.locationName = this.pinForm.controls['locationName'].value;
+    // validate latitude and longitude
+    if (
+      this.currentPin.latitude < -90 ||
+      this.currentPin.latitude > 90 ||
+      this.currentPin.longitude < -180 ||
+      this.currentPin.longitude > 180
+    ) {
+      this.toast.error('Please enter valid latitude and longitude');
+      return;
+    }
     this.submitted = true;
     this.enablePinModalSaveButton = false;
     if (this.pinForm.valid) {
@@ -186,7 +202,7 @@ export class HomeComponent implements OnInit {
       let pin: Pin = {
         latitude: this.currentPin.latitude,
         longitude: this.currentPin.longitude,
-        locationName: this.pinForm.controls['locationName'].value,
+        locationName: this.currentPin.locationName,
         pinId: -1,
         isSaved: true,
         isDraggable: false,
@@ -213,27 +229,26 @@ export class HomeComponent implements OnInit {
           .subscribe({
             next: (data: any) => {
               const updatedPin = data.payload;
-              console.log({
-                updatedPin: data,
-              });
+              // console.log({
+              //   updatedPin: data,
+              // });
               updatedPin.isSaved = true;
               updatedPin.isDraggable = false;
-              updatedPin.iconUrl = this.pinIconUrl.savedPinIcon;
-              // this.newlyCreatedPins.push(data);
+              updatedPin.iconUrl = this.pinIconUrl.savedPinIcon;            
               this.savedPins[this.currentPinIndex] = updatedPin;
-              
+
               const index = this.newlyCreatedPins.findIndex(
                 (pin) => pin.pinId === updatedPin.pinId
               );
               this.newlyCreatedPins[index] = updatedPin;
               delete this.updatingPinsMap[updatedPin.pinId];
               this.toast.info(data?.message);
-              console.log(this.savedPins[this.currentPinIndex]);
+              // console.log(this.savedPins[this.currentPinIndex]);
             },
             error: (err: any) => {
               console.log(err);
               const error = err.error;
-              this.toast.error(error?.payload?.message);
+              this.toast.error(error?.payload?.message || error?.message);
               this.currentPin.iconUrl = this.pinIconUrl.savedPinIcon;
             },
           });
@@ -256,7 +271,7 @@ export class HomeComponent implements OnInit {
           .subscribe({
             next: (data: any) => {
               const newPin = data.payload;
-              console.log({ newPin: data });
+              // console.log({ newPin: data });
               newPin.isSaved = true;
               newPin.isDraggable = false;
               newPin.iconUrl = this.pinIconUrl.savedPinIcon;
@@ -267,7 +282,7 @@ export class HomeComponent implements OnInit {
             error: (err: HttpErrorResponse) => {
               console.log(err);
               const error = err.error;
-              this.toast.error(error?.payload?.message);
+              this.toast.error(error?.payload?.message || error?.message);
               this.savedPins.splice(this.currentPinIndex, 1);
             },
           });
@@ -278,7 +293,7 @@ export class HomeComponent implements OnInit {
   editPinCoordinates() {
     this.displayPinModal = false;
     this.toast.info(
-      'Please move the selected marker to change its coordinates'
+      'Please move the selected Pin to change its coordinates'
     );
     this.savedPins[this.currentPinIndex].isDraggable = true;
     this.savedPins[this.currentPinIndex].iconUrl =
@@ -289,6 +304,17 @@ export class HomeComponent implements OnInit {
   getPinsByRadiusFromService() {
     if (this.radius < 0) {
       this.radius = Math.abs(this.radius);
+    }
+    // validate latitude and longitude
+    if (
+      this.latitude < -90.0 ||
+      this.latitude > 90.0 ||
+      this.longitude < -180.0 ||
+      this.longitude > 180.0
+    ) {
+      this.latitude= this.DEFAULT_LAT;
+      this.longitude = this.DEFAULT_LNG;
+      this.toast.error('Invalid latitude or longitude');
     }
     const meterToKmUnit = 1000;
     const radiusInKms: number = this.radius / meterToKmUnit;
@@ -301,12 +327,12 @@ export class HomeComponent implements OnInit {
       )
       .subscribe({
         next: (pinsByRadiusData: any) => {
-          console.log({
-            pinsByRadiusData,
-            newlyCreatedPins: this.newlyCreatedPins,
-          });
+          // console.log({
+          //   pinsByRadiusData,
+          //   newlyCreatedPins: this.newlyCreatedPins,
+          // });
 
-          console.log({ updatedPins: this.updatingPinsMap });
+          // console.log({ updatedPins: this.updatingPinsMap });
 
           // refresh data of newly created pins
           if (this.newlyCreatedPins.length > 0) {
@@ -325,13 +351,15 @@ export class HomeComponent implements OnInit {
               )
               .subscribe({
                 next: (data: any) => {
-                  console.log({ refreshedPins: data });
+                  // console.log({ refreshedPins: data });
                   this.newlyCreatedPins = data.payload;
                 },
                 error: (err: HttpErrorResponse) => {
                   console.log(err);
                   const error = err.error;
-                  this.toast.error(error?.payload?.message || 'Unable to retrieve pins');
+                  this.toast.error(
+                    error?.payload?.message || error?.message || 'Unable to retrieve pins'
+                  );
                 },
               });
           } else {
@@ -342,7 +370,9 @@ export class HomeComponent implements OnInit {
           console.log(err);
           const error = err.error;
           this.toast.clear();
-          this.toast.error(error?.payload?.message || 'Unable to retrieve pins');
+          this.toast.error(
+            error?.payload?.message || error?.message || 'Unable to retrieve pins'
+          );
         },
       });
   }
@@ -373,14 +403,14 @@ export class HomeComponent implements OnInit {
 
     this.savedPins = Object.values(savedPinsMap);
 
-    console.log(this.savedPins);
+    // console.log(this.savedPins);
   }
 
   pinDragEnd(m: Pin, index: number, event: MouseEvent) {
     console.log('dragEnd', m, event);
     m.latitude = event.coords.lat;
     m.longitude = event.coords.lng;
-    console.log(m);
+    // console.log(m);
   }
 
   identifyPin(index: number, pin: Pin) {
