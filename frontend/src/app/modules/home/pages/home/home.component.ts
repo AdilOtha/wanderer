@@ -109,7 +109,7 @@ export class HomeComponent implements OnInit {
     });
 
     // listen to center change events
-    this.centerChangeSubject.pipe(debounceTime(1000)).subscribe((data: any) => {
+    this.centerChangeSubject.pipe(debounceTime(0)).subscribe((data: any) => {
       console.log('Center Change: ',data);
 
       this.latitude = data.lat;

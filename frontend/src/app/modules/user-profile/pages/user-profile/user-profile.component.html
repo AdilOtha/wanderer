@@ -69,6 +69,7 @@
         ><strong>New Profile Image: </strong> {{ uploadedFilename }}</label
       >
       <p-fileUpload
+        #imageUpload
         name="profileImage"
         accept="image/*"
         [showUploadButton]="false"
@@ -118,7 +119,7 @@
           ></button>
         </ng-template>
         <div class="user-profile-detail py-2">
-          <strong>Name: {{ f['firstName'].value }} {{ f['lastName'].value }}</strong>
+          <strong>Name: {{ firstName }} {{ lastName }}</strong>
         </div>
         <p-divider></p-divider>
         <div class="user-profile-detail py-2">

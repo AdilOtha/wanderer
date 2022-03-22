@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { UserProfile } from 'src/app/data/schema/user-profile';
@@ -6,6 +6,7 @@ import { UserProfileService } from 'src/app/data/service/user-profile/user-profi
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -24,10 +25,14 @@ export class UserProfileComponent implements OnInit {
   profileImage: any =
     'https://images.unsplash.com/photo-1645785538675-f81e7dbab4b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80';
 
-  email: string = 'adil@gmail.com';
+  email: string = '';
 
+  @ViewChild('imageUpload') imageUpload: any;
   fileLimit: number = 1;
   uploadedFilename: string = '';
+
+  firstName!: string;
+  lastName!: string;
 
   saveForm: FormGroup = this.fb.group({
     firstName: ['', [Validators.required]],
@@ -46,12 +51,21 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('User-profile component loaded');
-    this.userProfileService.getUserDetails().subscribe({
+    this.spinner.show();
+    this.userProfileService.getUserDetails()
+    .pipe(
+      finalize(() => {
+        this.spinner.hide();
+      })
+    )
+    .subscribe({
       next: (data: any) => {
         console.log(data);
         const userData = data.payload;
         this.saveForm.controls['firstName'].patchValue(userData.firstName);
+        this.firstName = userData.firstName;
         this.saveForm.controls['lastName'].patchValue(userData.lastName);
+        this.lastName = userData.lastName;
         this.saveForm.controls['emailId'].patchValue(userData.emailId);
         if (userData.image) {
           const unsafeImageUrl = userData.image;
@@ -90,18 +104,30 @@ export class UserProfileComponent implements OnInit {
         lastName: this.saveForm.controls['lastName'].value,
         profileImage: this.profileImage,
       };
-      this.userProfileService.updateUserDetails(userProfile).subscribe({
+      this.userProfileService.updateUserDetails(userProfile)      
+      .subscribe({
         next: (data: any) => {
           const updatedUser = data.payload;
+          this.saveForm.controls['firstName'].patchValue(
+            updatedUser.firstName
+          );
+          this.firstName = updatedUser.firstName;
+          this.saveForm.controls['lastName'].patchValue(updatedUser.lastName);
+          this.lastName = updatedUser.lastName;
 
           console.log(data);
 
-          const reader = new FileReader();
-          reader.readAsDataURL(this.profileImage);
-          reader.onloadend = () => {
-            this.saveForm.controls['profileImage'].patchValue(reader.result);
+          if(this.profileImage instanceof Blob){
+            const reader = new FileReader();
+            reader.readAsDataURL(this.profileImage);
+            reader.onloadend = () => {
+              this.saveForm.controls['profileImage'].patchValue(reader.result);
+              this.spinner.hide();
+            };
+          } else {
             this.spinner.hide();
-          };
+          }
+          this.imageUpload.clear();
           this.submitted = false;
           this.modalDisplay = false;
         },
@@ -109,6 +135,7 @@ export class UserProfileComponent implements OnInit {
           console.log(err);
           const error = err.error;
           this.toast.error(error?.payload?.message);
+          this.spinner.hide();
         },
       });
     }
@@ -122,9 +149,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   onProfileImageClear(event: any) {
-    console.log(event);
+    // console.log(event);
     this.profileImage = '';
     this.uploadedFilename = '';
-    console.log('Cancel Triggered');
+    // console.log('Cancel Triggered');
   }
 }
