@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit {
 
     // listen to center change events
     this.centerChangeSubject.pipe(debounceTime(0)).subscribe((data: any) => {
-      console.log('Center Change: ',data);
+      console.log('Center Change: ', data);
 
       this.latitude = data.lat;
       this.longitude = data.lng;
@@ -218,10 +218,7 @@ export class HomeComponent implements OnInit {
           .updatePin(pin.pinId, pin.locationName, pin.latitude, pin.longitude)
           .pipe(
             finalize(() => {
-              this.displayPinModal = false;
-              this.submitted = false;
-              this.enablePinModalSaveButton = true;
-
+              this.pinFormCleanup();
               // hide spinner
               this.spinner.hide();
             })
@@ -234,7 +231,7 @@ export class HomeComponent implements OnInit {
               // });
               updatedPin.isSaved = true;
               updatedPin.isDraggable = false;
-              updatedPin.iconUrl = this.pinIconUrl.savedPinIcon;            
+              updatedPin.iconUrl = this.pinIconUrl.savedPinIcon;
               this.savedPins[this.currentPinIndex] = updatedPin;
 
               const index = this.newlyCreatedPins.findIndex(
@@ -260,10 +257,7 @@ export class HomeComponent implements OnInit {
           .insertPin(pin)
           .pipe(
             finalize(() => {
-              this.displayPinModal = false;
-              this.submitted = false;
-              this.enablePinModalSaveButton = true;
-
+              this.pinFormCleanup();
               // hide spinner
               this.spinner.hide();
             })
@@ -290,11 +284,17 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  pinFormCleanup() {
+    this.displayPinModal = false;
+    this.submitted = false;
+    this.enablePinModalSaveButton = true;
+
+    this.pinForm.reset();
+  }
+
   editPinCoordinates() {
     this.displayPinModal = false;
-    this.toast.info(
-      'Please move the selected Pin to change its coordinates'
-    );
+    this.toast.info('Please move the selected Pin to change its coordinates');
     this.savedPins[this.currentPinIndex].isDraggable = true;
     this.savedPins[this.currentPinIndex].iconUrl =
       this.pinIconUrl.editablePinIcon;
@@ -312,7 +312,7 @@ export class HomeComponent implements OnInit {
       this.longitude < -180.0 ||
       this.longitude > 180.0
     ) {
-      this.latitude= this.DEFAULT_LAT;
+      this.latitude = this.DEFAULT_LAT;
       this.longitude = this.DEFAULT_LNG;
       this.toast.error('Invalid latitude or longitude');
     }
@@ -358,7 +358,9 @@ export class HomeComponent implements OnInit {
                   console.log(err);
                   const error = err.error;
                   this.toast.error(
-                    error?.payload?.message || error?.message || 'Unable to retrieve pins'
+                    error?.payload?.message ||
+                      error?.message ||
+                      'Unable to retrieve pins'
                   );
                 },
               });
@@ -371,7 +373,9 @@ export class HomeComponent implements OnInit {
           const error = err.error;
           this.toast.clear();
           this.toast.error(
-            error?.payload?.message || error?.message || 'Unable to retrieve pins'
+            error?.payload?.message ||
+              error?.message ||
+              'Unable to retrieve pins'
           );
         },
       });

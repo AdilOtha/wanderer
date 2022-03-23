@@ -14,30 +14,30 @@ import { finalize } from 'rxjs';
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-  title: string = 'User Profile';
+  readonly title: string = 'User Profile';
 
-  editProfileButtonLabel: string = 'Edit Profile Details';
+  readonly editProfileButtonLabel: string = 'Edit Profile Details';
 
   modalDisplay: boolean = false;
 
   submitted: boolean = false;
 
-  profileImage: any =
+  readonly DEFAULT_PROFILE_IMAGE =
     'https://images.unsplash.com/photo-1645785538675-f81e7dbab4b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80';
 
-  email: string = '';
+  profileImage: any = this.DEFAULT_PROFILE_IMAGE;
 
   @ViewChild('imageUpload') imageUpload: any;
   fileLimit: number = 1;
   uploadedFilename: string = '';
 
-  firstName!: string;
-  lastName!: string;
+  firstName: string = '';
+  lastName: string = '';
+  emailId: string = '';
 
   saveForm: FormGroup = this.fb.group({
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
-    emailId: [{ value: '', disabled: true }],
     profileImage: [''],
   });
 
@@ -50,40 +50,44 @@ export class UserProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('User-profile component loaded');
     this.spinner.show();
-    this.userProfileService.getUserDetails()
-    .pipe(
-      finalize(() => {
-        this.spinner.hide();
-      })
-    )
-    .subscribe({
-      next: (data: any) => {
-        console.log(data);
-        const userData = data.payload;
-        this.saveForm.controls['firstName'].patchValue(userData.firstName);
-        this.firstName = userData.firstName;
-        this.saveForm.controls['lastName'].patchValue(userData.lastName);
-        this.lastName = userData.lastName;
-        this.saveForm.controls['emailId'].patchValue(userData.emailId);
-        if (userData.image) {
-          const unsafeImageUrl = userData.image;
-          this.saveForm.controls['profileImage'].patchValue(
-            this.sanitizer.bypassSecurityTrustResourceUrl(unsafeImageUrl)
-          );
-        } else {
-          this.saveForm.controls['profileImage'].patchValue(
-            userData.googlePhotoUrl
-          );
-        }
-      },
-      error: (err: any) => {
-        console.log(err);
-        const error = err.error;
-        this.toast.error(error?.payload?.message);
-      },
-    });
+    this.userProfileService
+      .getUserDetails()
+      .pipe(
+        finalize(() => {
+          this.spinner.hide();
+        })
+      )
+      .subscribe({
+        next: (data: any) => {
+          console.log(data);
+          
+          const userData = data.payload;
+          this.firstName = userData.firstName;
+          this.lastName = userData.lastName;
+          this.emailId = userData.emailId;
+
+          if (userData?.image) {
+            const unsafeImageUrl = userData.image;
+            this.saveForm.controls['profileImage'].patchValue(
+              this.sanitizer.bypassSecurityTrustResourceUrl(unsafeImageUrl)
+            );
+          } else if (userData?.googlePhotoUrl) {
+            this.saveForm.controls['profileImage'].patchValue(
+              userData.googlePhotoUrl
+            );
+          } else {
+            this.saveForm.controls['profileImage'].patchValue(
+              this.DEFAULT_PROFILE_IMAGE
+            );
+          }
+        },
+        error: (err: any) => {
+          console.log(err);
+          const error = err.error;
+          this.toast.error(error?.payload?.message);
+        },
+      });
   }
 
   get f() {
@@ -92,6 +96,8 @@ export class UserProfileComponent implements OnInit {
 
   showModal(): void {
     this.modalDisplay = true;
+    this.saveForm.controls['firstName'].patchValue(this.firstName);
+    this.saveForm.controls['lastName'].patchValue(this.lastName);
   }
 
   onSubmitClick() {
@@ -104,47 +110,63 @@ export class UserProfileComponent implements OnInit {
         lastName: this.saveForm.controls['lastName'].value,
         profileImage: this.profileImage,
       };
-      this.userProfileService.updateUserDetails(userProfile)      
-      .subscribe({
-        next: (data: any) => {
-          const updatedUser = data.payload;
-          this.saveForm.controls['firstName'].patchValue(
-            updatedUser.firstName
-          );
-          this.firstName = updatedUser.firstName;
-          this.saveForm.controls['lastName'].patchValue(updatedUser.lastName);
-          this.lastName = updatedUser.lastName;
+      this.userProfileService
+        .updateUserDetails(userProfile)
+        .pipe(
+          finalize(() => {
+            this.imageUpload.clear();
+            this.submitted = false;
+            this.modalDisplay = false;
+          })
+        )
+        .subscribe({
+          next: (data: any) => {
+            console.log(data);
+            
+            const updatedUser = data.payload;
+            this.firstName = updatedUser.firstName;
+            this.lastName = updatedUser.lastName;
 
-          console.log(data);
+            this.saveForm.controls['firstName'].patchValue(
+              updatedUser.firstName
+            );
+            this.saveForm.controls['lastName'].patchValue(updatedUser.lastName);
 
-          if(this.profileImage instanceof Blob){
-            const reader = new FileReader();
-            reader.readAsDataURL(this.profileImage);
-            reader.onloadend = () => {
-              this.saveForm.controls['profileImage'].patchValue(reader.result);
+            console.log(data);
+
+            if (this.profileImage instanceof Blob) {
+              const reader = new FileReader();
+              reader.readAsDataURL(this.profileImage);
+              reader.onloadend = () => {                
+                this.saveForm.controls['profileImage'].patchValue(
+                  reader.result
+                );
+                this.spinner.hide();
+              };
+            } else {
               this.spinner.hide();
-            };
-          } else {
+            }
+            this.toast.success('Profile updated successfully');
+          },
+          error: (err: any) => {
+            console.log(err);
+            const error = err.error;
+            this.toast.error(error?.payload?.message);
             this.spinner.hide();
-          }
-          this.imageUpload.clear();
-          this.submitted = false;
-          this.modalDisplay = false;
-        },
-        error: (err: any) => {
-          console.log(err);
-          const error = err.error;
-          this.toast.error(error?.payload?.message);
-          this.spinner.hide();
-        },
-      });
+          },
+        });
     }
   }
 
   myUploader(event: any) {
-    console.log(event);
+    console.log(event.files[0]);
+    // show error if file is of type svg
+    if (event.files.length>0 && event.files[0].type === 'image/svg+xml') {
+      this.toast.error('SVG files are not allowed');
+      this.imageUpload.clear();
+      return;
+    }
     this.profileImage = event.files[0];
-    // this.saveForm.controls['profileImage'].setValue(event.files[0]);
     // console.log(this.saveForm.controls['profileImage'].value);
   }
 
