@@ -5,7 +5,8 @@ import { BlogRoutingModule } from './blog-routing.module';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [    
+  ],
   imports: [
     CommonModule,
     BlogRoutingModule

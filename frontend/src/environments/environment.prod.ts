@@ -15,5 +15,9 @@ export const environment = {
     measurementId: 'G-PJNEBC17EC',
   },
 
-  googleMaps: ''
+  googleMaps: 'AIzaSyBHkVH8NiHsuH4cU-GsZC38GXLvxoxXSjo',
+
+  APIENDPOINT: 'https://wanderergroup21.herokuapp.com/',
+
+  OAUTH_REDIRECT_URL: 'https://wanderergroup21.herokuapp.com/oauth2/authorization/google',
 };

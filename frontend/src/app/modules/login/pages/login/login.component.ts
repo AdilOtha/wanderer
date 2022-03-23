@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/data/service/auth-service/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -8,13 +10,17 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route:ActivatedRoute, private authServie: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    const token = this.route.snapshot.queryParamMap.get('token');
+    if(token!=null) {
+      this.authServie.addToken(token);
+      this.router.navigate(['/']);
+    }
   }
 
   onClick() {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = environment.OAUTH_REDIRECT_URL;
   }
-
 }

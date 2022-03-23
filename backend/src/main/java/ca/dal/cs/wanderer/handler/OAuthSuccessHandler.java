@@ -1,6 +1,8 @@
 package ca.dal.cs.wanderer.handler;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -14,11 +16,14 @@ import java.io.IOException;
 @Component
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
+    @Value("${oauth.success.redirect.uri}")
+    private String successRedirectUri;
+
     RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                        Authentication authentication) throws IOException {
-        redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "http://localhost:4200/");
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+        DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
+        redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse,successRedirectUri + "?token=" + principal.getIdToken().getTokenValue());
     }
 }

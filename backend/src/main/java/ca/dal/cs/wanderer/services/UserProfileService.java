@@ -15,18 +15,24 @@ public class UserProfileService {
     private UserRepository repo;
 
     public User fetchByEmail(String email) {
+
         return repo.findByEmailId(email);
     }
 
-
-    public void updateProfile(MultipartFile file, User user, String fName, String lName) throws IOException {
+    public User updateProfile(MultipartFile file, User user, String fName, String lName) throws IOException {
         // user.setImage();
 
         if (file != null)
             user.setImage(file.getBytes());
         user.setFirstName(fName);
         user.setLastName(lName);
-        repo.save(user);
+        User savedUser = repo.save(user);
+//        user = repo.save(user);
+        return savedUser;
+    }
+
+    public boolean existsUserByEmailId(String email) {
+        return repo.existsUserByEmailIdIgnoreCase(email);
     }
 
 }

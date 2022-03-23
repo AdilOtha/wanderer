@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -19,8 +18,10 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class CustomOidcUserServiceTest {
 
@@ -29,7 +30,6 @@ class CustomOidcUserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
 
     @BeforeEach
     public void init() {
@@ -47,13 +47,15 @@ class CustomOidcUserServiceTest {
 
         User user = getUser();
 
-        Mockito.when(userRepository.findByEmailId(anyString())).thenReturn(user);
+        when(userRepository.findByEmailId(anyString())).thenReturn(user);
 
         OidcUser oidcUser = customOidcUserService.loadUser(oidcUserRequest);
 
         Assertions.assertNotNull(oidcUser);
         Assertions.assertEquals(user.getEmailId(), oidcUser.getEmail());
         Assertions.assertNotNull(oidcUser.getAuthorities());
+
+        verify(userRepository, times(1)).findByEmailId(anyString());
     }
 
     @Test
@@ -73,7 +75,7 @@ class CustomOidcUserServiceTest {
     private User getUser() {
         User user = new User();
         user.setEmailId("dummy@gmail.com");
-        user.setId(1L);
+        user.setId(1);
         user.setFirstName("dummyFirstName");
         user.setLastName("dummyLastName");
 

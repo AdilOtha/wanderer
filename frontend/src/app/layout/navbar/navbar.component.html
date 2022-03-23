@@ -1,1 +1,12 @@
-<p-menubar [model]="items"></p-menubar>
+<p-menubar [model]="items">
+  <ng-template pTemplate="end">
+    <p-avatar
+    icon="pi pi-user"
+      styleClass="p-mr-2"
+      [style]="{'cursor': 'pointer'}"
+      size="large"
+      shape="circle"
+      (click)="onAvatarClick()"
+    ></p-avatar>
+  </ng-template>
+</p-menubar>

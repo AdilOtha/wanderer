@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss']
 })
-export class MainLayoutComponent implements OnInit {
+export class MainLayoutComponent {
 
-  showHeader :boolean= true;
+  showHeader: boolean = true;
 
-  constructor(private router:Router) { }
-
-
-  ngOnInit(): void {
-    this.showHeader = this.router.url !== "/login" 
+  constructor(private router: Router) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Hide progress spinner or progress bar
+        this.showHeader = event.url !== "/login"
+      }
+    })
   }
+
 }
