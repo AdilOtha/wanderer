@@ -146,7 +146,7 @@ export class UserProfileComponent implements OnInit {
             } else {
               this.spinner.hide();
             }
-            this.toast.success('Profile updated successfully');
+            this.toast.info('Profile updated successfully');
           },
           error: (err: any) => {
             console.log(err);
