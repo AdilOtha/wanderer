@@ -4,6 +4,7 @@
 
 // import { UserProfileComponent } from './user-profile.component';
 // import { of, throwError } from 'rxjs';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // describe('UserProfileComponent', () => {
 //   let component: UserProfileComponent;
@@ -13,7 +14,8 @@
 //     await TestBed.configureTestingModule({
 //       imports: [
 //         SharedModule,
-//         HttpClientTestingModule        
+//         HttpClientTestingModule,
+//         BrowserAnimationsModule
 //       ],
 //       declarations: [UserProfileComponent],
 //     }).compileComponents();
@@ -37,7 +39,6 @@
 //     expect(component.modalDisplay).toBeTrue;
 //     expect(component.saveForm.controls['profileImage'].value).toBe('');
 //     expect(component.uploadedFilename).toBe('');
-//     expect(component.saveForm.controls['firstName'].value).toBe(component.firstName);
 //   });
 
 //   it('should submit form',()=>{

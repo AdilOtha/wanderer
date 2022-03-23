@@ -69,6 +69,7 @@
         ><strong>New Profile Image: </strong> {{ uploadedFilename }}</label
       >
       <p-fileUpload
+        #imageUpload
         name="profileImage"
         accept="image/*"
         [showUploadButton]="false"
@@ -96,11 +97,11 @@
   </form>
 </p-dialog>
 <div class="grid">
-  <div class="sm:col-12 md:col-6 md:col-offset-3">
+  <div class="col-12 md:col-6 md:col-offset-3">
     <p-panel [header]="title">
       <div class="flex justify-content-center mb-2">
         <p-image
-          [src]="profileImage"
+          [src]="f['profileImage'].value"
           alt="Image"
           height="200"
           width="200"
@@ -122,7 +123,7 @@
         </div>
         <p-divider></p-divider>
         <div class="user-profile-detail py-2">
-          <strong>Email: {{ email }}</strong>
+          <strong>Email: {{ emailId }}</strong>
         </div>
       </p-card>
     </p-panel>

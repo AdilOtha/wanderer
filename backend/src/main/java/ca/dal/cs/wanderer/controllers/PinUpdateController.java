@@ -13,7 +13,7 @@ public class PinUpdateController {
     @Autowired
     private PinUpdateService pinUpdateService;
 
-    @PutMapping("/updatePinTimestamp")
+    @PutMapping("/api/v1/updatePinTimestamp")
     public String sendPinUpdate(){
         try {
             pinUpdateService.sendPinUpdate();

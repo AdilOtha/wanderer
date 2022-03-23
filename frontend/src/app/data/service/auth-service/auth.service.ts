@@ -19,7 +19,7 @@ export class AuthService {
 
   isLoggedIn() {
     const token = this.cookieService.get('token'); // get token from local storage
-    console.log('Token', token);
+    // console.log('Token', token);
     if(token) {
       const payload = atob(token.split('.')[1]); // decode payload of token
       const parsedPayload = JSON.parse(payload); // convert payload into an Object
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   getToken() {
-    console.log('inside token method', this.cookieService.get('token'));
+    // console.log('inside token method', this.cookieService.get('token'));
     return this.cookieService.get('token');
   }
 }

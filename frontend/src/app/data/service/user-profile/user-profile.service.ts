@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserProfileService {
-  apiEndPoint: string ='api/v1/wanderer/user/';
+  apiEndPoint: string = 'api/v1/wanderer/user/';
 
   constructor(private http: HttpClient) { }
 
@@ -18,8 +18,10 @@ export class UserProfileService {
   updateUserDetails(userProfile: UserProfile): Observable<any>{
     let formData: FormData = new FormData();
     formData.append('firstName', userProfile.firstName);
+    formData.append('lastName', userProfile.lastName);
+    formData.append('image',userProfile.profileImage);
     // formData.append('profileImage', userProfile.profileImage);
 
-    return this.http.post(this.apiEndPoint, formData);
+    return this.http.put(this.apiEndPoint + 'updateProfile', formData);
   }
 }
