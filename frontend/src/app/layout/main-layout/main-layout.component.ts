@@ -15,6 +15,7 @@ export class MainLayoutComponent {
       if (event instanceof NavigationEnd) {
         // Hide progress spinner or progress bar
         this.showHeader = event.url !== "/login"
+        console.log('header', this.showHeader);
       }
     })
   }

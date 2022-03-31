@@ -30,6 +30,10 @@ public class Pin {
         this.longitude = longitude;
     }
 
+    public void setPinId(int pinId) {
+        this.pinId = pinId;
+    }
+
     public Integer getPinId() {
         return pinId;
     }
