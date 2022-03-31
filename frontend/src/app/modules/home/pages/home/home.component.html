@@ -1,22 +1,7 @@
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="fire"
-  [fullScreen]="true"
-></ngx-spinner>
-<p-dialog
-  [header]="pinModalHeaderLabel"
-  [(visible)]="displayPinModal"
-  position="top-left"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
-  [maximizable]="true"
->
-  <p-tabView styleClass="tabview-custom">
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="fire" [fullScreen]="true"></ngx-spinner>
+<p-dialog [header]="pinModalHeaderLabel" [(visible)]="displayPinModal" position="top-left" [modal]="true"
+  [style]="{ width: '50vw' }" [baseZIndex]="10000" [draggable]="false" [resizable]="false" [maximizable]="true">
+  <p-tabView styleClass="tabview-custom" (onChange)="handleChange($event)">
     <p-tabPanel>
       <ng-template pTemplate="header">
         <i class="pi pi-map-marker mr-2"></i>
@@ -26,177 +11,154 @@
         <div class="formgrid grid p-fluid p-0">
           <div class="col-12 field">
             <label for="locationName">Location Name:</label>
-            <input
-              pInputText
-              type="text"
-              class="form-control inputfield"
-              name="locationName"
-              id="locationName"
-              formControlName="locationName"
-              required
-            />
-            <ng-container
-              *ngIf="
+            <input pInputText type="text" class="form-control inputfield" name="locationName" id="locationName"
+              formControlName="locationName" required />
+            <ng-container *ngIf="
                 (submitted && pinFormControls['locationName']?.errors) ||
                 (pinFormControls['locationName']?.errors &&
                   pinFormControls['locationName']?.dirty)
-              "
-            >
-              <div
-                *ngIf="pinFormControls['locationName']?.errors?.['required']"
-                class="flex justify-content-center mt-3"
-              >
-                <p-message
-                  severity="error"
-                  text="Location Name is required"
-                ></p-message>
+              ">
+              <div *ngIf="pinFormControls['locationName']?.errors?.['required']"
+                class="flex justify-content-center mt-3">
+                <p-message severity="error" text="Location Name is required"></p-message>
               </div>
             </ng-container>
           </div>
           <div class="col-6 field">
             <label for="pinLatitude">Latitude:</label>
-            <input
-              pInputText
-              type="number"
-              class="form-control inputfield"
-              name="pinLatitude"
-              id="pinLatitude"
-              formControlName="pinLatitude"
-              required
-            />
-            <ng-container
-              *ngIf="
+            <input pInputText type="number" class="form-control inputfield" name="pinLatitude" id="pinLatitude"
+              formControlName="pinLatitude" required />
+            <ng-container *ngIf="
                 (submitted && pinFormControls['pinLatitude']?.errors) ||
                 (pinFormControls['pinLatitude']?.errors &&
                   pinFormControls['pinLatitude']?.dirty)
-              "
-            >
-              <div
-                *ngIf="pinFormControls['pinLatitude']?.errors?.['required']"
-                class="flex justify-content-center mt-3"
-              >
-                <p-message
-                  severity="error"
-                  text="Pin Latitude is required"
-                ></p-message>
+              ">
+              <div *ngIf="pinFormControls['pinLatitude']?.errors?.['required']"
+                class="flex justify-content-center mt-3">
+                <p-message severity="error" text="Pin Latitude is required"></p-message>
               </div>
             </ng-container>
           </div>
           <div class="col-6 field">
             <label for="pinLongitude">Longitude:</label>
-            <input
-              pInputText
-              type="number"
-              class="form-control inputfield"
-              name="pinLongitude"
-              id="pinLongitude"
-              formControlName="pinLongitude"
-              required
-            />
-            <ng-container
-              *ngIf="
+            <input pInputText type="number" class="form-control inputfield" name="pinLongitude" id="pinLongitude"
+              formControlName="pinLongitude" required />
+            <ng-container *ngIf="
                 (submitted && pinFormControls['pinLongitude']?.errors) ||
                 (pinFormControls['pinLongitude']?.errors &&
                   pinFormControls['pinLongitude']?.dirty)
-              "
-            >
-              <div
-                *ngIf="pinFormControls['pinLongitude']?.errors?.['required']"
-                class="flex justify-content-center mt-3"
-              >
-                <p-message
-                  severity="error"
-                  text="Pin Longitude is required"
-                ></p-message>
+              ">
+              <div *ngIf="pinFormControls['pinLongitude']?.errors?.['required']"
+                class="flex justify-content-center mt-3">
+                <p-message severity="error" text="Pin Longitude is required"></p-message>
               </div>
             </ng-container>
           </div>
         </div>
         <div class="field flex flex-wrap justify-content-end">
-          <button
-            pButton
-            icon="pi pi-pencil"
-            form="pinForm"
-            label="Edit Coordinates"
-            type="button"
-            class="p-button-md mr-2 mt-2"
-            (click)="editPinCoordinates()"
-          ></button>
-          <button
-            pButton
-            icon="pi pi-check"
-            form="pinForm"
-            label="Save"
-            type="submit"
-            [disabled]="!pinForm.valid || !enablePinModalSaveButton"
-            class="p-button-md mr-2 mt-2"
-          ></button>
-          <p-button
-            type="button"
-            icon="pi pi-times"
-            (click)="displayPinModal = false"
-            label="Cancel"
-            class="p-button-md mt-2"
-          ></p-button>
+          <button pButton icon="pi pi-pencil" form="pinForm" label="Edit Coordinates" type="button"
+            class="p-button-md mr-2 mt-2" (click)="editPinCoordinates()"></button>
+          <button pButton icon="pi pi-check" form="pinForm" label="Save" type="submit"
+            [disabled]="!pinForm.valid || !enablePinModalSaveButton" class="p-button-md mr-2 mt-2"></button>
+          <p-button type="button" icon="pi pi-times" (click)="displayPinModal = false" label="Cancel"
+            class="p-button-md mt-2"></p-button>
         </div>
       </form>
       <!-- <ng-template pTemplate="footer"> -->
 
       <!-- </ng-template> -->
     </p-tabPanel>
+    <p-tabPanel header="Future Trips" [disabled]="!currentPin || !currentPin.locationName">
+      <ng-template pTemplate="header">
+        <i class="pi pi-calendar mr-2"></i>
+        <span>Create Your Future Trip</span>
+      </ng-template>
+      <form [formGroup]="futureTripEditForm">
+        <div class="formgrid grid p-fluid p-0">
+          <div class="col-12 field">
+            <label for="tripName"><b>Trip Name</b></label>
+            <input pInputText type="text" class="form-control inputfield" name="tripName" id="tripName"
+              formControlName="tripName" required>
+          </div>
+          <div class="col-12 field">
+            <label for="tripDescription"><b>Trip Description</b></label>
+            <p-editor formControlName="tripDescription" name="tripDescription" id="tripDescription"
+              [style]="{'height':'320px'}" required></p-editor>
+          </div>
+          <div class="col-4 field">
+            <label for="tripDate"><b>Trip Date</b></label>
+            <input pInputText type="date" class="form-control inputfield" name="tripDate" id="tripDate"
+              formControlName="tripDate" min="{{currentDate}}" required>
+          </div>
+          <div class="col-12 field">
+            <label for="locationName"><b>Location Name</b></label>
+            <input pInputText type="text" class="form-control inputfield" name="locationName" id="locationName"
+              formControlName="locationName">
+          </div>
+        </div>
+        <div class="field flex flex-wrap justify-content-end">
+          <button pButton icon="pi pi-check" label="Save" (click)="saveFutureTrip()" type="submit"
+            class="p-button-md mr-2 mt-2" [disabled]="!futureTripEditForm.valid || !futureTripEditForm.dirty"></button>
+          <p-button type="button" icon="pi pi-times" (click)="displayPinModal = false" label="Cancel"
+            class="p-button-md mt-2"></p-button>
+        </div>
+      </form>
+    </p-tabPanel>
     <p-tabPanel header="Future Trips">
       <ng-template pTemplate="header">
         <i class="pi pi-calendar mr-2"></i>
         <span>Future Trips</span>
       </ng-template>
-      <p>
-        At vero eos et accusamus et iusto odio dignissimos ducimus qui
-        blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
-        et quas molestias excepturi sint occaecati cupiditate non provident,
-        similique sunt in culpa qui officia deserunt mollitia animi, id est
-        laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita
-        distinctio. Nam libero tempore, cum soluta nobis est eligendi optio
-        cumque nihil impedit quo minus.
-      </p>
+      <div *ngIf="!currentPinFutureTrips || currentPinFutureTrips.length === 0">
+        <span>Oops!! No Future Trips for Current Location</span>
+      </div>
+      <div *ngFor="let trip of currentPinFutureTrips" style="margin: 10px;">
+        <p-panel header="{{trip.tripName}}" [toggleable]="true">
+          <div class="grid">
+            <div class="col-6">
+              <h5>Location</h5>
+              <span>{{trip.pin?.locationName}}</span>
+            </div>
+            <div class="col-6">
+              <h5>Trip Date</h5>
+              <span>{{trip.tripDate | date:'longDate'}}</span>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-6">
+              <h5>User Name</h5>
+              <p>{{trip.user.firstName + ' ' + trip.user.lastName}}</p>
+            </div>
+            <div class="col-6">
+              <h5>User Email Id</h5>
+              <p>{{trip.user.emailId}}</p>
+            </div>
+          </div>
+          <div>
+            <p-fieldset legend="Description">
+              <div [innerHTML]="trip.htmlDescription"></div>
+            </p-fieldset>
+          </div>
+        </p-panel>
+      </div>
     </p-tabPanel>
   </p-tabView>
 </p-dialog>
 <p-panel styleClass="my-3" [header]="mapPanelHeader">
   <div class="map">
-    <agm-map
-      [latitude]="latitude"
-      [longitude]="longitude"
-      [zoom]="zoom"
-      (mapClick)="createPin($event)"
-      (mapRightClick)="shiftCenter($event)"
-      [disableDefaultUI]="false"
-      [streetViewControl]="false"
-    >
-      <agm-marker
-        *ngFor="let m of savedPins; let i = index; trackBy: identifyPin"
-        [latitude]="m.latitude"
-        [longitude]="m.longitude"
-        [markerDraggable]="!m.isSaved || m.isDraggable"
-        [iconUrl]="m.iconUrl"
-        (markerDblClick)="openPinModal(m, i)"
-        (dragEnd)="pinDragEnd(m, i, $event)"
-      >
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="createPin($event)"
+      (mapRightClick)="shiftCenter($event)" [disableDefaultUI]="false" [streetViewControl]="false">
+      <agm-marker *ngFor="let m of savedPins; let i = index; trackBy: identifyPin" [latitude]="m.latitude"
+        [longitude]="m.longitude" [markerDraggable]="!m.isSaved || m.isDraggable" [iconUrl]="m.iconUrl"
+        (markerDblClick)="openPinModal(m, i)" (dragEnd)="pinDragEnd(m, i, $event)">
         <!-- <agm-info-window>
           <strong>Pin Saved!</strong>
         </agm-info-window> -->
       </agm-marker>
 
-      <agm-circle
-        [latitude]="latitude"
-        [longitude]="longitude"
-        [radius]="radius"
-        [circleDraggable]="true"
-        [editable]="true"
-        [fillOpacity]="0.1"
-        [clickable]="false"
-        (centerChange)="centerChange($event)"
-        (radiusChange)="radiusChange($event)"
-      >
+      <agm-circle [latitude]="latitude" [longitude]="longitude" [radius]="radius" [circleDraggable]="true"
+        [editable]="true" [fillOpacity]="0.1" [clickable]="false" (centerChange)="centerChange($event)"
+        (radiusChange)="radiusChange($event)">
       </agm-circle>
     </agm-map>
   </div>
@@ -205,59 +167,25 @@
   <div class="grid p-fluid p-3">
     <div class="col-8 xl:col-2 field">
       <label for="radius" class="mb-2">Radius:</label>
-      <p-inputNumber
-        [ngModel]="radius | meterToKilometer"
-        (ngModelChange)="convertKilometerToMeter($event)"
-        suffix=" kms"
-        styleClass="inputfield"
-        [showButtons]="true"
-        buttonLayout="horizontal"
-        inputId="radius"
-        spinnerMode="horizontal"
-        [step]="10"
-        decrementButtonClass="p-button-primary"
-        incrementButtonClass="p-button-primary"
-        incrementButtonIcon="pi pi-plus"
-        decrementButtonIcon="pi pi-minus"
-      >
+      <p-inputNumber [ngModel]="radius | meterToKilometer" (ngModelChange)="convertKilometerToMeter($event)"
+        suffix=" kms" styleClass="inputfield" [showButtons]="true" buttonLayout="horizontal" inputId="radius"
+        spinnerMode="horizontal" [step]="10" decrementButtonClass="p-button-primary"
+        incrementButtonClass="p-button-primary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
       </p-inputNumber>
     </div>
     <div class="col-6 xl:col-2 field">
       <label for="latitude" class="mb-2">Latitude:</label>
-      <p-inputNumber
-        [(ngModel)]="latitude"
-        inputId="latitude"
-        styleClass="inputfield"
-        mode="decimal"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-        [min]="-90.00"
-        [max]="90.00"
-      ></p-inputNumber>
+      <p-inputNumber [(ngModel)]="latitude" inputId="latitude" styleClass="inputfield" mode="decimal"
+        [minFractionDigits]="2" [maxFractionDigits]="2" [min]="-90.00" [max]="90.00"></p-inputNumber>
     </div>
     <div class="col-6 xl:col-2 field">
       <label for="longitude" class="mb-2">Longitude:</label>
-      <p-inputNumber
-        [(ngModel)]="longitude"
-        inputId="longitude"
-        styleClass="inputfield"
-        mode="decimal"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-        [min]="-180.00"
-        [max]="180.00"
-      ></p-inputNumber>
+      <p-inputNumber [(ngModel)]="longitude" inputId="longitude" styleClass="inputfield" mode="decimal"
+        [minFractionDigits]="2" [maxFractionDigits]="2" [min]="-180.00" [max]="180.00"></p-inputNumber>
     </div>
     <div class="col-2 xl:col-2 field mt-2">
-      <button
-        pButton
-        pRipple
-        type="button"
-        title="Go to Current Location"
-        icon="gps-icon"
-        class="p-button-rounded p-button-primary xl:mt-3"
-        (click)="setCurrentLocation()"
-      ></button>
+      <button pButton pRipple type="button" title="Go to Current Location" icon="gps-icon"
+        class="p-button-rounded p-button-primary xl:mt-3" (click)="setCurrentLocation()"></button>
     </div>
   </div>
 </div>

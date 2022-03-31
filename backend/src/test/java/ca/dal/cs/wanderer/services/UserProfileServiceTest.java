@@ -35,11 +35,11 @@ public class UserProfileServiceTest {
         verify(userRepository, times(1)).existsUserByEmailIdIgnoreCase(anyString());
     }
 
-    @Test
-    public void testExistsUserByEmailId_userNotExist() {
-        when(userRepository.existsUserByEmailIdIgnoreCase(anyString())).thenReturn(false);
+        @Test
+        public void testExistsUserByEmailId_userNotExist() {
+            when(userRepository.existsUserByEmailIdIgnoreCase(anyString())).thenReturn(false);
 
-        assertFalse(profileService.existsUserByEmailId("test@gmail.com"));
-        verify(userRepository, times(1)).existsUserByEmailIdIgnoreCase(anyString());
+            assertFalse(profileService.existsUserByEmailId("test@gmail.com"));
+            verify(userRepository, times(1)).existsUserByEmailIdIgnoreCase(anyString());
+        }
     }
-}

@@ -28,6 +28,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./modules/user-profile/user-profile.module').then((m) => m.UserProfileModule),
       },
+      {
+        path: 'future-trip',
+        loadChildren: () =>
+          import('./modules/future-trip/future-trip.module').then((m) => m.FutureTripModule),
+      },
     ],
   },
   {

@@ -33,16 +33,13 @@ public class UserProfileController {
     @Autowired
     private ObjectMapper mapper;
 
-    private String email = "";
-
     @GetMapping("/getDetails")
     public ResponseEntity<GenericResponse<JSONObject>> fetchSingle(@AuthenticationPrincipal OidcUser principal) {
-        System.out.println(principal);
         if (principal == null) {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
 
-        email = principal.getEmail();
+        String email = principal.getEmail();
 
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -77,7 +74,7 @@ public class UserProfileController {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
 
-        email = principal.getEmail();
+        String email = principal.getEmail();
 
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);

@@ -5,9 +5,14 @@ import { MouseEvent } from '@agm/core';
 import { PinService } from 'src/app/data/service/pin-service/pin.service';
 import { Pin } from 'src/app/data/schema/pin';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FutureTripService } from 'src/app/data/service/future-trip/future-trip.service';
+import { FutureTripRequestDto } from 'src/app/data/schema/future-trip-request-dto';
+import { formatDate } from '@angular/common';
+import { FutureTrip } from 'src/app/data/schema/future-trip';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +24,21 @@ export class HomeComponent implements OnInit {
   //Firestore Data
   pinCreationUpdates!: Observable<any>;
   readonly PIN_UPDATE_COLLECTION: string = 'pin_updates';
+
+  // forn group for future trip edit form
+  futureTripEditForm = new FormGroup({
+    tripName: new FormControl(''),
+    tripDescription: new FormControl(''),
+    tripDate: new FormControl(''),
+    locationName: new FormControl(''),
+    tripId: new FormControl(''),
+    pinId: new FormControl('')
+});
+
+// getting the current date to allow the user to set the future trip for the past date
+currentDate = formatDate(new Date(), 'yyyy-MM-dd','en');
+// holding current pin future trips
+currentPinFutureTrips: FutureTrip[] = [];
 
   // Pin Center and Radius Subjects for 2-way communication between Map UI and Keyboard input
   centerChangeSubject: Subject<any> = new Subject();
@@ -91,7 +111,9 @@ export class HomeComponent implements OnInit {
     private pinService: PinService,
     private fb: FormBuilder,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private futureTripService: FutureTripService,
+    private sanitizer : DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -156,6 +178,7 @@ export class HomeComponent implements OnInit {
 
   openPinModal(pin: Pin, index: number) {
     this.setCurrentPin(pin, index);
+    this.setFutureTripForm(pin);
     this.displayPinModal = true;
   }
 
@@ -167,6 +190,37 @@ export class HomeComponent implements OnInit {
     this.pinForm.controls['pinLatitude'].patchValue(pin.latitude);
     this.pinForm.controls['pinLongitude'].patchValue(pin.longitude);
     // console.log('Current Pin Index: ' + this.currentPinIndex);
+  }
+
+  // create the future trip for the requested pin
+  setFutureTripForm(pin: Pin) {
+    this.futureTripEditForm.reset();
+    if(pin.locationName) {
+      this.futureTripEditForm.get('locationName')?.setValue(pin.locationName);
+      this.futureTripEditForm.get('pinId')?.setValue(pin.pinId);
+      this.futureTripEditForm.get('locationName')?.disable();
+    }
+  }
+
+  // getting the all future trips created for the current pin
+  setFutureTripsForCurrentPin(pin: Pin) {
+    this.futureTripService.getAllPinFutureTrips(pin.pinId).subscribe(response => {
+      this.currentPinFutureTrips = response.payload;
+      this.currentPinFutureTrips.forEach(key => key.htmlDescription = this.sanitizer.bypassSecurityTrustHtml(key.tripDescription));
+      this.spinner.hide();
+    })
+  }
+
+  // handling the change while getting the future trip created for the current pin
+  handleChange(event: any) {
+    var index = event.index;
+    if(index == 2) {
+      // showing the spinner
+      this.spinner.show();
+      // invoking the future trips call for current pin
+      // to fetch the data when user navigate to other's future trip tab
+      this.setFutureTripsForCurrentPin(this.currentPin);
+    }
   }
 
   // getter to access the pin form controls in template
@@ -465,5 +519,25 @@ export class HomeComponent implements OnInit {
         this.toast.warning('An unknown error occurred');
         break;
     }
+  }
+
+  // saving the created future trip for the user
+  saveFutureTrip() {
+    // showing the spinner
+    this.spinner.show();
+
+    // creating the request dto to call the requested api
+    var createdRequestDto:FutureTripRequestDto = {
+        tripName: this.futureTripEditForm.get('tripName')?.value,
+        tripDescription: this.futureTripEditForm.get('tripDescription')?.value,
+        tripDate: this.futureTripEditForm.get('tripDate')?.value,
+        pinId: this.futureTripEditForm.get('pinId')?.value,
+    }
+
+    // invoking the create future trip api
+    this.futureTripService.createFutureTrip(createdRequestDto).pipe(finalize(() => this.spinner.hide())).subscribe({
+      next: (res) => this.toast.success(res?.message),
+      error: (error) => this.toast.error(error?.message) 
+    });
   }
 }
