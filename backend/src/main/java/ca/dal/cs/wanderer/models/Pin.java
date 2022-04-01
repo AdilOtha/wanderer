@@ -1,5 +1,8 @@
 package ca.dal.cs.wanderer.models;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "pin_information")
@@ -19,6 +22,10 @@ public class Pin {
     private Double latitude;
     @Column(name="pin_longitude")
     private Double longitude;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "pin",cascade = CascadeType.ALL,fetch =FetchType.LAZY)
+    private List<PinImages> pinImages;
 
     public Pin() {
     }
@@ -64,5 +71,17 @@ public class Pin {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public List<PinImages> getPinImages() {
+        return pinImages;
+    }
+
+    public void setPinImages(List<PinImages> pinImages) {
+        this.pinImages = pinImages;
+    }
+
+    public Pin(List<PinImages> pinImages) {
+        this.pinImages = pinImages;
     }
 }
