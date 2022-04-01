@@ -33,7 +33,7 @@ public class PinImages {
     @JsonIgnore
     private byte[] image;
 
-    public PinImages(Pin pin) {
-        this.pin = pin;
+    public PinImages(byte[] image) {
+        this.image = image;
     }
 }
