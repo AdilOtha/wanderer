@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PinImageService {
@@ -17,12 +15,12 @@ public class PinImageService {
     private PinImageRepo pinImageRepo;
 
     public PinImages addImage(MultipartFile[] file, Pin savedPin) throws IOException {
-        List<MultipartFile> imageFile=new ArrayList<>();
-        PinImages images=new PinImages(savedPin);
-        images.setImage(file[1].getBytes());
-       // savedPin.setPinImages();
+        PinImages images = new PinImages(savedPin);
         savedPin.getPinId();
-
-return null;
+        for (MultipartFile files : file) {
+            images.setImage(files.getBytes());
+            PinImages image = pinImageRepo.save(images);
+        }
+        return null;
     }
 }

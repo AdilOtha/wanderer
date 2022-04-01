@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PinImageRepo extends JpaRepository<Integer, PinImages> {
+public interface PinImageRepo extends JpaRepository<PinImages, Integer> {
 }
