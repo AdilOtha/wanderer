@@ -85,7 +85,17 @@ export class FutureTripComponent implements OnInit {
 
         // invoking the edit future trip api call
         this.futureTripService.editFutureTrip(tripId, updateRequestDto).pipe(finalize(() => this.spinner.hide())).subscribe({
-            next: (res) => this.toast.success(res?.message),
+            next: (res) => {
+                var trip = this.trips.find(t => t.tripId == tripId);
+                if (trip) {
+                    trip.tripName = res.payload?.tripName;
+                    trip.tripDescription = res.payload?.tripDescription;
+                    trip.tripDate = res.payload?.tripDate;
+                    trip.htmlDescription = this.santizer.bypassSecurityTrustHtml(trip.tripDescription);
+                }
+                this.toast.success(res?.message)
+                console.log(trip);
+            },
             error: (error) => this.toast.error(error?.message),
             complete: () => this.displayBasic = false
         });
