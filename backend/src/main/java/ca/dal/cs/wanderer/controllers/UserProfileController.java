@@ -37,7 +37,7 @@ public class UserProfileController {
 
     @GetMapping("/getDetails")
     public ResponseEntity<GenericResponse<JSONObject>> fetchSingle(@AuthenticationPrincipal OidcUser principal) {
-        System.out.println(principal);
+        System.out.println("principal is"+principal);
         if (principal == null) {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }

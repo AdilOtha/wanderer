@@ -25,7 +25,8 @@ public class Pin {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "pin",cascade = CascadeType.ALL,fetch =FetchType.LAZY)
-    private List<PinImages> pinImages;
+    private List<PinImage> pinImages;
+
 
     public Pin() {
     }
@@ -73,15 +74,19 @@ public class Pin {
         this.longitude = longitude;
     }
 
-    public List<PinImages> getPinImages() {
+    public List<PinImage> getPinImages() {
         return pinImages;
     }
 
-    public void setPinImages(List<PinImages> pinImages) {
+    public void setPinImages(List<PinImage> pinImages) {
         this.pinImages = pinImages;
     }
 
-    public Pin(List<PinImages> pinImages) {
+    public Pin(List<PinImage> pinImages) {
         this.pinImages = pinImages;
+    }
+
+    public void addPinImage(PinImage image){
+        pinImages.add(image);
     }
 }

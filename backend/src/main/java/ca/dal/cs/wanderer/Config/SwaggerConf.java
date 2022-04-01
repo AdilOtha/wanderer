@@ -34,20 +34,16 @@ public class SwaggerConf {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                // .produces(DEFAULT_PRODUCES_AND_CONSUMES)
-                //.consumes(DEFAULT_PRODUCES_AND_CONSUMES)
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
-                //.apis(RequestHandlerSelectors.any())
                 .apis(RequestHandlerSelectors.basePackage("ca.dal.cs.wanderer"))
                 .paths(PathSelectors.any())
-                //.paths(PathSelectors.ant("/book/*"))
                 .build();
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("Token", AUTHORIZATION_HEADER, "Header");
+        return new ApiKey("Token", AUTHORIZATION_HEADER, "header");
     }
 
     private SecurityContext securityContext() {
@@ -60,4 +56,5 @@ public class SwaggerConf {
         authorizationScopes[0] = authorizationScope;
         return Arrays.asList(new SecurityReference("Token", authorizationScopes));
     }
+
 }

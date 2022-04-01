@@ -3,10 +3,7 @@ package ca.dal.cs.wanderer.controllers;
 import ca.dal.cs.wanderer.exception.GenericResponse;
 import ca.dal.cs.wanderer.exception.category.*;
 import ca.dal.cs.wanderer.models.Pin;
-import ca.dal.cs.wanderer.models.PinImages;
 import ca.dal.cs.wanderer.models.User;
-import ca.dal.cs.wanderer.repositories.PinImageRepo;
-import ca.dal.cs.wanderer.services.PinImageService;
 import ca.dal.cs.wanderer.services.PinService;
 import ca.dal.cs.wanderer.services.UserProfileService;
 import ca.dal.cs.wanderer.util.ErrorMessages;
@@ -29,12 +26,6 @@ public class PinController {
 
     @Autowired
     private UserProfileService userProfileService;
-
-    @Autowired
-    private PinImageRepo pinImageRepo;
-
-    @Autowired
-    private PinImageService pinImageService;
 
     private String email = "";
 
@@ -63,11 +54,10 @@ public class PinController {
         Integer userId = authenticatedUser.getId();
         System.out.println("Authenticated User ID: " + userId);
         pin.setUserId(userId);
-        Pin savedPin = pinService.savePin(pin);
+        Pin savedPin = pinService.savePin(pin, file, authenticatedUser);
         if (savedPin == null) {
             throw new PinNotSaved(ErrorMessages.PIN_NOT_SAVED);
         }
-        pinImageService.addImage(file, savedPin);
         GenericResponse<Pin> pinGenericResponse = new GenericResponse<>(true, "Pin saved successfully", savedPin);
         return new ResponseEntity<>(pinGenericResponse, HttpStatus.OK);
     }
