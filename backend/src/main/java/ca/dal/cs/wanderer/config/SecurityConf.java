@@ -1,4 +1,4 @@
-package ca.dal.cs.wanderer.Config;
+package ca.dal.cs.wanderer.config;
 
 import ca.dal.cs.wanderer.filter.TokenAuthenticationFilter;
 import ca.dal.cs.wanderer.handler.OAuthSuccessHandler;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,9 +39,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     private OAuthSuccessHandler oAuthSuccessHandler;
 
     protected static  final String[] AUTH_WHITE_LIST={
-      "http://localhost:8080/swagger-ui.html",
-            "/swagger-ui.html",
-            "/swagger-ui.html/**"
+            "/swagger-ui.html"
     };
 
     @Override
@@ -71,7 +68,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://wanderergroup21frontend.herokuapp.com/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://wanderergroup21frontend.herokuapp.com/","https://wanderer-live.com/"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Authorization", "Cache-Control", "Content-Type", "xsrfheadername", "xsrfcookiename"
