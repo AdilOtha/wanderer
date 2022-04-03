@@ -25,6 +25,7 @@ import { authInterceptorProviders } from './data/service/httpinterceptor/auth.in
 
 //ngx-toastr import
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { FutureTripModule } from './modules/future-trip/future-trip.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     MenubarModule,
     CardModule,
     LoginModule,
+    FutureTripModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AgmCoreModule.forRoot({

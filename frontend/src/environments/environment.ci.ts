@@ -17,7 +17,7 @@ export const environment = {
 
   googleMaps: 'AIzaSyBHkVH8NiHsuH4cU-GsZC38GXLvxoxXSjo',
 
-  APIENDPOINT: 'https://wanderer-backend-live.herokuapp.com/',
+  APIENDPOINT: 'https://wanderergroup21.herokuapp.com/',
 
-  OAUTH_REDIRECT_URL: 'https://wanderer-backend-live.herokuapp.com/oauth2/authorization/google',
+  OAUTH_REDIRECT_URL: 'https://wanderergroup21.herokuapp.com/oauth2/authorization/google',
 };

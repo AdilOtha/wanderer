@@ -26,8 +26,6 @@ public class PinController {
     @Autowired
     private UserProfileService userProfileService;
 
-    private String email = "";
-
     @PostMapping("/createPin")
     public ResponseEntity<GenericResponse<Pin>> createPin(@AuthenticationPrincipal OidcUser principal, @RequestBody Pin pin) throws Exception {
 
@@ -43,7 +41,7 @@ public class PinController {
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String email = principal.getEmail();
         System.out.println(email);
         if(email==null){
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -76,7 +74,7 @@ public class PinController {
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String email = principal.getEmail();
         System.out.println(email);
         if(email==null){
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -111,7 +109,7 @@ public class PinController {
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String email = principal.getEmail();
         System.out.println(email);
         if(email==null){
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -134,7 +132,8 @@ public class PinController {
         if(principal==null){
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String
+                email = principal.getEmail();
         System.out.println(email);
         if(email==null){
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);

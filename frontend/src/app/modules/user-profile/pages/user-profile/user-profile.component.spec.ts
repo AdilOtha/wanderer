@@ -1,92 +1,96 @@
-// import { ComponentFixture, TestBed } from '@angular/core/testing';
-// import { SharedModule } from 'src/app/shared/shared.module';
-// import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-// import { UserProfileComponent } from './user-profile.component';
-// import { of, throwError } from 'rxjs';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserProfileComponent } from './user-profile.component';
+import { of, throwError } from 'rxjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
-// describe('UserProfileComponent', () => {
-//   let component: UserProfileComponent;
-//   let fixture: ComponentFixture<UserProfileComponent>;
+describe('UserProfileComponent', () => {
+  let component: UserProfileComponent;
+  let fixture: ComponentFixture<UserProfileComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       imports: [
-//         SharedModule,
-//         HttpClientTestingModule,
-//         BrowserAnimationsModule
-//       ],
-//       declarations: [UserProfileComponent],
-//     }).compileComponents();
-//   });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        SharedModule,
+        HttpClientTestingModule,
+        BrowserAnimationsModule,
+        NgxSpinnerModule,
+        ToastrModule.forRoot()
+      ],
+      declarations: [UserProfileComponent]
+    }).compileComponents();
+  });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(UserProfileComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(UserProfileComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-//   it('should display modal', ()=>{
-//     component.modalDisplay = false;
+  it('should display modal', ()=>{
+    component.modalDisplay = false;
 
-//     component.showModal();
+    component.showModal();
 
-//     expect(component.modalDisplay).toBeTrue;
-//     expect(component.saveForm.controls['profileImage'].value).toBe('');
-//     expect(component.uploadedFilename).toBe('');
-//   });
+    expect(component.modalDisplay).toBeTrue;
+    expect(component.saveForm.controls['profileImage'].value).toBe('');
+    expect(component.uploadedFilename).toBe('');
+  });
 
-//   it('should submit form',()=>{
-//     const userProfileServiceSpy = jasmine.createSpyObj('UserProfileService', ['updateUserDetails']);    
+  it('should submit form',()=>{
+    const userProfileServiceSpy = jasmine.createSpyObj('UserProfileService', ['updateUserDetails']);    
 
-//     userProfileServiceSpy.updateUserDetails.and.returnValue(of({success: true}));
+    userProfileServiceSpy.updateUserDetails.and.returnValue(of({success: true}));
 
-//     userProfileServiceSpy.updateUserDetails().subscribe({
-//       next: (data:any) =>{
-//         expect(data.success).toBeTrue;
-//       }
-//     });
+    userProfileServiceSpy.updateUserDetails().subscribe({
+      next: (data:any) =>{
+        expect(data.success).toBeTrue;
+      }
+    });
 
-//     const userProfileServiceSpy2 = jasmine.createSpyObj('UserProfileService', ['updateUserDetails']);
+    const userProfileServiceSpy2 = jasmine.createSpyObj('UserProfileService', ['updateUserDetails']);
 
-//     userProfileServiceSpy2.updateUserDetails.and.returnValue(throwError(()=>{
-//       return of({status: 500})
-//     }));
+    userProfileServiceSpy2.updateUserDetails.and.returnValue(throwError(()=>{
+      return of({status: 500})
+    }));
 
-//     userProfileServiceSpy2.updateUserDetails().subscribe({
-//       error: (err: any)=>{
-//         expect(err.status).not.toEqual(200);
-//       }
-//     });
+    userProfileServiceSpy2.updateUserDetails().subscribe({
+      error: (err: any)=>{
+        expect(err.status).not.toEqual(200);
+      }
+    });
 
-//   });
+  });
 
-//   it('should upload file to frontend',()=>{
-//     const event: any = {
-//       files: ['capture.png']
-//     }
+  it('should upload file to frontend',()=>{
+    const event: any = {
+      files: ['capture.png']
+    }
 
-//     component.myUploader(event);
+    component.myUploader(event);
 
-//     expect(component.saveForm.controls['profileImage'].value).toBe(event.files[0]);
-//   });
+    expect(component.profileImage).toBe(event.files[0]);
+  });
 
-//   it('should clear profile image from form', ()=>{
-//     const event: any = {
-//       files: ['capture.png']
-//     }
+  it('should clear profile image from form', ()=>{
+    const event: any = {
+      files: ['capture.png']
+    }
 
-//     component.saveForm.controls['profileImage'].setValue('capture.png');
+    component.saveForm.controls['profileImage'].setValue('capture.png');
 
-//     component.onProfileImageClear(event);
+    component.onProfileImageClear(event);
 
-//     expect(component.saveForm.controls['profileImage'].value).toBe('');
+    expect(component.profileImage).toBe('');
 
-//     expect(component.uploadedFilename).toBe('');
-//   });
-// });
+    expect(component.uploadedFilename).toBe('');
+  });
+});

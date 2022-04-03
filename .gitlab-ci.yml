@@ -13,6 +13,8 @@ variables:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: always
     - if: $CI_PIPELINE_SOURCE == "push"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -35,7 +37,7 @@ frontend-build:
   image: node:16-alpine
   stage: build
   extends: .frontend
-  needs: []
+  needs: [ ]
   script:
     - echo "building the frontend code..."
     - cd frontend
@@ -46,7 +48,7 @@ frontend-build:
 build-backend:
   stage: build
   extends: .backend
-  needs: []
+  needs: [ ]
   script:
     - cd backend
     - mvn clean compile
@@ -54,7 +56,7 @@ build-backend:
 test-backend:
   stage: test
   extends: .backend
-  needs: ["build-backend"]
+  needs: [ "build-backend" ]
   script:
     - cd backend
     - mvn clean test -Dspring.profiles.active=test
@@ -63,7 +65,7 @@ frontend-test:
   stage: test
   image: node:16-alpine
   extends: .frontend
-  needs: ["frontend-build"]
+  needs: [ "frontend-build" ]
   before_script:
     - apk add chromium
     - export CHROME_BIN=/usr/bin/chromium-browser
@@ -74,22 +76,22 @@ frontend-test:
     - yarn test
 
 backend-staging:
-   image: ruby:latest
-   stage: deploy
-   before_script:
-     - cd backend
-     - apt-get update -qy
-     - apt-get install -y ruby-dev
-     - gem install dpl
-   script:
-     - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
-   only:
-     - develop
+  image: ruby:latest
+  stage: deploy
+  before_script:
+    - cd backend
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=wanderergroup21 --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+  only:
+    - develop
 
 frontend-staging:
   stage: deploy
   image: ruby:latest
-  needs: ["backend-staging"]
+  needs: [ "backend-staging" ]
   before_script:
     - cd frontend
     - apt-get update -qy
@@ -99,6 +101,33 @@ frontend-staging:
     - dpl --provider=heroku --app=wanderergroup21frontend --api-key=$HEROKU_STAGING_API_KEY_BACKEND
   only:
     - develop
+
+backend-staging-production:
+  image: ruby:latest
+  stage: deploy
+  before_script:
+    - cd backend
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=wanderer-backend-live --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+  only:
+    - master
+
+frontend-staging-production:
+  stage: deploy
+  image: ruby:latest
+  needs: [ "backend-staging-production" ]
+  before_script:
+    - cd frontend
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=wanderer-live --api-key=$HEROKU_STAGING_API_KEY_BACKEND
+  only:
+    - master
 
 backend-code-quality:
   stage: code-quality

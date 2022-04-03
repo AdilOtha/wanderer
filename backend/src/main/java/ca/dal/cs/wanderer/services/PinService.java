@@ -49,4 +49,8 @@ public class PinService {
     public List<Pin> getPinsByIds(List<Integer> pinIds){
         return pinRepository.findAllById(pinIds);
     }
+
+    public Pin getPinById(int pinId) {
+        return pinRepository.findById(pinId).get();
+    }
 }

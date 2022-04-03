@@ -17,6 +17,9 @@ import {AvatarModule} from 'primeng/avatar';
 import {FileUploadModule} from 'primeng/fileupload';
 import {InputNumberModule} from 'primeng/inputnumber';
 import { TabViewModule } from 'primeng/tabview';
+import {EditorModule} from 'primeng/editor';
+import {FieldsetModule} from 'primeng/fieldset';
+import { MenuModule } from 'primeng/menu';
 
 //ngx-spinner import
 import { NgxSpinnerModule } from "ngx-spinner";
@@ -44,7 +47,10 @@ import { MeterToKilometerPipe } from './pipes/meter-to-kilometer/meter-to-kilome
     NgxSpinnerModule,
     InputNumberModule,
     FormsModule,
-    TabViewModule
+    TabViewModule,
+    EditorModule,
+    FieldsetModule,
+    MenuModule
   ],
   exports: [
     HttpClientModule,
@@ -65,6 +71,9 @@ import { MeterToKilometerPipe } from './pipes/meter-to-kilometer/meter-to-kilome
     FormsModule,
     MeterToKilometerPipe,
     TabViewModule,
+    EditorModule,
+    FieldsetModule,
+    MenuModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: []

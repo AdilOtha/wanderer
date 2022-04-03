@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/data/service/auth-service/auth.service';
 export class NavbarComponent implements OnInit {
 
   items: MenuItem[] = [];
+  avtarMenuItems: MenuItem[] = [];
 
   constructor (private authService: AuthService, private router: Router) {}
 
@@ -19,17 +20,6 @@ export class NavbarComponent implements OnInit {
             {
                 label: 'Home',
                 routerLink: '/'
-                // items: [{
-                //         label: 'New',
-                //         icon: 'pi pi-fw pi-plus',
-                //         items: [
-                //             {label: 'Project'},
-                //             {label: 'Other'},
-                //         ]
-                //     },
-                //     {label: 'Open'},
-                //     {label: 'Quit'}
-                // ]
             },
             {
                 label: 'Blog',
@@ -40,17 +30,24 @@ export class NavbarComponent implements OnInit {
                 ]
             },
             {
+                label: 'Your Future Trips',
+                icon: 'pi pi-car',
+                routerLink: '/future-trip'
+            }
+        ];
+        this.avtarMenuItems = [
+            {
+                label: 'Profile',
+                routerLink: '/user-profile',
+                icon: 'pi pi-id-card'
+            },
+            {
                 label: 'Logout',
+                icon: 'pi pi-sign-out',
                 command: (event) => {
-                    console.log("Command Called");
                     this.authService.logout();
                 }
             }
         ];
     }
-
-    onAvatarClick(){
-        this.router.navigate(['/user-profile']);
-    }
-
 }
