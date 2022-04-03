@@ -27,8 +27,6 @@ public class PinController {
     @Autowired
     private UserProfileService userProfileService;
 
-    private String email = "";
-
     @PostMapping("/createPin")
     public ResponseEntity<GenericResponse<Pin>> createPin(@AuthenticationPrincipal OidcUser principal, @RequestPart(value = "pin") Pin pin,
                                                           @RequestPart(value = "image", required = false) MultipartFile[] file) throws Exception {
@@ -45,7 +43,7 @@ public class PinController {
         if (principal == null) {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String email = principal.getEmail();
         System.out.println(email);
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -78,7 +76,7 @@ public class PinController {
         if (principal == null) {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String email = principal.getEmail();
         System.out.println(email);
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -113,7 +111,7 @@ public class PinController {
         if (principal == null) {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String email = principal.getEmail();
         System.out.println(email);
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -136,7 +134,8 @@ public class PinController {
         if (principal == null) {
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
-        email = principal.getEmail();
+        String
+                email = principal.getEmail();
         System.out.println(email);
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);

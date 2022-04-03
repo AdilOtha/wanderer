@@ -19,5 +19,5 @@ export const environment = {
 
   APIENDPOINT: 'https://wanderer-backend-live.herokuapp.com/',
 
-  OAUTH_REDIRECT_URL: 'https://wanderer-backend-live.herokuapp.com/oauth2/authorization/google ',
+  OAUTH_REDIRECT_URL: 'https://wanderer-backend-live.herokuapp.com/oauth2/authorization/google',
 };

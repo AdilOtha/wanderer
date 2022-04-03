@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@Profile({"default", "ci", "prod"})
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     private ObjectMapper objectMapper;
@@ -59,15 +61,17 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .addFilterAfter(new TokenAuthenticationFilter("/api/v1/**", clientId, profileService), LogoutFilter.class);
     }
-
     @Override
-    public void configure(WebSecurity web) {
+    public void configure (WebSecurity web){
         web.ignoring().antMatchers(AUTH_WHITE_LIST);
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",
+                "https://wanderergroup21frontend.herokuapp.com/",
+                "https://wanderer-live.herokuapp.com/"));
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://wanderergroup21frontend.herokuapp.com/","https://wanderer-live.com/"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
