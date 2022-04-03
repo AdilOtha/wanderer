@@ -1,10 +1,8 @@
 package ca.dal.cs.wanderer.controllers;
 
 import ca.dal.cs.wanderer.dtos.FutureTripRequestDto;
-import ca.dal.cs.wanderer.handler.OAuthSuccessHandler;
 import ca.dal.cs.wanderer.models.FutureTrip;
 import ca.dal.cs.wanderer.models.User;
-import ca.dal.cs.wanderer.services.CustomOidcUserService;
 import ca.dal.cs.wanderer.services.FutureTripService;
 import ca.dal.cs.wanderer.services.UserProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,12 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -38,7 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(FutureTripController.class)
-class FutureTripControllerTest {
+@ActiveProfiles("test")
+public class FutureTripControllerTest {
 
     @Autowired
     private WebApplicationContext WebApplicationContext;
@@ -49,19 +43,12 @@ class FutureTripControllerTest {
     @MockBean
     private UserProfileService userProfileService;
 
-    @MockBean
-    private CustomOidcUserService oidcUserService;
-
-    @MockBean
-    private OAuthSuccessHandler successHandler;
-
-
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(WebApplicationContext).build();
-        setAuthentication();
+        UserAuthenticationHelper.setAuthentication();
     }
 
     @Test
@@ -193,6 +180,7 @@ class FutureTripControllerTest {
         verify(futureTripService).updateFutureTrip(anyInt(), any(FutureTrip.class));
     }
 
+
     private List<FutureTrip> getFutureTrips() {
         List<FutureTrip> futureTrips = new ArrayList<>();
 
@@ -215,15 +203,5 @@ class FutureTripControllerTest {
         user.setId(10);
         user.setEmailId("test@gmail.com");
         return user;
-    }
-
-    private void setAuthentication() {
-        OidcUser oidcUser = new DefaultOidcUser(
-                AuthorityUtils.createAuthorityList("SCOPE_message:read"),
-                OidcIdToken.withTokenValue("id-token").claim("user_name", "foo_user")
-                        .claim("email", "test@gmail.com").build(),
-                "user_name");
-
-        SecurityContextHolder.getContext().setAuthentication(new OAuth2AuthenticationToken(oidcUser, AuthorityUtils.createAuthorityList("SCOPE_message:read"), "clientId"));
     }
 }
