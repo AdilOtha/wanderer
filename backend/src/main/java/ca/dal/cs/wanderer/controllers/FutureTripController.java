@@ -10,23 +10,31 @@ import ca.dal.cs.wanderer.models.User;
 import ca.dal.cs.wanderer.services.FutureTripService;
 import ca.dal.cs.wanderer.services.UserProfileService;
 import ca.dal.cs.wanderer.util.ErrorMessages;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wanderer/futuretrip")
+@AllArgsConstructor
 public class FutureTripController {
 
-    @Autowired
     private FutureTripService futureTripService;
 
-    @Autowired
     private UserProfileService userProfileService;
 
     @PostMapping("/createFutureTrip")
@@ -35,14 +43,18 @@ public class FutureTripController {
             throw new PinNotFound(ErrorMessages.PINID_NOT_FOUND);
         }
 
+        // converting request dto into model
         FutureTrip futureTrip = FutureTripRequestDto.convertToModel(futureTripRequestDto);
 
+        // fetching user current logged in user
         User user = userProfileService.fetchByEmail(principal.getEmail());
 
+        // user not found
         if(user.getId() == null) {
             throw new UserNotFound(ErrorMessages.USERID_NOT_FOUND);
         }
 
+        // setting current logged-in user in future trip
         futureTrip.setUser(user);
 
         FutureTrip savedFutureTrip = futureTripService.saveFutureTrip(futureTrip);
@@ -55,10 +67,10 @@ public class FutureTripController {
         return new ResponseEntity<>(futureTripGenericResponse, HttpStatus.OK);
     }
 
-
     @GetMapping("/fetchFutureTripsByUserId")
     public ResponseEntity<GenericResponse<List<FutureTrip>>> getFutureTripsByUserId(@AuthenticationPrincipal OidcUser principal) {
 
+        // fetch all future trips of the current logged-in user
         List<FutureTrip> futureTrips = futureTripService.fetchFutureTripsByUserId(principal.getEmail());
 
         GenericResponse<List<FutureTrip>> futureTripsGenericResponse = new GenericResponse<>(true, "Future Trips for requested user fetched successfully", futureTrips);
@@ -68,6 +80,7 @@ public class FutureTripController {
     @GetMapping(value = "/fetchFutureTripsByPinId")
     public ResponseEntity<GenericResponse<List<FutureTrip>>> getFutureTripsByPinId(@RequestParam(value = "pinId") int pinId) {
 
+        // fetch all the future trips for given pinId
         List<FutureTrip> futureTrips = futureTripService.fetchFutureTripsByPinId(pinId);
 
         GenericResponse<List<FutureTrip>> futureTripsGenericResponse = new GenericResponse<>(true, "Future Trips for requested pin id fetched successfully", futureTrips);
@@ -75,8 +88,8 @@ public class FutureTripController {
     }
 
     @DeleteMapping(value = "/deleteFutureTripById")
-    public ResponseEntity deleteFutureTripById(@RequestParam(value = "futureTripId") int futureTripId) {
-
+    public ResponseEntity<GenericResponse<FutureTrip>> deleteFutureTripById(@RequestParam(value = "futureTripId") int futureTripId) {
+        // delete future trip by future-trip id
         futureTripService.deleteFutureTrip(futureTripId);
         GenericResponse<FutureTrip> futureTripGenericResponse = new GenericResponse<>(true, "Future Trip is deleted", null);
         return new ResponseEntity<>(futureTripGenericResponse, HttpStatus.OK);
@@ -85,8 +98,10 @@ public class FutureTripController {
     @PutMapping(value = "/updateFutureTrip/{futureTripId}")
     public ResponseEntity<GenericResponse<FutureTrip>> updateFutureTripById(@PathVariable(value = "futureTripId") int futureTripId, @RequestBody FutureTripRequestDto futureTripRequestDto) {
 
+        // converting DTO into model
         FutureTrip futureTrip = FutureTripRequestDto.convertToModel(futureTripRequestDto);
 
+        // update the current future trip value
         FutureTrip updatedFutureTrip = futureTripService.updateFutureTrip(futureTripId, futureTrip);
 
         GenericResponse<FutureTrip> futureTripGenericResponse = new GenericResponse<>(true, "Future Trip is updated", updatedFutureTrip);

@@ -61,7 +61,7 @@ export class FutureTripComponent implements OnInit {
     edit(trip: FutureTrip) {
         this.futureTripEditForm.get('tripName')?.setValue(trip.tripName);
         this.futureTripEditForm.get('tripDescription')?.setValue(trip.tripDescription);
-        this.futureTripEditForm.get('tripDate')?.setValue(formatDate(trip.tripDate, 'yyyy-MM-dd', 'en'));
+        this.futureTripEditForm.get('tripDate')?.setValue(formatDate(trip.tripDate, 'yyyy-MM-dd', 'en','+0000'));
         this.futureTripEditForm.get('locationName')?.setValue(trip.pin?.locationName);
         this.futureTripEditForm.get('tripId')?.setValue(trip.tripId);
         this.futureTripEditForm.get('pinId')?.setValue(trip.pin?.pinId);
