@@ -4,6 +4,9 @@ import ca.dal.cs.wanderer.exception.category.EmailNotFound;
 import ca.dal.cs.wanderer.exception.category.InvalidCoordinates;
 import ca.dal.cs.wanderer.exception.category.PinNotFound;
 import ca.dal.cs.wanderer.exception.category.PinNotSaved;
+import ca.dal.cs.wanderer.exception.category.blogexception.BlogNotFound;
+import ca.dal.cs.wanderer.exception.category.blogexception.UnauthorizedBlogAccess;
+import ca.dal.cs.wanderer.exception.category.pinexception.UnauthorizedPinAccess;
 import ca.dal.cs.wanderer.util.ErrorMessages;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,6 +55,30 @@ public class CustomizedExceptionResponse extends ResponseEntityExceptionHandler 
         ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         GenericResponse<ExceptionResponse> genericResponse = new GenericResponse<>(false, ErrorMessages.INVALID_COORDINATES.getHttpStatus().name(), response);
         return handleExceptionInternal(ex, genericResponse, new HttpHeaders(), ErrorMessages.INVALID_COORDINATES.getHttpStatus(), request);
+    }
+
+    // write method unauthorizedPinAccess
+    @ExceptionHandler(UnauthorizedPinAccess.class)
+    public final ResponseEntity<Object> unauthorizedPinAccess(UnauthorizedPinAccess ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        GenericResponse<ExceptionResponse> genericResponse = new GenericResponse<>(false, ErrorMessages.UNAUTHORIZED_PIN_ACCESS.getHttpStatus().name(), response);
+        return handleExceptionInternal(ex, genericResponse, new HttpHeaders(), ErrorMessages.UNAUTHORIZED_PIN_ACCESS.getHttpStatus(), request);
+    }
+
+    // write method for BLOG_NOT_FOUND
+    @ExceptionHandler(BlogNotFound.class)
+    public final ResponseEntity<Object> blogNotFound(BlogNotFound ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        GenericResponse<ExceptionResponse> genericResponse = new GenericResponse<>(false, ErrorMessages.BLOG_NOT_FOUND.getHttpStatus().name(), response);
+        return handleExceptionInternal(ex, genericResponse, new HttpHeaders(), ErrorMessages.BLOG_NOT_FOUND.getHttpStatus(), request);
+    }
+
+    // write method for UnauthorizedBlogAccess
+    @ExceptionHandler(UnauthorizedBlogAccess.class)
+    public final ResponseEntity<Object> unauthorizedBlogAccess(UnauthorizedBlogAccess ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        GenericResponse<ExceptionResponse> genericResponse = new GenericResponse<>(false, ErrorMessages.UNAUTHORIZED_BLOG_ACCESS.getHttpStatus().name(), response);
+        return handleExceptionInternal(ex, genericResponse, new HttpHeaders(), ErrorMessages.UNAUTHORIZED_BLOG_ACCESS.getHttpStatus(), request);
     }
 
 

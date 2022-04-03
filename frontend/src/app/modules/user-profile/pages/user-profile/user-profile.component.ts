@@ -159,10 +159,19 @@ export class UserProfileComponent implements OnInit {
   }
 
   myUploader(event: any) {
+    if(event.files.length===0){
+      return;
+    }
     console.log(event.files[0]);
     // show error if file is of type svg
-    if (event.files.length>0 && event.files[0].type === 'image/svg+xml') {
+    if (event.files[0].type === 'image/svg+xml') {
       this.toast.error('SVG files are not allowed');
+      this.imageUpload.clear();
+      return;
+    }
+    // if file size is greater than 1mb then show error
+    if (event.files[0].size > 1000000) {
+      this.toast.error('File size should be less than 1 MB');
       this.imageUpload.clear();
       return;
     }
