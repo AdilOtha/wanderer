@@ -1,0 +1,155 @@
+2022-34-03 13:34:46 [main] INFO  c.d.cs.wanderer.WandererApplication - Starting WandererApplication using Java 17.0.2 on Meghdoots-MacBook-Pro.local with PID 19157 (/Users/meghdoot/IdeaProjects/group21/backend/target/classes started by meghdoot in /Users/meghdoot/IdeaProjects/group21)
+2022-34-03 13:34:46 [main] INFO  c.d.cs.wanderer.WandererApplication - No active profile set, falling back to default profiles: default
+2022-34-03 13:34:47 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-34-03 13:34:47 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 76 ms. Found 3 JPA repository interfaces.
+2022-34-03 13:34:48 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-34-03 13:34:48 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-34-03 13:34:48 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-34-03 13:34:48 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-34-03 13:34:48 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2225 ms
+2022-34-03 13:34:48 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-34-03 13:34:48 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2022-34-03 13:34:48 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-34-03 13:34:48 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-34-03 13:34:49 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-34-03 13:34:49 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-34-03 13:34:50 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-34-03 13:34:50 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-34-03 13:34:50 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-34-03 13:34:51 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Ant [pattern='/swagger-ui.html'] with []
+2022-34-03 13:34:51 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3724ab90, org.springframework.security.web.context.SecurityContextPersistenceFilter@1372696b, org.springframework.security.web.header.HeaderWriterFilter@5039c2cf, org.springframework.web.filter.CorsFilter@40ef1934, org.springframework.security.web.authentication.logout.LogoutFilter@2305aad0, ca.dal.cs.wanderer.filter.TokenAuthenticationFilter@291522f1, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@6a906078, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@fd5c7f6, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@3b3b2290, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@85eba52, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@206e5183, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6c68f29c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1a34f8e2, org.springframework.security.web.session.SessionManagementFilter@5ca006ac, org.springframework.security.web.access.ExceptionTranslationFilter@1f27f354, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@733e3c19]
+2022-34-03 13:34:51 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-34-03 13:34:51 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-34-03 13:34:51 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2022-34-03 13:34:51 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2022-34-03 13:34:51 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2022-34-03 13:34:52 [main] INFO  c.d.cs.wanderer.WandererApplication - Started WandererApplication in 6.717 seconds (JVM running for 7.629)
+2022-35-03 13:35:09 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-35-03 13:35:09 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2022-35-03 13:35:09 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2022-35-03 13:35:13 [main] INFO  c.d.cs.wanderer.WandererApplication - Starting WandererApplication using Java 17.0.2 on Meghdoots-MacBook-Pro.local with PID 19163 (/Users/meghdoot/IdeaProjects/group21/backend/target/classes started by meghdoot in /Users/meghdoot/IdeaProjects/group21)
+2022-35-03 13:35:13 [main] INFO  c.d.cs.wanderer.WandererApplication - No active profile set, falling back to default profiles: default
+2022-35-03 13:35:14 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-35-03 13:35:15 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 70 ms. Found 3 JPA repository interfaces.
+2022-35-03 13:35:15 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-35-03 13:35:15 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-35-03 13:35:15 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-35-03 13:35:16 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-35-03 13:35:16 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2357 ms
+2022-35-03 13:35:16 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-35-03 13:35:16 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2022-35-03 13:35:16 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-35-03 13:35:16 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-35-03 13:35:16 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-35-03 13:35:17 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-35-03 13:35:17 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-35-03 13:35:17 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-35-03 13:35:17 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-35-03 13:35:19 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Ant [pattern='/swagger-ui.html'] with []
+2022-35-03 13:35:19 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2446be5f, org.springframework.security.web.context.SecurityContextPersistenceFilter@49e92724, org.springframework.security.web.header.HeaderWriterFilter@6c68f29c, org.springframework.web.filter.CorsFilter@2d4f1ddd, org.springframework.security.web.authentication.logout.LogoutFilter@755033c5, ca.dal.cs.wanderer.filter.TokenAuthenticationFilter@5b4880b3, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@32b8992e, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@3ef7fb04, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@2305aad0, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@5ae67f05, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@532e00bd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@58189132, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4bc39640, org.springframework.security.web.session.SessionManagementFilter@47d7e4b6, org.springframework.security.web.access.ExceptionTranslationFilter@69d2c460, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@a7fd77f]
+2022-35-03 13:35:19 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-35-03 13:35:19 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-35-03 13:35:19 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2022-35-03 13:35:19 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2022-35-03 13:35:19 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2022-35-03 13:35:20 [main] INFO  c.d.cs.wanderer.WandererApplication - Started WandererApplication in 7.169 seconds (JVM running for 8.141)
+2022-47-03 13:47:10 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-47-03 13:47:10 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2022-47-03 13:47:10 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2022-47-03 13:47:19 [main] INFO  c.d.cs.wanderer.WandererApplication - Starting WandererApplication using Java 17.0.2 on Meghdoots-MacBook-Pro.local with PID 19306 (/Users/meghdoot/IdeaProjects/group21/backend/target/classes started by meghdoot in /Users/meghdoot/IdeaProjects/group21)
+2022-47-03 13:47:19 [main] INFO  c.d.cs.wanderer.WandererApplication - No active profile set, falling back to default profiles: default
+2022-47-03 13:47:21 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-47-03 13:47:21 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 74 ms. Found 3 JPA repository interfaces.
+2022-47-03 13:47:22 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-47-03 13:47:22 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-47-03 13:47:22 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-47-03 13:47:22 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-47-03 13:47:22 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2514 ms
+2022-47-03 13:47:22 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-47-03 13:47:22 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2022-47-03 13:47:22 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-47-03 13:47:22 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-47-03 13:47:23 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-47-03 13:47:23 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-47-03 13:47:23 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-47-03 13:47:23 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-47-03 13:47:23 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-47-03 13:47:24 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Ant [pattern='/swagger-ui.html'] with []
+2022-47-03 13:47:25 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2446be5f, org.springframework.security.web.context.SecurityContextPersistenceFilter@49e92724, org.springframework.security.web.header.HeaderWriterFilter@6c68f29c, org.springframework.web.filter.CorsFilter@2d4f1ddd, org.springframework.security.web.authentication.logout.LogoutFilter@755033c5, ca.dal.cs.wanderer.filter.TokenAuthenticationFilter@5b4880b3, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@32b8992e, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@3ef7fb04, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@2305aad0, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@5ae67f05, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@532e00bd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@58189132, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4bc39640, org.springframework.security.web.session.SessionManagementFilter@47d7e4b6, org.springframework.security.web.access.ExceptionTranslationFilter@69d2c460, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@a7fd77f]
+2022-47-03 13:47:25 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-47-03 13:47:25 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-47-03 13:47:25 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2022-47-03 13:47:25 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2022-47-03 13:47:25 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2022-47-03 13:47:25 [main] INFO  c.d.cs.wanderer.WandererApplication - Started WandererApplication in 6.954 seconds (JVM running for 7.998)
+2022-47-03 13:47:31 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-47-03 13:47:31 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2022-47-03 13:47:31 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2022-48-03 13:48:23 [http-nio-8080-exec-3] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
+java.lang.RuntimeException: java.nio.charset.MalformedInputException: Input length = 1
+	at org.springframework.security.jwt.codec.Codecs.utf8Decode(Codecs.java:86)
+	at org.springframework.security.jwt.codec.Codecs.utf8Decode(Codecs.java:78)
+	at org.springframework.security.jwt.JwtHeaderHelper.parseParams(JwtHelper.java:130)
+	at org.springframework.security.jwt.JwtHeaderHelper.create(JwtHelper.java:119)
+	at org.springframework.security.jwt.JwtHelper.decode(JwtHelper.java:57)
+	at ca.dal.cs.wanderer.filter.TokenAuthenticationFilter.verifyJwtAndBuildToken(TokenAuthenticationFilter.java:70)
+	at ca.dal.cs.wanderer.filter.TokenAuthenticationFilter.attemptAuthentication(TokenAuthenticationFilter.java:52)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:222)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:212)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:540)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:382)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:895)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1732)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.nio.charset.MalformedInputException: Input length = 1
+	at java.base/java.nio.charset.CoderResult.throwException(CoderResult.java:274)
+	at java.base/java.nio.charset.CharsetDecoder.decode(CharsetDecoder.java:820)
+	at org.springframework.security.jwt.codec.Codecs.utf8Decode(Codecs.java:83)
+	... 59 common frames omitted
+2022-49-03 13:49:21 [http-nio-8080-exec-4] INFO  c.d.c.w.c.UserProfileController - Principal details for the user: Name: [105147569164745671104], Granted Authorities: [[ROLE_USER]], User Attributes: [{at_hash=5Zaq2tFI7DqruyOcKMPk6Q, sub=105147569164745671104, email_verified=true, iss=https://accounts.google.com, given_name=meghdoot, locale=en, nonce=MwWvjiWkEB-0pwsXI31t02UToQz4WMZafGTad3eORLM, picture=https://lh3.googleusercontent.com/a-/AOh14GiR_oScfpt9BQ8zzZuDWkst1x_IV5cw_3DZwaMpSkM=s96-c, aud=299352296399-kjng616j38slcrrvau6qodl6sto7poj8.apps.googleusercontent.com, azp=299352296399-kjng616j38slcrrvau6qodl6sto7poj8.apps.googleusercontent.com, name=meghdoot ojha, exp=2022-04-03T17:47:38Z, family_name=ojha, iat=2022-04-03T16:47:38Z, email=meghdootojha001@gmail.com}]
