@@ -13,6 +13,8 @@ import { FutureTripRequestDto } from 'src/app/data/schema/future-trip-request-dt
 import { formatDate } from '@angular/common';
 import { FutureTrip } from 'src/app/data/schema/future-trip';
 import { DomSanitizer } from '@angular/platform-browser';
+import { pinIconUrl } from 'src/app/data/schema/pin-icon';
+import { UserProfileService } from 'src/app/data/service/user-profile/user-profile.service';
 
 @Component({
   selector: 'app-home',
@@ -67,44 +69,25 @@ currentPinFutureTrips: FutureTrip[] = [];
   updatingPinsMap: any = {};
 
   // Pin Modal Data
-  readonly mapPanelHeader: string = 'Navigator';
+  readonly mapPanelHeader: string = 'Map Explorer';
   readonly pinModalHeaderLabel: string = 'Add/Edit Pin Details';
   displayPinModal: boolean = false;
   enablePinModalSaveButton: boolean = true;
 
   currentPin!: Pin;
   currentPinIndex!: number;
-
-  pinForm: FormGroup = this.fb.group({
-    locationName: ['', [Validators.required]],
-    pinLatitude: ['', [Validators.required]],
-    pinLongitude: ['', [Validators.required]],
-  });
+  
   submitted: boolean = false;
+  enablePinEditMode: boolean = false;
 
-  readonly pinIconUrl: any = {
-    temporaryPinIcon: {
-      url: 'assets/svgs/pin_alt_yellow.svg',
-      scaledSize: {
-        width: 50,
-        height: 50,
-      },
-    },
-    savedPinIcon: {
-      url: 'assets/svgs/pin_alt_red.svg',
-      scaledSize: {
-        width: 50,
-        height: 50,
-      },
-    },
-    editablePinIcon: {
-      url: 'assets/svgs/pin_alt_blue.svg',
-      scaledSize: {
-        width: 50,
-        height: 50,
-      },
-    },
-  };
+  readonly pinIconUrl: any = pinIconUrl;
+
+  currentUserId!: any;  
+
+  readonly defaultUserIdErrorMsg: string = 'Error getting user id';
+  readonly unauthorizedErrorMsg: string = 'Unauthorized';
+  readonly userIdPropName: string = 'userId';
+  readonly rootSpinnerName: string = 'root-spinner';
 
   constructor(
     private firestore: Firestore,
@@ -113,10 +96,14 @@ currentPinFutureTrips: FutureTrip[] = [];
     private toast: ToastrService,
     private spinner: NgxSpinnerService,
     private futureTripService: FutureTripService,
-    private sanitizer : DomSanitizer
+    private sanitizer : DomSanitizer,
+    private userProfileService: UserProfileService,
   ) {}
 
   ngOnInit(): void {
+    // get user id
+    this.getUserId();
+
     // get user's current location
     this.setCurrentLocation();
 
@@ -125,7 +112,7 @@ currentPinFutureTrips: FutureTrip[] = [];
     this.pinCreationUpdates = collectionData(dataList);
 
     // subscribe to pin creation updates from firestore
-    this.pinCreationUpdates.pipe(debounceTime(0)).subscribe((update) => {
+    this.pinCreationUpdates.pipe(debounceTime(700)).subscribe((update) => {
       console.log(update);
       this.getPinsByRadiusFromService();
     });
@@ -149,6 +136,44 @@ currentPinFutureTrips: FutureTrip[] = [];
 
         this.getPinsByRadiusFromService();
       });
+  }
+
+  getUserId(){
+    this.spinner.show();
+    // get user id from user service
+    this.userProfileService
+      .getUserId()
+      .pipe(
+        finalize(() => {
+          this.spinner.hide();
+        })
+      )
+      .subscribe({
+        next: (data: any) => {
+          if (data && data?.payload?.userId) {
+            this.currentUserId = data.payload.userId;
+          } else {
+            this.toast.error(this.defaultUserIdErrorMsg);
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+          this.toast.error(
+            this.getUserErrorMsg(err, this.defaultUserIdErrorMsg)
+          );
+        },
+      });
+  }
+
+  getUserErrorMsg(err: HttpErrorResponse, defaultMsg: string): string {
+    if (err.status === 401) {
+      return this.unauthorizedErrorMsg;
+    } else {
+      const error = err.error;
+      return (
+        error?.payload?.message || error?.message || err?.message || defaultMsg
+      );
+    }
   }
 
   // render pin on map
@@ -182,13 +207,20 @@ currentPinFutureTrips: FutureTrip[] = [];
     this.displayPinModal = true;
   }
 
+  closePinModal(event:any) {
+    console.log(event);
+    
+    this.enablePinEditMode = false;
+    this.displayPinModal = false;
+    this.submitted = false;
+  }
+
   // set double clicked pin as current pin to set values in pin modal form
   setCurrentPin(pin: Pin, index: number) {
-    this.currentPin = pin;
+    this.currentPin = Object.assign({}, pin);
+    // update current pin using spread operator
+    // this.currentPin = { ...pin };    
     this.currentPinIndex = index;
-    this.pinForm.controls['locationName'].patchValue(pin.locationName);
-    this.pinForm.controls['pinLatitude'].patchValue(pin.latitude);
-    this.pinForm.controls['pinLongitude'].patchValue(pin.longitude);
     // console.log('Current Pin Index: ' + this.currentPinIndex);
   }
 
@@ -221,138 +253,6 @@ currentPinFutureTrips: FutureTrip[] = [];
       // to fetch the data when user navigate to other's future trip tab
       this.setFutureTripsForCurrentPin(this.currentPin);
     }
-  }
-
-  // getter to access the pin form controls in template
-  get pinFormControls() {
-    return this.pinForm.controls;
-  }
-
-  // save or update pin to database
-  savePin() {
-    this.currentPin.latitude = this.pinForm.controls['pinLatitude'].value;
-    this.currentPin.longitude = this.pinForm.controls['pinLongitude'].value;
-    this.currentPin.locationName = this.pinForm.controls['locationName'].value;
-    // validate latitude and longitude
-    if (
-      this.currentPin.latitude < -90 ||
-      this.currentPin.latitude > 90 ||
-      this.currentPin.longitude < -180 ||
-      this.currentPin.longitude > 180
-    ) {
-      this.toast.error('Please enter valid latitude and longitude');
-      return;
-    }
-    this.submitted = true;
-    this.enablePinModalSaveButton = false;
-    if (this.pinForm.valid) {
-      // show spinner
-      this.spinner.show();
-
-      // console.log('Saved Pin Index: ' + this.currentPinIndex);
-
-      this.savedPins[this.currentPinIndex].isSaved = true;
-
-      let pin: Pin = {
-        latitude: this.currentPin.latitude,
-        longitude: this.currentPin.longitude,
-        locationName: this.currentPin.locationName,
-        pinId: -1,
-        isSaved: true,
-        isDraggable: false,
-        iconUrl: this.pinIconUrl.savedPinIcon,
-      };
-
-      // if Pin exists then update Pin
-      if (this.currentPin.pinId !== -1) {
-        pin.pinId = this.currentPin.pinId;
-
-        // call service to update pin
-        this.pinService
-          .updatePin(pin.pinId, pin.locationName, pin.latitude, pin.longitude)
-          .pipe(
-            finalize(() => {
-              this.pinFormCleanup();
-              // hide spinner
-              this.spinner.hide();
-            })
-          )
-          .subscribe({
-            next: (data: any) => {
-              const updatedPin = data.payload;
-              // console.log({
-              //   updatedPin: data,
-              // });
-              updatedPin.isSaved = true;
-              updatedPin.isDraggable = false;
-              updatedPin.iconUrl = this.pinIconUrl.savedPinIcon;
-              this.savedPins[this.currentPinIndex] = updatedPin;
-
-              const index = this.newlyCreatedPins.findIndex(
-                (pin) => pin.pinId === updatedPin.pinId
-              );
-              this.newlyCreatedPins[index] = updatedPin;
-              delete this.updatingPinsMap[updatedPin.pinId];
-              this.toast.info(data?.message);
-              // console.log(this.savedPins[this.currentPinIndex]);
-            },
-            error: (err: any) => {
-              console.log(err);
-              const error = err.error;
-              this.toast.error(error?.payload?.message || error?.message);
-              this.currentPin.iconUrl = this.pinIconUrl.savedPinIcon;
-            },
-          });
-      } else {
-        // else if Pin does not exist then save Pin
-
-        // call service to insert pin
-        this.pinService
-          .insertPin(pin)
-          .pipe(
-            finalize(() => {
-              this.pinFormCleanup();
-              // hide spinner
-              this.spinner.hide();
-            })
-          )
-          .subscribe({
-            next: (data: any) => {
-              const newPin = data.payload;
-              // console.log({ newPin: data });
-              newPin.isSaved = true;
-              newPin.isDraggable = false;
-              newPin.iconUrl = this.pinIconUrl.savedPinIcon;
-              this.newlyCreatedPins.push(newPin);
-              this.savedPins[this.currentPinIndex] = newPin;
-              this.toast.success(data?.message);
-            },
-            error: (err: HttpErrorResponse) => {
-              console.log(err);
-              const error = err.error;
-              this.toast.error(error?.payload?.message || error?.message);
-              this.savedPins.splice(this.currentPinIndex, 1);
-            },
-          });
-      }
-    }
-  }
-
-  pinFormCleanup() {
-    this.displayPinModal = false;
-    this.submitted = false;
-    this.enablePinModalSaveButton = true;
-
-    this.pinForm.reset();
-  }
-
-  editPinCoordinates() {
-    this.displayPinModal = false;
-    this.toast.info('Please move the selected Pin to change its coordinates');
-    this.savedPins[this.currentPinIndex].isDraggable = true;
-    this.savedPins[this.currentPinIndex].iconUrl =
-      this.pinIconUrl.editablePinIcon;
-    this.updatingPinsMap[this.currentPin.pinId] = this.currentPin;
   }
 
   getPinsByRadiusFromService() {
@@ -450,25 +350,43 @@ currentPinFutureTrips: FutureTrip[] = [];
 
   mergePins(pinsByRadiusData: any) {
     const savedPinsMap: any = {};
-    for (let pin of pinsByRadiusData?.payload.concat(this.newlyCreatedPins)) {
-      if (pin.pinId in this.updatingPinsMap) {
+    const concatPins: any[] = pinsByRadiusData?.payload.concat(this.newlyCreatedPins);
+    for (let pin of concatPins) {
+      
+      if(pin.userId === this.currentUserId) {
+        pin.iconUrl = this.pinIconUrl.userCreatedPinIcon;
+      }
+      if (pin.pinId in this.updatingPinsMap) {        
         pin = this.updatingPinsMap[pin.pinId];
-      }
-      if (!(pin.pinId in savedPinsMap)) {
-        savedPinsMap[pin.pinId] = pin;
-      }
+        pin.iconUrl = this.pinIconUrl.editablePinIcon;
+        console.log('pin updated', pin);        
+      }      
+      if (!(pin.pinId in savedPinsMap)) {        
+        savedPinsMap[pin.pinId] = pin;  
+        savedPinsMap[pin.pinId].iconUrl = pin.iconUrl;        
+      }      
     }
 
     this.savedPins = Object.values(savedPinsMap);
 
-    // console.log(this.savedPins);
+    console.log({
+      mergedPins: this.savedPins,
+    });
   }
 
   pinDragEnd(m: Pin, index: number, event: MouseEvent) {
     console.log('dragEnd', m, event);
     m.latitude = event.coords.lat;
     m.longitude = event.coords.lng;
-    // console.log(m);
+    this.savedPins[index] = m;
+    
+    this.savedPins = [...this.savedPins];
+    if(m.pinId in this.updatingPinsMap) {
+      this.updatingPinsMap[m.pinId] = m;
+      this.updatingPinsMap = {...this.updatingPinsMap};
+      console.log('***',this.updatingPinsMap[m.pinId]);
+      
+    }
   }
 
   identifyPin(index: number, pin: Pin) {
@@ -519,6 +437,20 @@ currentPinFutureTrips: FutureTrip[] = [];
         this.toast.warning('An unknown error occurred');
         break;
     }
+  }
+
+  getUserAccess(): boolean {
+    return !this.currentPin?.isSaved || this.currentUserId == this.currentPin?.userId || this.submitted
+  }
+
+  getUpdatedPinsMap(event: any) {
+    console.log(event);
+    
+    this.updatingPinsMap = event;
+
+    console.log({
+      updatingPinsMap: this.updatingPinsMap,
+      });    
   }
 
   // saving the created future trip for the user

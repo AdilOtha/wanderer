@@ -11,6 +11,10 @@ export class UserProfileService {
 
   constructor(private http: HttpClient) { }
 
+  getUserId(): Observable<any> {
+    return this.http.get(this.apiEndPoint + 'getUserId');
+  }
+  
   getUserDetails(): Observable<any> {
     return this.http.get(this.apiEndPoint + 'getDetails');
   }

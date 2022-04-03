@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { UserProfileRoutingModule } from './user-profile-routing.module';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { BucketListComponent } from './pages/bucket-list/bucket-list.component';
 
 
 @NgModule({
   declarations: [
-    UserProfileComponent
+    UserProfileComponent,
+    BucketListComponent
   ],
   imports: [
     CommonModule,
