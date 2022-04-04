@@ -92,11 +92,6 @@ public class FutureTripController {
     @GetMapping(value = "/fetchFutureTripsByPinId")
     public ResponseEntity<GenericResponse<List<FutureTrip>>> getFutureTripsByPinId(@RequestParam(value = "pinId") int pinId) throws Exception {
 
-        // if pinId is less than 0 then throw exception
-        if(pinId<=0){
-            throw new Exception(ErrorMessages.INVALID_PIN_ID.getErrorMessage());
-        }
-
         // fetch all the future trips for given pinId
         List<FutureTrip> futureTrips = futureTripService.fetchFutureTripsByPinId(pinId);
 
