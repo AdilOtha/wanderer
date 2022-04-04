@@ -6,14 +6,9 @@ import { HomeComponent } from './pages/home/home.component';
 const routes: Routes = [
   {
     path: '',
-    children: [
-      {
-        path: '',
-        component: HomeComponent,
-        canActivate: [AuthGuard],
-      },
-    ],
-  },
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+  }
 ];
 
 @NgModule({

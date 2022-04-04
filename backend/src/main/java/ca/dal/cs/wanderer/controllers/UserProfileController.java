@@ -10,8 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.minidev.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/wanderer/user")
@@ -37,17 +35,13 @@ public class UserProfileController {
 
     private String email = "";
 
-    //SL4J logger factory to introduce 5 level of logging
-    Logger logger = LoggerFactory.getLogger(UserProfileController.class);
-
     @GetMapping("/getDetails")
     public ResponseEntity<GenericResponse<JSONObject>> fetchSingle(@AuthenticationPrincipal OidcUser principal) {
-        logger.info("Principal details for the user: " + principal);
-        if (principal==null) {
-            throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
+        if (principal == null) {
+                throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
 
-        email = principal.getEmail();
+        String email = principal.getEmail();
 
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
@@ -61,9 +55,8 @@ public class UserProfileController {
         jsonObject.put("emailId", email);
         jsonObject.put("googlePhotoUrl", googleProfileImage);
         if (user.getImage() != null) {
-            logger.info("Image already found");
             String encodedImage = Base64.getEncoder().encodeToString(user.getImage());
-            jsonObject.put("image", "data:image/png;base64, " + encodedImage);
+            jsonObject.put("image", "data:blogImage/png;base64, " + encodedImage);
         } else {
             jsonObject.put("image", null);
         }
@@ -80,30 +73,50 @@ public class UserProfileController {
                                              @RequestParam(value = "lastName", required = false) String lName) throws IOException {
         System.out.println(principal);
         if (principal == null) {
-            logger.warn("No principal found");
             throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
         }
 
-        email = principal.getEmail();
+        String email = principal.getEmail();
 
         if (email == null) {
-            logger.warn("No email found");
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
         }
 
         User user = service.fetchByEmail(email);
 
         if (fName == null) {
-            logger.info("fetching first name from principal");
             fName = principal.getGivenName();
         }
         if (lName == null) {
-            logger.info("fetching last name from principal");
             lName = principal.getFamilyName();
         }
         User savedUser = service.updateProfile(file, user, fName, lName);
 
         GenericResponse<User> userGenericResponse = new GenericResponse<>(true, "User Profile Updated Successfully", savedUser);
+
+        return new ResponseEntity<>(userGenericResponse, HttpStatus.OK);
+    }
+
+    // get user id
+    @GetMapping("/getUserId")
+    public ResponseEntity<GenericResponse<Map<String,Object>>> getUserId(@AuthenticationPrincipal OidcUser principal) {
+        System.out.println(principal);
+        if (principal == null) {
+            throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
+        }
+
+        email = principal.getEmail();
+
+        if (email == null) {
+            throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
+        }
+
+        User user = service.fetchByEmail(email);
+        Integer userId = user.getId();
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId", userId);
+        GenericResponse<Map<String,Object>> userGenericResponse = new GenericResponse<>(true, "User Id retrieved successfully", map);
 
         return new ResponseEntity<>(userGenericResponse, HttpStatus.OK);
     }

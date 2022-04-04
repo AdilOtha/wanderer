@@ -23,13 +23,12 @@ public class PinImage {
     private Integer imageID;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pin_id", nullable = false)
     private Pin pin;
 
     @Lob
-    @Column(name= "image_name",columnDefinition = "MEDIUMBLOB")
-    @JsonIgnore
+    @Column(name = "image_name", columnDefinition = "MEDIUMBLOB")
     private byte[] image;
 
     public PinImage(byte[] image) {
