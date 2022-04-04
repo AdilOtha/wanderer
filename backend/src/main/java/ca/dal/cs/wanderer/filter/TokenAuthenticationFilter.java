@@ -30,20 +30,26 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+// class for managing token authentication filter
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private UserProfileService profileService;
 
     private String clientId;
 
+    // initializing constructor
     public TokenAuthenticationFilter(String defaultFilterProcessesUrl, String clientId, UserProfileService profileService) {
         super(defaultFilterProcessesUrl);
         this.profileService = profileService;
         this.clientId = clientId;
     }
 
+    // method for attempting authentication for api by fetching bearer token from authorization header and then validating
+    // @param httpServletRequest - http request
+    // @param httpServletResponse - http response
+    // @returns - return authentication
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException {
 
         // Read the token from the request header. Throw exception if Authorization header is not found.
         String token = getBearerToken(httpServletRequest);
@@ -64,6 +70,9 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
         return new OAuth2AuthenticationToken(principal, authorities, clientId);
     }
 
+    // method for verifying the jwt token to authenticate the user
+    // @param token - the user token
+    // @return - returns the OidcIdToken
     public OidcIdToken verifyJwtAndBuildToken(String token) throws JsonProcessingException {
 
         // Decode the jwt.
@@ -88,12 +97,17 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
         return oidc.build();
     }
 
+    // method for checking whether token is alive or not
+    // @param exp - expiration time
     protected void isTokenAlive(Instant exp) {
         if (exp.isBefore(Instant.now())) {
             throw new InternalAuthenticationServiceException("Token Expired");
         }
     }
 
+    // method for fetching the bearer token
+    // @param request - the http request
+    // @return - returns the token
     private String getBearerToken(HttpServletRequest request) {
 
         // Reading Authorization Header from the request object.
