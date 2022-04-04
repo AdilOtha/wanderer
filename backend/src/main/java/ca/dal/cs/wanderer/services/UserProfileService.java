@@ -20,7 +20,7 @@ public class UserProfileService {
     }
 
     public User updateProfile(MultipartFile file, User user, String fName, String lName) throws IOException {
-        // user.setImage();
+        // user.setBlogImage();
 
         if (file != null)
             user.setImage(file.getBytes());

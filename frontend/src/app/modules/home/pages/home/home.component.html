@@ -1,69 +1,38 @@
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="fire" [fullScreen]="true"></ngx-spinner>
-<p-dialog [header]="pinModalHeaderLabel" [(visible)]="displayPinModal" position="top-left" [modal]="true"
-  [style]="{ width: '50vw' }" [baseZIndex]="10000" [draggable]="false" [resizable]="false" [maximizable]="true">
+<p-dialog styleClass=""
+[header]="pinModalHeaderLabel"
+[(visible)]="displayPinModal"
+position="top-left"
+[modal]="true"
+[baseZIndex]="10000"
+[draggable]="false"
+[resizable]="false"
+[maximizable]="true"
+[style]="{ width: '50vw' }"
+[breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+(onHide)="closePinModal($event)">
   <p-tabView styleClass="tabview-custom" (onChange)="handleChange($event)">
     <p-tabPanel>
       <ng-template pTemplate="header">
         <i class="pi pi-map-marker mr-2"></i>
         <span>Pin Info</span>
       </ng-template>
-      <form [formGroup]="pinForm" (ngSubmit)="savePin()" id="pinForm">
-        <div class="formgrid grid p-fluid p-0">
-          <div class="col-12 field">
-            <label for="locationName">Location Name:</label>
-            <input pInputText type="text" class="form-control inputfield" name="locationName" id="locationName"
-              formControlName="locationName" required />
-            <ng-container *ngIf="
-                (submitted && pinFormControls['locationName']?.errors) ||
-                (pinFormControls['locationName']?.errors &&
-                  pinFormControls['locationName']?.dirty)
-              ">
-              <div *ngIf="pinFormControls['locationName']?.errors?.['required']"
-                class="flex justify-content-center mt-3">
-                <p-message severity="error" text="Location Name is required"></p-message>
-              </div>
-            </ng-container>
-          </div>
-          <div class="col-6 field">
-            <label for="pinLatitude">Latitude:</label>
-            <input pInputText type="number" class="form-control inputfield" name="pinLatitude" id="pinLatitude"
-              formControlName="pinLatitude" required />
-            <ng-container *ngIf="
-                (submitted && pinFormControls['pinLatitude']?.errors) ||
-                (pinFormControls['pinLatitude']?.errors &&
-                  pinFormControls['pinLatitude']?.dirty)
-              ">
-              <div *ngIf="pinFormControls['pinLatitude']?.errors?.['required']"
-                class="flex justify-content-center mt-3">
-                <p-message severity="error" text="Pin Latitude is required"></p-message>
-              </div>
-            </ng-container>
-          </div>
-          <div class="col-6 field">
-            <label for="pinLongitude">Longitude:</label>
-            <input pInputText type="number" class="form-control inputfield" name="pinLongitude" id="pinLongitude"
-              formControlName="pinLongitude" required />
-            <ng-container *ngIf="
-                (submitted && pinFormControls['pinLongitude']?.errors) ||
-                (pinFormControls['pinLongitude']?.errors &&
-                  pinFormControls['pinLongitude']?.dirty)
-              ">
-              <div *ngIf="pinFormControls['pinLongitude']?.errors?.['required']"
-                class="flex justify-content-center mt-3">
-                <p-message severity="error" text="Pin Longitude is required"></p-message>
-              </div>
-            </ng-container>
-          </div>
-        </div>
-        <div class="field flex flex-wrap justify-content-end">
-          <button pButton icon="pi pi-pencil" form="pinForm" label="Edit Coordinates" type="button"
-            class="p-button-md mr-2 mt-2" (click)="editPinCoordinates()"></button>
-          <button pButton icon="pi pi-check" form="pinForm" label="Save" type="submit"
-            [disabled]="!pinForm.valid || !enablePinModalSaveButton" class="p-button-md mr-2 mt-2"></button>
-          <p-button type="button" icon="pi pi-times" (click)="displayPinModal = false" label="Cancel"
-            class="p-button-md mt-2"></p-button>
-        </div>
-      </form>
+      <app-pin-form
+        [savedPins]="savedPins"
+        [newlyCreatedPins]="newlyCreatedPins"
+        [updatingPinsMap]="updatingPinsMap"
+        [currentPin]="currentPin"
+        [currentPinIndex]="currentPinIndex"
+        [currentUserId]="currentUserId"
+        [displayPinModal]="displayPinModal"
+        [enablePinEditMode]="enablePinEditMode"
+        [submitted]="submitted"
+        (savedPinsUpdate)="savedPins = $event"
+        (newlyCreatedPinsUpdate)="newlyCreatedPins = $event"
+        (updatingPinsMapUpdate)="getUpdatedPinsMap($event)"
+        (displayPinModalUpdate)="displayPinModal = $event"
+        (enablePinEditModeUpdate)="enablePinEditMode = $event"
+      ></app-pin-form>      
       <!-- <ng-template pTemplate="footer"> -->
 
       <!-- </ng-template> -->
@@ -121,7 +90,7 @@
             </div>
             <div class="col-6">
               <h5>Trip Date</h5>
-              <span>{{trip.tripDate | date:'longDate'}}</span>
+              <span>{{trip.tripDate | date:'longDate' :'+0000'}}</span>
             </div>
           </div>
           <div class="grid">
@@ -151,9 +120,9 @@
       <agm-marker *ngFor="let m of savedPins; let i = index; trackBy: identifyPin" [latitude]="m.latitude"
         [longitude]="m.longitude" [markerDraggable]="!m.isSaved || m.isDraggable" [iconUrl]="m.iconUrl"
         (markerDblClick)="openPinModal(m, i)" (dragEnd)="pinDragEnd(m, i, $event)">
-        <!-- <agm-info-window>
-          <strong>Pin Saved!</strong>
-        </agm-info-window> -->
+        <agm-info-window>
+          <strong>{{ m.locationName }}</strong>
+        </agm-info-window>
       </agm-marker>
 
       <agm-circle [latitude]="latitude" [longitude]="longitude" [radius]="radius" [circleDraggable]="true"

@@ -54,7 +54,7 @@ public class UserProfileController {
         jsonObject.put("googlePhotoUrl", googleProfileImage);
         if (user.getImage() != null) {
             String encodedImage = Base64.getEncoder().encodeToString(user.getImage());
-            jsonObject.put("image", "data:image/png;base64, " + encodedImage);
+            jsonObject.put("image", "data:blogImage/png;base64, " + encodedImage);
         } else {
             jsonObject.put("image", null);
         }
@@ -91,6 +91,29 @@ public class UserProfileController {
         User savedUser = service.updateProfile(file, user, fName, lName);
 
         GenericResponse<User> userGenericResponse = new GenericResponse<>(true, "User Profile Updated Successfully", savedUser);
+
+        return new ResponseEntity<>(userGenericResponse, HttpStatus.OK);
+    }
+
+    // get user id
+    @GetMapping("/getUserId")
+    public ResponseEntity<GenericResponse<Map<String,Object>>> getUserId(@AuthenticationPrincipal OidcUser principal) {
+        if (principal == null) {
+            throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
+        }
+
+        String email = principal.getEmail();
+
+        if (email == null) {
+            throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
+        }
+
+        User user = service.fetchByEmail(email);
+        Integer userId = user.getId();
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId", userId);
+        GenericResponse<Map<String,Object>> userGenericResponse = new GenericResponse<>(true, "User Id retrieved successfully", map);
 
         return new ResponseEntity<>(userGenericResponse, HttpStatus.OK);
     }

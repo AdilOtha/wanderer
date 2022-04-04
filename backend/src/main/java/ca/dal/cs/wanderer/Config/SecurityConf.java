@@ -3,11 +3,11 @@ package ca.dal.cs.wanderer.Config;
 import ca.dal.cs.wanderer.filter.TokenAuthenticationFilter;
 import ca.dal.cs.wanderer.handler.OAuthSuccessHandler;
 import ca.dal.cs.wanderer.services.UserProfileService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,9 +21,8 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@Profile({"default", "ci", "prod"})
 public class SecurityConf extends WebSecurityConfigurerAdapter {
-
-    private ObjectMapper objectMapper;
 
     @Autowired
     private OidcUserService oidcUserService;
@@ -37,6 +36,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuthSuccessHandler oAuthSuccessHandler;
 
+    // method for setting application security configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().authorizeRequests()
@@ -56,6 +56,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     }
 
+    // method for allowing the cors origin for different environments
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

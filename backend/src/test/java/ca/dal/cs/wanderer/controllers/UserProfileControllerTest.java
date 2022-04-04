@@ -1,8 +1,6 @@
 package ca.dal.cs.wanderer.controllers;
 
-import ca.dal.cs.wanderer.handler.OAuthSuccessHandler;
 import ca.dal.cs.wanderer.models.User;
-import ca.dal.cs.wanderer.services.CustomOidcUserService;
 import ca.dal.cs.wanderer.services.UserProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,12 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -30,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserProfileController.class)
+@ActiveProfiles("test")
 public class UserProfileControllerTest {
 
     private MockMvc mockMvc;
@@ -40,16 +34,10 @@ public class UserProfileControllerTest {
     @MockBean
     private UserProfileService userProfileService;
 
-    @MockBean
-    private CustomOidcUserService oidcUserService;
-
-    @MockBean
-    private OAuthSuccessHandler successHandler;
-
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-        setAuthentication();
+        UserAuthenticationHelper.setAuthentication();
     }
 
     @Test
@@ -75,15 +63,5 @@ public class UserProfileControllerTest {
         user.setId(10);
         user.setEmailId("test@gmail.com");
         return user;
-    }
-
-    private void setAuthentication() {
-        OidcUser oidcUser = new DefaultOidcUser(
-                AuthorityUtils.createAuthorityList("SCOPE_message:read"),
-                OidcIdToken.withTokenValue("id-token").claim("user_name", "foo_user")
-                        .claim("email", "test@gmail.com").build(),
-                "user_name");
-
-        SecurityContextHolder.getContext().setAuthentication(new OAuth2AuthenticationToken(oidcUser, AuthorityUtils.createAuthorityList("SCOPE_message:read"), "clientId"));
     }
 }
