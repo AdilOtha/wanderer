@@ -24,21 +24,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wanderer/futuretrip")
 @AllArgsConstructor
+
+// class for managing future trip feature
 public class FutureTripController {
 
     private FutureTripService futureTripService;
 
     private UserProfileService userProfileService;
 
+    // method for creating future trip
+    // @param principal - oauth principal containing user details
+    // @param futureTripRequestDto - future trip request dto
+    // @return - returns future trip
     @PostMapping("/createFutureTrip")
     public ResponseEntity<GenericResponse<FutureTrip>> createFutureTrip(@AuthenticationPrincipal OidcUser principal, @RequestBody FutureTripRequestDto futureTripRequestDto) {
+
         if(futureTripRequestDto.getPinId() < 0) {
             throw new PinNotFound(ErrorMessages.PINID_NOT_FOUND);
         }
@@ -67,6 +73,9 @@ public class FutureTripController {
         return new ResponseEntity<>(futureTripGenericResponse, HttpStatus.OK);
     }
 
+    // method for fetching future trips by user id
+    // @param principal - oauth principal containing user details
+    // @return - returns list of future trip
     @GetMapping("/fetchFutureTripsByUserId")
     public ResponseEntity<GenericResponse<List<FutureTrip>>> getFutureTripsByUserId(@AuthenticationPrincipal OidcUser principal) {
 
@@ -77,8 +86,11 @@ public class FutureTripController {
         return new ResponseEntity<>(futureTripsGenericResponse, HttpStatus.OK);
     }
 
+    // method for fetching future trips by pin id
+    // @param pinId - pinId
+    // @return - returns list of future trip
     @GetMapping(value = "/fetchFutureTripsByPinId")
-    public ResponseEntity<GenericResponse<List<FutureTrip>>> getFutureTripsByPinId(@RequestParam(value = "pinId") int pinId) {
+    public ResponseEntity<GenericResponse<List<FutureTrip>>> getFutureTripsByPinId(@RequestParam(value = "pinId") int pinId) throws Exception {
 
         // fetch all the future trips for given pinId
         List<FutureTrip> futureTrips = futureTripService.fetchFutureTripsByPinId(pinId);
@@ -87,6 +99,9 @@ public class FutureTripController {
         return new ResponseEntity<>(futureTripsGenericResponse, HttpStatus.OK);
     }
 
+    // method for deleting future trip
+    // @param futureTripId - future trip id
+    // @return - returns the status code
     @DeleteMapping(value = "/deleteFutureTripById")
     public ResponseEntity<GenericResponse<FutureTrip>> deleteFutureTripById(@RequestParam(value = "futureTripId") int futureTripId) {
         // delete future trip by future-trip id
@@ -95,6 +110,10 @@ public class FutureTripController {
         return new ResponseEntity<>(futureTripGenericResponse, HttpStatus.OK);
     }
 
+    // method for updating future trip
+    // @param futureTripId -  future trip id
+    // @param futureTripRequestDto - future trip request dto
+    // @return - returns future trip
     @PutMapping(value = "/updateFutureTrip/{futureTripId}")
     public ResponseEntity<GenericResponse<FutureTrip>> updateFutureTripById(@PathVariable(value = "futureTripId") int futureTripId, @RequestBody FutureTripRequestDto futureTripRequestDto) {
 

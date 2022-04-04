@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// class for managing future trip service
 @Service
 public class FutureTripService {
 
@@ -20,21 +21,33 @@ public class FutureTripService {
     @Autowired
     private UserProfileService userProfileService;
 
+    // method for saving the future trip
+    // @param futureTrip - the future trip
+    // @return - returns future trip
     public FutureTrip saveFutureTrip(FutureTrip futureTrip) {
         futureTrip.setPin(pinService.getPinById(futureTrip.getPin().getPinId()));
         return futureTripRepository.save(futureTrip);
     }
 
+    // method for fetching the future trip by user id
+    // @param email - the email
+    // @return - returns the list of future trip
     public List<FutureTrip> fetchFutureTripsByUserId(String email) {
-
         User user = userProfileService.fetchByEmail(email);
         return futureTripRepository.findByUserId(user.getId());
     }
 
+    // method for fetching the future trip by pin id
+    // @param pinId - the pinId
+    // @return - returns the list of future trip
     public List<FutureTrip> fetchFutureTripsByPinId(int pinId) {
         return futureTripRepository.findByPinPinId(pinId);
     }
 
+    // method for updating the future trip
+    // @param futureTripId - the future trip id
+    // @param updatedFutureTrip - the updated future trip
+    // @return - returns the future trip
     public FutureTrip updateFutureTrip(int futureTripId, FutureTrip updatedFutureTrip) {
         FutureTrip futureTrip = futureTripRepository.getById(futureTripId);
         futureTrip.setTripName(updatedFutureTrip.getTripName());
@@ -43,6 +56,8 @@ public class FutureTripService {
         return futureTripRepository.save(futureTrip);
     }
 
+    // method for deleting the future trip
+    // @param futureTripId - the future trip id
     public void deleteFutureTrip(int futureTripId) {
         futureTripRepository.deleteById(futureTripId);
     }

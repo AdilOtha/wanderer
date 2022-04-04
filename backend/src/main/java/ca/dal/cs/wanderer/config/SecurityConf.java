@@ -44,6 +44,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html"
     };
 
+    // method for setting application security configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().authorizeRequests()
@@ -60,12 +61,10 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .addFilterAfter(new TokenAuthenticationFilter("/api/v1/**", clientId, profileService), LogoutFilter.class);
-    }
-    @Override
-    public void configure (WebSecurity web){
-        web.ignoring().antMatchers(AUTH_WHITE_LIST);
+
     }
 
+    // method for allowing the cors origin for different environments
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

@@ -2,6 +2,7 @@ package ca.dal.cs.wanderer.services;
 
 import ca.dal.cs.wanderer.controllers.PinUpdateController;
 import ca.dal.cs.wanderer.exception.category.pinexception.PinNotFound;
+import ca.dal.cs.wanderer.exception.category.pinexception.PinNotSaved;
 import ca.dal.cs.wanderer.exception.category.pinexception.UnauthorizedPinAccess;
 import ca.dal.cs.wanderer.models.Pin;
 import ca.dal.cs.wanderer.models.PinImage;
@@ -42,7 +43,7 @@ public class PinService {
             if (newPin == null) {
                 throw new PinNotFound(ErrorMessages.PIN_NOT_FOUND);
             }
-            if (!Objects.equals(newPin.getUserId(), user.getId())) {
+            if(!Objects.equals(newPin.getUserId(), user.getId())){
                 throw new UnauthorizedPinAccess(ErrorMessages.UNAUTHORIZED_PIN_ACCESS);
             }
             newPin.setLocationName(pin.getLocationName());
@@ -52,7 +53,7 @@ public class PinService {
             pinImageRepo.deleteAllByPinId(pin.getPinId());
         }
         List<PinImage> pinImageList = new ArrayList<>();
-        if (files != null) {
+        if(files != null) {
             for (MultipartFile file : files) {
                 try {
                     PinImage image = new PinImage(file.getBytes());
@@ -63,7 +64,7 @@ public class PinService {
                 }
             }
         }
-        if (pinImageList.size() > 0) {
+        if(pinImageList.size()>0){
             newPin.setPinImages(pinImageList);
         }
         Pin savedPin = pinRepository.save(newPin);
@@ -72,22 +73,22 @@ public class PinService {
 
     }
 
-    public List<PinRepository.PinBasicInfo> getPinsByRadius(double radius, double centerLat, double centerLng) {
+    public List<PinRepository.PinBasicInfo> getPinsByRadius(double radius, double centerLat, double centerLng){
         return pinRepository.getPinsByRadius(radius, centerLat, centerLng);
     }
 
     public Pin updatePin(Integer pinId, String locationName, Double latitude, Double longitude) throws ExecutionException, InterruptedException {
         Pin existingPin = pinRepository.findById(pinId).orElse(null);
-        if (existingPin == null) {
+        if(existingPin == null){
             return null;
         } else {
-            if (locationName != null) {
+            if(locationName != null){
                 existingPin.setLocationName(locationName);
             }
-            if (latitude != null) {
+            if(latitude!=null){
                 existingPin.setLatitude(latitude);
             }
-            if (longitude != null) {
+            if(longitude!=null){
                 existingPin.setLongitude(longitude);
             }
             Pin updatedPin = pinRepository.save(existingPin);
@@ -96,16 +97,16 @@ public class PinService {
         }
     }
 
-    public List<Pin> getPinsByIds(List<Integer> pinIds) {
+    public List<Pin> getPinsByIds(List<Integer> pinIds){
         return pinRepository.findAllById(pinIds);
     }
 
-    public Pin getSinglePinById(Integer pinId) {
+    public Pin getSinglePinById(Integer pinId){
         return pinRepository.findById(pinId).orElse(null);
     }
 
     // get single by id
-    public Pin getSinglePin(Integer pinId) {
+    public Pin getSinglePin(Integer pinId){
         return pinRepository.findById(pinId).orElse(null);
     }
 
@@ -113,12 +114,12 @@ public class PinService {
     public void deletePin(Integer pinId, Integer userId) throws ExecutionException, InterruptedException {
         Pin pin = getSinglePin(pinId);
 
-        if (pin == null) {
+        if(pin==null){
             throw new PinNotFound(ErrorMessages.PIN_NOT_FOUND);
         }
 
         // check if user is the owner of the pin
-        if (!Objects.equals(pin.getUserId(), userId)) {
+        if(!Objects.equals(pin.getUserId(), userId)){
             throw new UnauthorizedPinAccess(ErrorMessages.UNAUTHORIZED_PIN_ACCESS);
         }
 

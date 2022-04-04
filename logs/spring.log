@@ -260,3 +260,47 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
 2022-28-04 01:28:10 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-28-04 01:28:10 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2022-28-04 01:28:10 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2022-22-04 02:22:27 [main] INFO  c.d.cs.wanderer.WandererApplication - Starting WandererApplication using Java 17.0.2 on Meghdoots-MacBook-Pro.local with PID 26641 (/Users/meghdoot/IdeaProjects/group21/backend/target/classes started by meghdoot in /Users/meghdoot/IdeaProjects/group21)
+2022-22-04 02:22:27 [main] INFO  c.d.cs.wanderer.WandererApplication - No active profile set, falling back to default profiles: default
+2022-22-04 02:22:29 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-22-04 02:22:29 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 105 ms. Found 9 JPA repository interfaces.
+2022-22-04 02:22:30 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-22-04 02:22:30 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-22-04 02:22:30 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-22-04 02:22:30 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-22-04 02:22:30 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2500 ms
+2022-22-04 02:22:30 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-22-04 02:22:30 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2022-22-04 02:22:30 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-22-04 02:22:30 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-22-04 02:22:31 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-22-04 02:22:31 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-22-04 02:22:32 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-22-04 02:22:32 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-22-04 02:22:32 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-22-04 02:22:33 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Ant [pattern='/swagger-ui.html'] with []
+2022-22-04 02:22:34 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@439b0198, org.springframework.security.web.context.SecurityContextPersistenceFilter@600a1270, org.springframework.security.web.header.HeaderWriterFilter@75d61b62, org.springframework.web.filter.CorsFilter@c2dab10, org.springframework.security.web.authentication.logout.LogoutFilter@6ce24203, ca.dal.cs.wanderer.filter.TokenAuthenticationFilter@6c4e11d0, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@6600d07d, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@44103266, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@5418a659, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@29088d3d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@28effa3f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@155767a7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3284de45, org.springframework.security.web.session.SessionManagementFilter@53086bdc, org.springframework.security.web.access.ExceptionTranslationFilter@706c2726, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@818a514]
+2022-22-04 02:22:34 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-22-04 02:22:34 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-22-04 02:22:34 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2022-22-04 02:22:34 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2022-22-04 02:22:34 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2022-22-04 02:22:35 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addCommentsUsingPOST_1
+2022-22-04 02:22:35 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getCommentsUsingGET_1
+2022-22-04 02:22:35 [main] INFO  c.d.cs.wanderer.WandererApplication - Started WandererApplication in 8.728 seconds (JVM running for 9.971)
+2022-54-04 02:54:00 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m58s938ms).
+2022-30-04 03:30:18 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15m47s909ms).
+2022-47-04 03:47:23 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m35s145ms).
+2022-04-04 05:04:03 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=17m8s363ms).
+2022-20-04 05:20:17 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m14s190ms).
+2022-38-04 06:38:18 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=18m547ms).
+2022-54-04 06:54:55 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m36s957ms).
+2022-10-04 07:10:59 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15m33s110ms).
+2022-27-04 07:27:36 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m37s119ms).
+2022-43-04 08:43:32 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15m55s74ms).
+2022-59-04 08:59:40 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m8s179ms).
+2022-16-04 09:16:51 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m40s716ms).
+2022-06-04 10:06:41 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=27m49s816ms).
+2022-42-04 10:42:28 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=35m46s990ms).
+2022-37-04 11:37:22 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=30m53s666ms).
+2022-40-04 11:40:04 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m41s981ms).
