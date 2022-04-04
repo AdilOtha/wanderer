@@ -1,14 +1,16 @@
-package ca.dal.cs.wanderer.Config;
+package ca.dal.cs.wanderer.config;
 
 import ca.dal.cs.wanderer.filter.TokenAuthenticationFilter;
 import ca.dal.cs.wanderer.handler.OAuthSuccessHandler;
 import ca.dal.cs.wanderer.services.UserProfileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -24,6 +26,8 @@ import java.util.Arrays;
 @Profile({"default", "ci", "prod"})
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 
+    private ObjectMapper objectMapper;
+
     @Autowired
     private OidcUserService oidcUserService;
 
@@ -35,6 +39,10 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private OAuthSuccessHandler oAuthSuccessHandler;
+
+    protected static  final String[] AUTH_WHITE_LIST={
+            "/swagger-ui.html"
+    };
 
     // method for setting application security configuration
     @Override
@@ -63,6 +71,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",
                 "https://wanderergroup21frontend.herokuapp.com/",
                 "https://wanderer-live.herokuapp.com/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://wanderergroup21frontend.herokuapp.com/","https://wanderer-live.com/"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Authorization", "Cache-Control", "Content-Type", "xsrfheadername", "xsrfcookiename"
