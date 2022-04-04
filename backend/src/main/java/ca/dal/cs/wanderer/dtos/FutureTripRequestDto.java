@@ -9,6 +9,7 @@ import java.util.Calendar;
 
 @Getter
 @Setter
+// class for managing future trip request dto
 public class FutureTripRequestDto {
 
     private String tripName;
@@ -16,6 +17,7 @@ public class FutureTripRequestDto {
     private Calendar tripDate;
     private Integer pinId;
 
+    // method for converting future trip request dto to model
     public static FutureTrip convertToModel(FutureTripRequestDto futureTripRequestDto) {
         FutureTrip futureTrip = new FutureTrip();
         futureTrip.setTripName(futureTripRequestDto.getTripName());

@@ -29,13 +29,9 @@ public class SwaggerConf {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-               // .produces(DEFAULT_PRODUCES_AND_CONSUMES)
-                //.consumes(DEFAULT_PRODUCES_AND_CONSUMES)
                 .select()
-                //.apis(RequestHandlerSelectors.any())
                 .apis(RequestHandlerSelectors.basePackage("ca.dal.cs.wanderer"))
                 .paths(PathSelectors.any())
-                //.paths(PathSelectors.ant("/book/*"))
                 .build();
     }
 }

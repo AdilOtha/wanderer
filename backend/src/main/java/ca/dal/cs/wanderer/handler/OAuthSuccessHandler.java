@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+// class managing the oauth success handler
 @Component
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -21,9 +21,15 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
+    // method for redirecting user with token on successfully authentication
+    // @param httpServletRequest - http request
+    // @param httpServletResponse - http response
+    // @param authentication - authentication
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+        // getting the principal
         DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
+        // redirecting with the success redirect uri along with token
         redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse,successRedirectUri + "?token=" + principal.getIdToken().getTokenValue());
     }
 }

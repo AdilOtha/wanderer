@@ -36,6 +36,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuthSuccessHandler oAuthSuccessHandler;
 
+    // method for setting application security configuration
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().authorizeRequests()
@@ -55,6 +56,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     }
 
+    // method for allowing the cors origin for different environments
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
