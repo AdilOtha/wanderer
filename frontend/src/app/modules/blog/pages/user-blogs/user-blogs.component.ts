@@ -36,7 +36,6 @@ export class UserBlogsComponent implements OnInit {
       )
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           let blogs: any = data?.payload;
           // convert blog image to base64
           blogs?.forEach((blog: any) => {
@@ -73,7 +72,6 @@ export class UserBlogsComponent implements OnInit {
       )
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           this.toast.success('Blog deleted successfully');
           this.blogList = this.blogList.filter(
             (blog: any) => blog.blogId !== this.selectedBlogId
@@ -92,6 +90,11 @@ export class UserBlogsComponent implements OnInit {
   navigateToBlog(blogId: string) {
     // navigate to blog editor
     this.router.navigate(['/blog/blog-editor', blogId]);
+  }
+
+  navigateToSingleBlog(blogId: string) {
+    // navigate to blog editor
+    this.router.navigate(['/blog/single-blog', blogId]);
   }
 
   showResponsiveDialog(blogId: number) {
