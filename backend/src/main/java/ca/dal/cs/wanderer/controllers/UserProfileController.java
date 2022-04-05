@@ -8,6 +8,8 @@ import ca.dal.cs.wanderer.services.UserProfileService;
 import ca.dal.cs.wanderer.util.ErrorMessages;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,9 @@ public class UserProfileController {
 
     @Autowired
     private ObjectMapper mapper;
+    Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
+    //method to get fetch the details of an individual user
     @GetMapping("/getDetails")
     public ResponseEntity<GenericResponse<JSONObject>> fetchSingle(@AuthenticationPrincipal OidcUser principal) {
         if (principal == null) {
@@ -40,6 +44,7 @@ public class UserProfileController {
         String email = principal.getEmail();
 
         if (email == null) {
+            logger.warn("Empty email is captured");
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
         }
 
@@ -62,6 +67,7 @@ public class UserProfileController {
         return new ResponseEntity<>(jsonObjectGenericResponse, HttpStatus.OK);
     }
 
+    //below method enable to update the name and profile image, though its not mandatory fields
     @PutMapping(value = "/updateProfile")
     public ResponseEntity<GenericResponse<User>> updateUser(@AuthenticationPrincipal OidcUser principal,
                                                             @RequestParam(value = "image", required = false) MultipartFile file,
@@ -75,15 +81,18 @@ public class UserProfileController {
         String email = principal.getEmail();
 
         if (email == null) {
+            logger.warn("Empty email is captured");
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
         }
 
         User user = service.fetchByEmail(email);
 
         if (fName == null) {
+            logger.info("Fetching first name from Principal");
             fName = principal.getGivenName();
         }
         if (lName == null) {
+            logger.info("Fetching last name from Principal");
             lName = principal.getFamilyName();
         }
         User savedUser = service.updateProfile(file, user, fName, lName);
@@ -93,7 +102,7 @@ public class UserProfileController {
         return new ResponseEntity<>(userGenericResponse, HttpStatus.OK);
     }
 
-    // get user id
+    // Below method returns the user by its id
     @GetMapping("/getUserId")
     public ResponseEntity<GenericResponse<Map<String, Object>>> getUserId(@AuthenticationPrincipal OidcUser principal) {
         if (principal == null) {
