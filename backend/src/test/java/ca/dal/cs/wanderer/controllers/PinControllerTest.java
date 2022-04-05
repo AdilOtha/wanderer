@@ -218,7 +218,7 @@ class PinControllerTest {
     @Test
     void getSinglePinById() throws Exception {
         Pin pin = new Pin(1,"Halifax",10.0,10.0,"Hello");
-        when(pinService.getSinglePinById(any())).thenReturn(pin);
+        when(pinService.getPinById(anyInt())).thenReturn(pin);
         mockMvc.perform(get("/api/v1/pin/getPinById?pinId=1"))
                 .andExpect(status().isOk());
     }
@@ -226,7 +226,7 @@ class PinControllerTest {
     @Test
     void getSinglePinByIdWithMinusId() throws Exception {
         Pin pin = new Pin(1,"Halifax",10.0,10.0,"Hello");
-        when(pinService.getSinglePinById(any())).thenReturn(pin);
+        when(pinService.getPinById(anyInt())).thenReturn(pin);
         mockMvc.perform(get("/api/v1/pin/getPinById?pinId=-1"))
                 .andExpect(status().isInternalServerError());
     }
@@ -234,7 +234,7 @@ class PinControllerTest {
     @Test
     void getSinglePinByIdWithNullPin() throws Exception {
         Pin pin = null;
-        when(pinService.getSinglePinById(any())).thenReturn(pin);
+        when(pinService.getPinById(anyInt())).thenReturn(pin);
         mockMvc.perform(get("/api/v1/pin/getPinById?pinId=-1"))
                 .andExpect(status().isInternalServerError());
     }

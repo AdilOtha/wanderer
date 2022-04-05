@@ -5,7 +5,7 @@ import { MouseEvent } from '@agm/core';
 import { PinService } from 'src/app/data/service/pin-service/pin.service';
 import { Pin } from 'src/app/data/schema/pin';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FutureTripService } from 'src/app/data/service/future-trip/future-trip.service';
@@ -89,6 +89,8 @@ currentPinFutureTrips: FutureTrip[] = [];
   readonly userIdPropName: string = 'userId';
   readonly rootSpinnerName: string = 'root-spinner';
 
+  showInfoWindow: boolean = false;
+
   constructor(
     private firestore: Firestore,
     private pinService: PinService,
@@ -112,14 +114,13 @@ currentPinFutureTrips: FutureTrip[] = [];
     this.pinCreationUpdates = collectionData(dataList);
 
     // subscribe to pin creation updates from firestore
-    this.pinCreationUpdates.pipe(debounceTime(700)).subscribe((update) => {
+    this.pinCreationUpdates.pipe(debounceTime(1000)).subscribe((update) => {
       console.log(update);
       this.getPinsByRadiusFromService();
     });
 
     // listen to center change events
-    this.centerChangeSubject.pipe(debounceTime(0)).subscribe((data: any) => {
-      console.log('Center Change: ', data);
+    this.centerChangeSubject.pipe(debounceTime(0)).subscribe((data: any) => {      
 
       this.latitude = data.lat;
       this.longitude = data.lng;
@@ -130,7 +131,6 @@ currentPinFutureTrips: FutureTrip[] = [];
     this.radiusChangeSubject
       .pipe(debounceTime(1000))
       .subscribe((newRadius: any) => {
-        // console.log(newRadius);
 
         this.radius = parseInt(newRadius.toString());
 
@@ -177,9 +177,7 @@ currentPinFutureTrips: FutureTrip[] = [];
   }
 
   // render pin on map
-  createPin(event: MouseEvent) {
-    // console.log($event);
-    // console.log(this.savedPins);
+  createPin(event: MouseEvent) {    
 
     // remove last rendered pin from map
     if (
@@ -208,7 +206,6 @@ currentPinFutureTrips: FutureTrip[] = [];
   }
 
   closePinModal(event:any) {
-    console.log(event);
     
     this.enablePinEditMode = false;
     this.displayPinModal = false;
@@ -217,11 +214,8 @@ currentPinFutureTrips: FutureTrip[] = [];
 
   // set double clicked pin as current pin to set values in pin modal form
   setCurrentPin(pin: Pin, index: number) {
-    this.currentPin = Object.assign({}, pin);
-    // update current pin using spread operator
-    // this.currentPin = { ...pin };    
+    this.currentPin = Object.assign({}, pin);       
     this.currentPinIndex = index;
-    // console.log('Current Pin Index: ' + this.currentPinIndex);
   }
 
   // create the future trip for the requested pin
@@ -280,13 +274,7 @@ currentPinFutureTrips: FutureTrip[] = [];
         })
       )
       .subscribe({
-        next: (pinsByRadiusData: any) => {
-          // console.log({
-          //   pinsByRadiusData,
-          //   newlyCreatedPins: this.newlyCreatedPins,
-          // });
-
-          // console.log({ updatedPins: this.updatingPinsMap });
+        next: (pinsByRadiusData: any) => {          
 
           // refresh data of newly created pins
           if (this.newlyCreatedPins.length > 0) {
@@ -305,7 +293,6 @@ currentPinFutureTrips: FutureTrip[] = [];
               )
               .subscribe({
                 next: (data: any) => {
-                  // console.log({ refreshedPins: data });
                   this.newlyCreatedPins = data.payload;
                 },
                 error: (err: HttpErrorResponse) => {
@@ -359,7 +346,6 @@ currentPinFutureTrips: FutureTrip[] = [];
       if (pin.pinId in this.updatingPinsMap) {        
         pin = this.updatingPinsMap[pin.pinId];
         pin.iconUrl = this.pinIconUrl.editablePinIcon;
-        console.log('pin updated', pin);        
       }      
       if (!(pin.pinId in savedPinsMap)) {        
         savedPinsMap[pin.pinId] = pin;  
@@ -368,14 +354,10 @@ currentPinFutureTrips: FutureTrip[] = [];
     }
 
     this.savedPins = Object.values(savedPinsMap);
-
-    console.log({
-      mergedPins: this.savedPins,
-    });
+   
   }
 
   pinDragEnd(m: Pin, index: number, event: MouseEvent) {
-    console.log('dragEnd', m, event);
     m.latitude = event.coords.lat;
     m.longitude = event.coords.lng;
     this.savedPins[index] = m;
@@ -383,9 +365,7 @@ currentPinFutureTrips: FutureTrip[] = [];
     this.savedPins = [...this.savedPins];
     if(m.pinId in this.updatingPinsMap) {
       this.updatingPinsMap[m.pinId] = m;
-      this.updatingPinsMap = {...this.updatingPinsMap};
-      console.log('***',this.updatingPinsMap[m.pinId]);
-      
+      this.updatingPinsMap = {...this.updatingPinsMap};      
     }
   }
 
@@ -443,14 +423,8 @@ currentPinFutureTrips: FutureTrip[] = [];
     return !this.currentPin?.isSaved || this.currentUserId == this.currentPin?.userId || this.submitted
   }
 
-  getUpdatedPinsMap(event: any) {
-    console.log(event);
-    
-    this.updatingPinsMap = event;
-
-    console.log({
-      updatingPinsMap: this.updatingPinsMap,
-      });    
+  getUpdatedPinsMap(event: any) {    
+    this.updatingPinsMap = event;      
   }
 
   // saving the created future trip for the user
@@ -471,5 +445,9 @@ currentPinFutureTrips: FutureTrip[] = [];
       next: (res) => this.toast.success(res?.message),
       error: (error) => this.toast.error(error?.message) 
     });
+  }
+
+  displayInfoWindow(){
+    this.showInfoWindow=true;
   }
 }

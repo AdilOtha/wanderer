@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -15,7 +14,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
-import { Pin } from 'src/app/data/schema/pin';
 import { pinIconUrl } from 'src/app/data/schema/pin-icon';
 import { PinImage } from 'src/app/data/schema/pin-image';
 import { PinService } from 'src/app/data/service/pin-service/pin.service';
@@ -108,9 +106,6 @@ export class PinFormComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes:', changes);
-    // console.log('saved pin images:', this.savedPinImages);
-    // console.log('new pin images:', this.newPinImages);    
 
     if (changes['currentPin']?.currentValue) {
       this.newPinImages = [];
@@ -126,13 +121,7 @@ export class PinFormComponent implements OnInit, OnChanges {
 
         // get single pin from pinservice using current pin id and update the pin form
         this.pinService
-          .getSinglePinById(this.currentPin.pinId)
-          .pipe(
-            finalize(() => {
-              // hide spinner
-              // this.spinner.hide();
-            })
-          )
+          .getSinglePinById(this.currentPin.pinId)          
           .subscribe({
             next: (data: any) => {
               this.currentPinExtended = data.payload;
@@ -141,9 +130,7 @@ export class PinFormComponent implements OnInit, OnChanges {
                 pinLatitude: this.savedPins[this.currentPinIndex].latitude,
                 pinLongitude: this.savedPins[this.currentPinIndex].longitude,
                 description: this.currentPinExtended.description,
-              });
-
-              // console.log(this.currentPinExtended.pinImages);
+              });              
               
               if(this.currentPinExtended?.pinImages?.length>0){                
                 for(let i=0; i<this.currentPinExtended.pinImages.length; i++){                  
@@ -152,8 +139,7 @@ export class PinFormComponent implements OnInit, OnChanges {
                     imageUrl: this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, '+ this.currentPinExtended.pinImages[i].image),
                   });
                 }                
-                this.savedPinImages = [...this.savedPinImages];
-                // console.log('saved pin images:', this.savedPinImages);
+                this.savedPinImages = [...this.savedPinImages];                
                 
               }
 
@@ -170,8 +156,7 @@ export class PinFormComponent implements OnInit, OnChanges {
                       return acc + curr.rating;
                     },
                     0
-                  ) / this.currentPinExtended.pinRatings.length;
-                // console.log('averageRating:', this.averagePinRating);                
+                  ) / this.currentPinExtended.pinRatings.length;                             
               }
 
               // check if pin is in bucket list using pinService
@@ -235,122 +220,6 @@ export class PinFormComponent implements OnInit, OnChanges {
   }
 
   // save or update pin to database
-  savePin() {
-    this.currentPin.latitude = this.pinForm.controls['pinLatitude'].value;
-    this.currentPin.longitude = this.pinForm.controls['pinLongitude'].value;
-    this.currentPin.locationName = this.pinForm.controls['locationName'].value;
-    this.currentPin.description = this.pinForm.controls['description'].value;
-    // validate latitude and longitude
-    if (
-      this.currentPin.latitude < -90 ||
-      this.currentPin.latitude > 90 ||
-      this.currentPin.longitude < -180 ||
-      this.currentPin.longitude > 180
-    ) {
-      this.toast.error('Please enter valid latitude and longitude');
-      return;
-    }
-    this.submitted = true;
-    this.enablePinModalSaveButton = false;
-    if (this.pinForm.valid) {
-      // show spinner
-      this.spinner.show();
-
-      // console.log('Saved Pin Index: ' + this.currentPinIndex);
-
-      this.savedPins[this.currentPinIndex].isSaved = true;
-
-      let pin: Pin = {
-        latitude: this.currentPin.latitude,
-        longitude: this.currentPin.longitude,
-        locationName: this.currentPin.locationName,
-        description: this.currentPin.description,
-        pinId: -1,
-        isSaved: true,
-        isDraggable: false,
-        iconUrl: this.pinIconUrl.savedPinIcon,
-      };
-
-      // if Pin exists then update Pin
-      if (this.currentPin.pinId !== -1) {
-        pin.pinId = this.currentPin.pinId;
-
-        // call service to update pin
-        this.pinService
-          .updatePin(pin.pinId, pin.locationName, pin.latitude, pin.longitude)
-          .pipe(
-            finalize(() => {
-              this.pinFormCleanup();
-              // hide spinner
-              this.spinner.hide();
-            })
-          )
-          .subscribe({
-            next: (data: any) => {
-              const updatedPin = data.payload;
-              // console.log({
-              //   updatedPin: data,
-              // });
-              updatedPin.isSaved = true;
-              updatedPin.isDraggable = false;
-              updatedPin.iconUrl = this.pinIconUrl.userCreatedPinIcon;
-              this.savedPins[this.currentPinIndex] = updatedPin;
-
-              const index = this.newlyCreatedPins.findIndex(
-                (pin) => pin.pinId === updatedPin.pinId
-              );
-              this.newlyCreatedPins[index] = updatedPin;
-              delete this.updatingPinsMap[updatedPin.pinId];
-              this.toast.info(data?.message);
-              // console.log(this.savedPins[this.currentPinIndex]);
-            },
-            error: (err: any) => {
-              console.log(err);
-              const error = err.error;
-              this.toast.error(error?.payload?.message || error?.message);
-              this.currentPin.iconUrl = this.pinIconUrl.savedPinIcon;
-            },
-          });
-      } else {
-        // else if Pin does not exist then save Pin
-
-        // call service to insert pin
-        this.pinService
-          .insertPin(pin)
-          .pipe(
-            finalize(() => {
-              // this.pinFormCleanup();
-              this.savedPinsUpdate.emit(this.savedPins);
-              this.newlyCreatedPinsUpdate.emit(this.newlyCreatedPins);
-              this.updatingPinsMapUpdate.emit(this.updatingPinsMap);
-              this.pinFormCleanup();
-              // hide spinner
-              this.spinner.hide();
-            })
-          )
-          .subscribe({
-            next: (data: any) => {
-              const newPin = data.payload;
-              // console.log({ newPin: data });
-              newPin.isSaved = true;
-              newPin.isDraggable = false;
-              newPin.iconUrl = this.pinIconUrl.userCreatedPinIcon;
-              // newPin.iconUrl = this.pinIconUrl.savedPinIcon;
-              this.newlyCreatedPins.push(newPin);
-              this.savedPins[this.currentPinIndex] = newPin;
-              this.toast.success(data?.message);
-            },
-            error: (err: HttpErrorResponse) => {
-              console.log(err);
-              const error = err.error;
-              this.toast.error(error?.payload?.message || error?.message);
-              this.savedPins.splice(this.currentPinIndex, 1);
-            },
-          });
-      }
-    }
-  }
-
   savePinWithImages() {
     this.currentPin.latitude = this.pinForm.controls['pinLatitude'].value;
     this.currentPin.longitude = this.pinForm.controls['pinLongitude'].value;
@@ -366,11 +235,7 @@ export class PinFormComponent implements OnInit, OnChanges {
       this.toast.error('Please enter valid latitude and longitude');
       return;
     }
-    // print length of savedPinImages and newPinImages
-    console.log(
-      'Saved Pin Images Length: ' + this.savedPinImages.length
-    );
-    console.log('New Pin Images Length: ' + this.newPinImages.length);
+    
     // if sum of length of savedPinImages and newPinImages is greater than 5 then show error
     if (this.savedPinImages.length + this.newPinImages.length > 5) {
       this.toast.error(
@@ -414,10 +279,6 @@ export class PinFormComponent implements OnInit, OnChanges {
       longitude: this.currentPin.longitude,
       locationName: this.currentPin.locationName,
       description: this.currentPin.description,
-      // pinId: -1,
-      // isSaved: true,
-      // isDraggable: false,
-      // iconUrl: this.pinIconUrl.savedPinIcon,
     };
 
     // if Pin exists then update Pin
@@ -432,8 +293,7 @@ export class PinFormComponent implements OnInit, OnChanges {
     this.pinService
       .insertPinWithImages(pin, images)
       .pipe(
-        finalize(() => {
-          // this.pinFormCleanup();
+        finalize(() => {          
           this.savedPinsUpdate.emit(this.savedPins);
           this.newlyCreatedPinsUpdate.emit(this.newlyCreatedPins);
           this.updatingPinsMapUpdate.emit(this.updatingPinsMap);
@@ -444,8 +304,7 @@ export class PinFormComponent implements OnInit, OnChanges {
       )
       .subscribe({
         next: (data: any) => {
-          const newPin = data.payload;
-          // console.log({ newPin: data });
+          const newPin = data.payload;          
           newPin.isSaved = true;
           newPin.isDraggable = false;
           newPin.iconUrl = this.pinIconUrl.userCreatedPinIcon;
@@ -459,8 +318,7 @@ export class PinFormComponent implements OnInit, OnChanges {
             if (newPin?.pinId in this.updatingPinsMap) {
               delete this.updatingPinsMap[newPin.pinId];
             }
-          } else {
-            // newPin.iconUrl = this.pinIconUrl.savedPinIcon;
+          } else {            
             this.newlyCreatedPins.push(newPin);
             this.savedPins[this.currentPinIndex] = newPin;
           }
@@ -475,18 +333,14 @@ export class PinFormComponent implements OnInit, OnChanges {
                 imageUrl: image,
                 index: index
               });
-            });
-            // console.log(this.savedPinImages);
+            });            
           }
           this.toast.success(data?.message);
         },
         error: (err: HttpErrorResponse) => {
           console.log(err);
           const error = err.error;
-          this.toast.error(error?.payload?.message || error?.message);
-          // if (this.currentPin.pinId !== -1) {
-          //   this.savedPins.splice(this.currentPinIndex, 1);
-          // }
+          this.toast.error(error?.payload?.message || error?.message);          
         },
       });
   }
@@ -518,8 +372,7 @@ export class PinFormComponent implements OnInit, OnChanges {
         })
       )
       .subscribe({
-        next: (data: any) => {
-          console.log(data);
+        next: (data: any) => {          
 
           if (data?.message) {
             this.toast.warning(data.message);
@@ -567,8 +420,7 @@ export class PinFormComponent implements OnInit, OnChanges {
   }
 
   submitRatingForm() {
-    if (this.ratingForm.valid) {
-      // console.log(this.ratingForm.value);
+    if (this.ratingForm.valid) {      
       this.spinner.show();
       let pinId: any = this.currentPin.pinId;
       if (this.currentPin.pinId !== -1) {
@@ -586,8 +438,7 @@ export class PinFormComponent implements OnInit, OnChanges {
           })
         )
         .subscribe({
-          next: (data: any) => {
-            console.log(data);
+          next: (data: any) => {            
             this.toast.info(data?.message);
             const newRatings: any = data?.payload;
             // get average rating from newRatings
@@ -608,8 +459,7 @@ export class PinFormComponent implements OnInit, OnChanges {
 
   submitCommentForm() {
     this.commentFormSubmitted = true;
-    if (this.commentForm.valid) {
-      // console.log(this.commentForm.value);
+    if (this.commentForm.valid) {      
       let pinId: any = this.currentPin.pinId;
       if (this.currentPin.pinId !== -1) {
         pinId = this.currentPin.pinId;
@@ -627,8 +477,7 @@ export class PinFormComponent implements OnInit, OnChanges {
           })
         )
         .subscribe({
-          next: (data: any) => {
-            console.log(data);
+          next: (data: any) => {            
             this.toast.success(data?.message);
             const newComment: any = data?.payload;
             this.currentPinExtended.pinComments.push(newComment);
@@ -648,7 +497,6 @@ export class PinFormComponent implements OnInit, OnChanges {
     if (event.files.length === 0) {
       return;
     }
-    // console.log(event.files);
     // show error if file is not jpeg or png
     if (
       event.files[0].type !== 'image/jpeg' &&
@@ -681,19 +529,16 @@ export class PinFormComponent implements OnInit, OnChanges {
       } else {
         this.newPinImages.push(event.files[i]);
       }
-    }
-    console.log(this.newPinImages);
+    }    
   }
 
-  onPinImageClear(event: any) {
-    // console.log(event);
+  onPinImageClear(event: any) {    
     // find name of file in newPinImages and remove it
     const index = this.newPinImages.findIndex(
       (file: any) => file.name === event.file.name
     );
     if(index !== -1) {
       this.newPinImages.splice(index, 1);
-      // console.log(this.newPinImages);      
     }
   }
 
@@ -734,7 +579,6 @@ export class PinFormComponent implements OnInit, OnChanges {
       })
     ).subscribe({
       next: (data: any) => {
-        console.log(data);
         this.currentPinExtended.isInBucketList = false;
         this.toast.info(data?.message);        
       },

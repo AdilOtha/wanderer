@@ -75,7 +75,7 @@ public class PinRatingsController {
             throw new InvalidPinId(ErrorMessages.INVALID_PIN_ID);
         }
 
-        Pin pin = pinService.getSinglePin(pinId);
+        Pin pin = pinService.getPinById(pinId);
         if (pin == null) {
             throw new PinNotFound(ErrorMessages.PIN_NOT_FOUND);
         }

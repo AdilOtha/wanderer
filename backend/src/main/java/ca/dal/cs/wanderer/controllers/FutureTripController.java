@@ -3,7 +3,7 @@ package ca.dal.cs.wanderer.controllers;
 import ca.dal.cs.wanderer.dtos.FutureTripRequestDto;
 import ca.dal.cs.wanderer.exception.GenericResponse;
 import ca.dal.cs.wanderer.exception.category.FutureTripNotSaved;
-import ca.dal.cs.wanderer.exception.category.PinNotFound;
+import ca.dal.cs.wanderer.exception.category.pinexception.PinNotFound;
 import ca.dal.cs.wanderer.exception.category.UserNotFound;
 import ca.dal.cs.wanderer.models.FutureTrip;
 import ca.dal.cs.wanderer.models.User;

@@ -51,6 +51,11 @@ export class NavbarComponent implements OnInit {
         icon: 'pi pi-car',
         routerLink: '/future-trip',
       },
+      {
+        label: 'About Us',
+        icon: 'pi pi-users',
+        routerLink: '/about-us',
+      },
     ];
     this.avtarMenuItems = [
       {

@@ -58,7 +58,6 @@ export class SingleBlogComponent implements OnInit {
               )
               .subscribe({
                 next: (data: any) => {
-                  console.log(data);
                   const blog: any = data?.payload;                  
                   // check if blogImage is not null in payload
                   if (blog?.blogImage) {
@@ -97,7 +96,6 @@ export class SingleBlogComponent implements OnInit {
   submitCommentForm() {
     this.commentFormSubmitted = true;
     if (this.commentForm.valid) {
-      console.log(this.commentForm.value);      
       this.spinner.show();
       // add pin comment to database
       this.blogService
@@ -110,7 +108,6 @@ export class SingleBlogComponent implements OnInit {
         )
         .subscribe({
           next: (data: any) => {
-            console.log(data);
             this.toast.success(data?.message);
             const newComment: any = data?.payload;
             this.commentsList.push(newComment);

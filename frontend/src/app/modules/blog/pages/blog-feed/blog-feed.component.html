@@ -18,7 +18,6 @@
               styleClass="p-card-shadow my-3"
             >
               <div class="grid">
-                <!-- flex flex-wrap lg:flex-nowrap flex-direction-row -->
                 <ng-container *ngIf="blog?.blogImage">
                   <div class="col-12 xl:col-4">
                     <img
@@ -40,7 +39,6 @@
                   </h2>
                   <h4>By {{ blog?.blogAuthor }}</h4>
                   <h5>Posted On: {{ blog?.blogCreationDate }}</h5>
-                  <!-- <div [innerHTML]="blog?.blogDescription"></div> -->
                   <p class="text-blue-700 underline cursor-pointer" (click)="navigateToBlog(blog?.blogId)">Read more</p>
                 </div>
               </div>
