@@ -113,16 +113,49 @@ position="top-left"
     </p-tabPanel>
   </p-tabView>
 </p-dialog>
+<p-dialog
+  header="Map Control Instructions"
+  [(visible)]="showInfoWindow"
+  position="center"
+  [modal]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '50vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+>
+<p>To create a Pin: <strong>Single Click</strong></p>
+<p>To add/edit Pin Details: <strong>Double Click on the Pin</strong></p>
+<p>To shift Center of Circle: <strong>Right Click on Map OR Drag the Circle Center</strong></p>
+<p>To change Radius: <strong>Drag the Circle edge to increase or decrease value</strong></p>
+<p>Center Coordinates and Radius can also be changed using the keyboard controls.</p>
+<br>
+<p><strong>Pin Color Indicators:</strong></p>
+<p><span style="color: green;">Green:</span> Your created Pins</p>
+<p><span style="color: red;">Red:</span> Pins created by other Users</p>
+<p><span style="color: darkgoldenrod;">Yellow:</span> Unsaved Pin (on Pin creation)</p>
+<p><strong style="color: blue;">Blue:</strong> Pin in edit mode and can be dragged around to update coordinates</p>
+</p-dialog>
 <p-panel styleClass="my-3" [header]="mapPanelHeader">
+  <ng-template pTemplate="icons">
+    <button
+      pButton
+      class="p-panel-header-icon p-link"
+      icon="pi pi-exclamation-circle"
+      (click)="displayInfoWindow()"
+    ></button>
+  </ng-template>
   <div class="map">
     <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="createPin($event)"
       (mapRightClick)="shiftCenter($event)" [disableDefaultUI]="false" [streetViewControl]="false">
       <agm-marker *ngFor="let m of savedPins; let i = index; trackBy: identifyPin" [latitude]="m.latitude"
         [longitude]="m.longitude" [markerDraggable]="!m.isSaved || m.isDraggable" [iconUrl]="m.iconUrl"
         (markerDblClick)="openPinModal(m, i)" (dragEnd)="pinDragEnd(m, i, $event)">
-        <agm-info-window>
-          <strong>{{ m.locationName }}</strong>
-        </agm-info-window>
+        <ng-container *ngIf="m?.locationName != ''">
+          <agm-info-window>
+            <strong>{{ m.locationName }}</strong>
+          </agm-info-window>
+        </ng-container>
       </agm-marker>
 
       <agm-circle [latitude]="latitude" [longitude]="longitude" [radius]="radius" [circleDraggable]="true"

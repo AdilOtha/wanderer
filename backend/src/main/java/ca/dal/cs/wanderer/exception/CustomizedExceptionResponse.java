@@ -2,8 +2,8 @@ package ca.dal.cs.wanderer.exception;
 
 import ca.dal.cs.wanderer.exception.category.EmailNotFound;
 import ca.dal.cs.wanderer.exception.category.InvalidCoordinates;
-import ca.dal.cs.wanderer.exception.category.PinNotFound;
-import ca.dal.cs.wanderer.exception.category.PinNotSaved;
+import ca.dal.cs.wanderer.exception.category.pinexception.PinNotFound;
+import ca.dal.cs.wanderer.exception.category.pinexception.PinNotSaved;
 import ca.dal.cs.wanderer.exception.category.blogexception.BlogNotFound;
 import ca.dal.cs.wanderer.exception.category.blogexception.UnauthorizedBlogAccess;
 import ca.dal.cs.wanderer.exception.category.pinexception.UnauthorizedPinAccess;

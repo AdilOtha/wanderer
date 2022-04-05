@@ -1,0 +1,78 @@
+2022-01-05 02:01:27 [main] INFO  c.d.cs.wanderer.WandererApplication - Starting WandererApplication using Java 17.0.2 on Meghdoots-MacBook-Pro.local with PID 35809 (/Users/meghdoot/IdeaProjects/group21/backend/target/classes started by meghdoot in /Users/meghdoot/IdeaProjects/group21)
+2022-01-05 02:01:27 [main] INFO  c.d.cs.wanderer.WandererApplication - No active profile set, falling back to default profiles: default
+2022-01-05 02:01:28 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-01-05 02:01:28 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 113 ms. Found 9 JPA repository interfaces.
+2022-01-05 02:01:29 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-01-05 02:01:29 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-01-05 02:01:29 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-01-05 02:01:29 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-01-05 02:01:29 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2550 ms
+2022-01-05 02:01:30 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-01-05 02:01:30 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2022-01-05 02:01:30 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-01-05 02:01:30 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-01-05 02:01:30 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-01-05 02:01:30 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-01-05 02:01:31 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-01-05 02:01:31 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-01-05 02:01:31 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-01-05 02:01:33 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@48590849, org.springframework.security.web.context.SecurityContextPersistenceFilter@7b6b8cea, org.springframework.security.web.header.HeaderWriterFilter@1d1da00b, org.springframework.web.filter.CorsFilter@6c38f4de, org.springframework.security.web.authentication.logout.LogoutFilter@3abb6aa, ca.dal.cs.wanderer.filter.TokenAuthenticationFilter@489c15e2, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@5390862e, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@4fccdd1d, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@68303aad, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@923bf67, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@55a29589, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7cf166db, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@938e54a, org.springframework.security.web.session.SessionManagementFilter@5cef5fc9, org.springframework.security.web.access.ExceptionTranslationFilter@254210b1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3c39c739]
+2022-01-05 02:01:33 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-01-05 02:01:33 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-01-05 02:01:33 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2022-01-05 02:01:33 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2022-01-05 02:01:33 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2022-01-05 02:01:34 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addCommentsUsingPOST_1
+2022-01-05 02:01:35 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getCommentsUsingGET_1
+2022-01-05 02:01:35 [main] INFO  c.d.cs.wanderer.WandererApplication - Started WandererApplication in 8.995 seconds (JVM running for 10.137)
+2022-03-05 02:03:34 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-03-05 02:03:34 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2022-03-05 02:03:34 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2022-03-05 02:03:37 [main] INFO  c.d.cs.wanderer.WandererApplication - Starting WandererApplication using Java 17.0.2 on Meghdoots-MacBook-Pro.local with PID 35825 (/Users/meghdoot/IdeaProjects/group21/backend/target/classes started by meghdoot in /Users/meghdoot/IdeaProjects/group21)
+2022-03-05 02:03:37 [main] INFO  c.d.cs.wanderer.WandererApplication - No active profile set, falling back to default profiles: default
+2022-03-05 02:03:39 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-03-05 02:03:39 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 100 ms. Found 9 JPA repository interfaces.
+2022-03-05 02:03:40 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-03-05 02:03:40 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2581 ms
+2022-03-05 02:03:40 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-03-05 02:03:40 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2022-03-05 02:03:40 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-03-05 02:03:40 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-03-05 02:03:41 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-03-05 02:03:41 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-03-05 02:03:42 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-03-05 02:03:42 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-03-05 02:03:42 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-03-05 02:03:44 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@56bf6f1e, org.springframework.security.web.context.SecurityContextPersistenceFilter@28f081ad, org.springframework.security.web.header.HeaderWriterFilter@687d31a9, org.springframework.web.filter.CorsFilter@4ac26092, org.springframework.security.web.authentication.logout.LogoutFilter@193c810, ca.dal.cs.wanderer.filter.TokenAuthenticationFilter@308e465b, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@4a532271, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@35b38986, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@3e7fc07e, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@6e7d9d0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@e30a8ef, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2c02cf78, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2b0d818d, org.springframework.security.web.session.SessionManagementFilter@4cc28ad0, org.springframework.security.web.access.ExceptionTranslationFilter@3b60be3, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@580c4c0b]
+2022-03-05 02:03:44 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-03-05 02:03:44 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-03-05 02:03:44 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2022-03-05 02:03:44 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2022-03-05 02:03:44 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2022-17-05 02:17:04 [main] INFO  c.d.cs.wanderer.WandererApplication - Starting WandererApplication using Java 17.0.2 on Meghdoots-MacBook-Pro.local with PID 36039 (/Users/meghdoot/IdeaProjects/group21/backend/target/classes started by meghdoot in /Users/meghdoot/IdeaProjects/group21)
+2022-17-05 02:17:04 [main] INFO  c.d.cs.wanderer.WandererApplication - No active profile set, falling back to default profiles: default
+2022-17-05 02:17:05 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-17-05 02:17:05 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 105 ms. Found 9 JPA repository interfaces.
+2022-17-05 02:17:06 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-17-05 02:17:06 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-17-05 02:17:06 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-17-05 02:17:06 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-17-05 02:17:06 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2646 ms
+2022-17-05 02:17:07 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-17-05 02:17:07 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.33
+2022-17-05 02:17:07 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-17-05 02:17:07 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-17-05 02:17:07 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-17-05 02:17:07 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-17-05 02:17:09 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-17-05 02:17:09 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-17-05 02:17:09 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-17-05 02:17:10 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5390862e, org.springframework.security.web.context.SecurityContextPersistenceFilter@28effa3f, org.springframework.security.web.header.HeaderWriterFilter@53086bdc, org.springframework.web.filter.CorsFilter@4fccdd1d, org.springframework.security.web.authentication.logout.LogoutFilter@29811d4d, ca.dal.cs.wanderer.filter.TokenAuthenticationFilter@22c0c0bc, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@439b0198, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@c2dab10, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@2d26c6a2, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@36a25457, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2db4a84a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@46067a74, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@61d4155b, org.springframework.security.web.session.SessionManagementFilter@600a1270, org.springframework.security.web.access.ExceptionTranslationFilter@40ecead5, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@495e1ad1]
+2022-17-05 02:17:10 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-17-05 02:17:11 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-17-05 02:17:11 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+2022-17-05 02:17:11 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2022-17-05 02:17:11 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+2022-17-05 02:17:12 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: addCommentsUsingPOST_1
+2022-17-05 02:17:12 [main] INFO  s.d.s.w.r.o.CachingOperationNameGenerator - Generating unique operation named: getCommentsUsingGET_1
+2022-17-05 02:17:12 [main] INFO  c.d.cs.wanderer.WandererApplication - Started WandererApplication in 9.546 seconds (JVM running for 10.797)

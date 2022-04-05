@@ -6,7 +6,6 @@ import ca.dal.cs.wanderer.exception.category.PrincipalNotFound;
 import ca.dal.cs.wanderer.exception.category.pinexception.InvalidPinId;
 import ca.dal.cs.wanderer.exception.category.pinexception.InvalidPinRating;
 import ca.dal.cs.wanderer.exception.category.pinexception.PinNotFound;
-import ca.dal.cs.wanderer.exception.category.pinexception.RatingNotFound;
 import ca.dal.cs.wanderer.models.Pin;
 import ca.dal.cs.wanderer.models.PinRating;
 import ca.dal.cs.wanderer.models.User;
@@ -36,22 +35,21 @@ public class PinRatingsController {
     @Autowired
     private PinService pinService;
 
+    //Get all the ratings for a pin
     @GetMapping("/getRatings")
-    public ResponseEntity<GenericResponse<List<PinRating>>> getRatings(@RequestParam Integer pinId) {
+    public ResponseEntity<GenericResponse<List<PinRating>>> getRatings(@AuthenticationPrincipal OidcUser principal, @RequestParam Integer pinId) {
 
+        getUserId(principal);
         if (pinId <= 0) {
             throw new InvalidPinId(ErrorMessages.INVALID_PIN_ID);
         }
         List<PinRating> ratings = pinRatingsService.getRatings(pinId);
-        if (ratings.isEmpty()) {
-            throw new RatingNotFound(ErrorMessages.RATING_NOT_FOUND);
-        }
-        return ResponseEntity.ok(new GenericResponse<>(true, "Ratings retrieved successfully", ratings));
+        return ResponseEntity.ok(new GenericResponse<>(true, SuccessMessages.PIN_RATING_RETRIEVE_SUCCESS.getSuccessMessage(), ratings));
     }
 
+    //Get all the ratings for a pin of a user
     @GetMapping("/getRatingsById")
-    public ResponseEntity<GenericResponse<PinRating>> getRatingById(@AuthenticationPrincipal OidcUser principal,
-                                                                           @RequestParam Integer pinId) throws Exception {
+    public ResponseEntity<GenericResponse<PinRating>> getRatingById(@AuthenticationPrincipal OidcUser principal, @RequestParam Integer pinId) {
 
         Integer userId = getUserId(principal);
 
@@ -59,12 +57,11 @@ public class PinRatingsController {
             throw new InvalidPinId(ErrorMessages.INVALID_PIN_ID);
         }
         PinRating rating = pinRatingsService.getRatingsByID(userId, pinId);
-        if (rating == null) {
-            throw new RatingNotFound(ErrorMessages.RATING_NOT_FOUND);
-        }
-        return ResponseEntity.ok(new GenericResponse<>(true, "Rating retrieved successfully", rating));
+
+        return ResponseEntity.ok(new GenericResponse<>(true, SuccessMessages.PIN_RATING_RETRIEVE_SUCCESS.getSuccessMessage(), rating));
     }
 
+    //Add user ratings for a pin
     @PostMapping("/addRating")
     public ResponseEntity<GenericResponse<List<PinRating>>> addRating(@AuthenticationPrincipal OidcUser principal, @RequestParam Integer pinId,
                                                         @RequestParam Integer pinRating) {
@@ -75,7 +72,7 @@ public class PinRatingsController {
             throw new InvalidPinId(ErrorMessages.INVALID_PIN_ID);
         }
 
-        Pin pin = pinService.getSinglePin(pinId);
+        Pin pin = pinService.getPinById(pinId);
         if (pin == null) {
             throw new PinNotFound(ErrorMessages.PIN_NOT_FOUND);
         }
@@ -96,7 +93,11 @@ public class PinRatingsController {
         if (email == null) {
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
         }
-        User authenticatedUser = userProfileService.fetchByEmail(email);
-        return authenticatedUser.getId();
+
+        User user = userProfileService.fetchByEmail(email);
+        if(user==null) {
+            throw new PrincipalNotFound(ErrorMessages.PRINCIPAL_NOT_FOUND);
+        }
+        return user.getId();
     }
 }

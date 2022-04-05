@@ -31,19 +31,14 @@ public class BlogPostService {
         String blogDescription = blog.getBlogDescription();
         String blogAuthor = user.getFirstName() + " " + user.getLastName();
 
-        if(blogId != null && blogId <=0) {
-            throw new InvalidBlogId(ErrorMessages.INVALID_BLOG_ID);
+        Blog blogToUpdate;
+
+        if(blogTitle == null || blogTitle.isEmpty()) {
+            throw new BlogTitleIsEmpty(ErrorMessages.BLOG_TITLE_NOT_FOUND);
         }
 
-        if(blogId != null) {
-            Blog blogToUpdate = blogPostRepository.findById(blogId).orElse(null);
-            if(blogToUpdate == null) {
-                throw new BlogNotFound(ErrorMessages.BLOG_NOT_FOUND);
-            }
-            // check if blog is owned by user
-            if(!Objects.equals(blogToUpdate.getUser().getId(), user.getId())) {
-                throw new UnauthorizedBlogAccess(ErrorMessages.UNAUTHORIZED_BLOG_ACCESS);
-            }
+        if(blogDescription == null || blogDescription.isEmpty()) {
+            throw new BlogDescriptionIsEmpty(ErrorMessages.BLOG_DESCRIPTION_NOT_FOUND);
         }
 
         byte[] blogImageBytes = null;
@@ -55,31 +50,27 @@ public class BlogPostService {
             }
         }
 
-        Blog newBlog;
-
-        if(blogTitle == null || blogTitle.isEmpty()) {
-            throw new BlogTitleIsEmpty(ErrorMessages.BLOG_TITLE_NOT_FOUND);
-        }
-
-        if(blogDescription == null || blogDescription.isEmpty()) {
-            throw new BlogDescriptionIsEmpty(ErrorMessages.BLOG_DESCRIPTION_NOT_FOUND);
+        if(blogId != null && blogId <=0) {
+            throw new InvalidBlogId(ErrorMessages.INVALID_BLOG_ID);
         }
 
         if(blogId != null) {
-            newBlog = showSingleBlog(blogId);
-
-            if(newBlog == null) {
+            blogToUpdate = showSingleBlog(blogId);
+            if(blogToUpdate == null) {
                 throw new BlogNotFound(ErrorMessages.BLOG_NOT_FOUND);
             }
+            // check if blog is owned by user
+            if(!Objects.equals(blogToUpdate.getUser().getId(), user.getId())) {
+                throw new UnauthorizedBlogAccess(ErrorMessages.UNAUTHORIZED_BLOG_ACCESS);
+            }
 
-            newBlog.setBlogDescription(blogDescription);
-            newBlog.setBlogTitle(blogTitle);
-            newBlog.setBlogAuthor(blogAuthor);
-            newBlog.setBlogImage(blogImageBytes);
+            blogToUpdate.setBlogDescription(blogDescription);
+            blogToUpdate.setBlogTitle(blogTitle);
+            blogToUpdate.setBlogImage(blogImageBytes);
         } else {
-            newBlog = new Blog(blogDescription, blogTitle, blogAuthor, blogImageBytes, java.time.LocalDate.now(), user);
+            blogToUpdate = new Blog(blogDescription, blogTitle, blogAuthor, blogImageBytes, java.time.LocalDate.now(), user);
         }
-        return blogPostRepository.save(newBlog);
+        return blogPostRepository.save(blogToUpdate);
     }
 
     public List<Blog> showAllBlogs() {

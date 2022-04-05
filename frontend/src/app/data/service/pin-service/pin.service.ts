@@ -12,13 +12,6 @@ export class PinService {
 
   constructor(private http: HttpClient) {}
 
-  insertPin(pin: Pin) {
-    return this.http.post(
-      this.controllerEndPoint + '/createPin',
-      pin
-    );
-  }
-
   insertPinWithImages(pin: Pin, images: any[]) {
     const formData: FormData = new FormData();
     formData.append('pin', new Blob([JSON.stringify(pin)], {
@@ -42,26 +35,6 @@ export class PinService {
           centerLat,
           centerLng,
         },
-      }
-    );
-  }
-
-  updatePin(
-    pinId: number,
-    locationName: string,
-    latitude: number,
-    longitude: number
-  ) {
-    const params: HttpParams = new HttpParams()
-    .set('pinId', pinId)
-    .set('locationName', locationName)
-    .set('latitude', latitude)
-    .set('longitude', longitude)
-    return this.http.put(
-      this.controllerEndPoint + '/updatePin',
-      null,
-      {
-        params: params
       }
     );
   }

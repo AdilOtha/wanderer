@@ -49,15 +49,7 @@
             </ng-container>
           </div>
           <div class="col-12 field">
-            <label for="blogDescription">Blog Content: </label>
-            <!-- <textarea
-              id="blogDescription"
-              pInputTextarea
-              formControlName="blogDescription"
-              [autoResize]="true"
-              rows="15"
-              cols="45"
-            ></textarea> -->
+            <label for="blogDescription">Blog Content: </label>            
             <p-editor formControlName="blogDescription" [style]="{'height':'40vh'}"></p-editor>
             <ng-container
               *ngIf="

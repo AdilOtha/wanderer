@@ -22,8 +22,7 @@ export class UserProfileComponent implements OnInit {
 
   submitted: boolean = false;
 
-  readonly DEFAULT_PROFILE_IMAGE =
-    'https://images.unsplash.com/photo-1645785538675-f81e7dbab4b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80';
+  readonly DEFAULT_PROFILE_IMAGE = 'assets/images/login-logo.jpg';
 
   profileImage: any = this.DEFAULT_PROFILE_IMAGE;
 
@@ -60,7 +59,6 @@ export class UserProfileComponent implements OnInit {
       )
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           
           const userData = data.payload;
           this.firstName = userData.firstName;
@@ -104,7 +102,6 @@ export class UserProfileComponent implements OnInit {
     this.submitted = true;
     if (this.saveForm.valid) {
       this.spinner.show();
-      console.log('form submitted');
       const userProfile: UserProfile = {
         firstName: this.saveForm.controls['firstName'].value,
         lastName: this.saveForm.controls['lastName'].value,
@@ -121,7 +118,6 @@ export class UserProfileComponent implements OnInit {
         )
         .subscribe({
           next: (data: any) => {
-            console.log(data);
             
             const updatedUser = data.payload;
             this.firstName = updatedUser.firstName;
@@ -131,8 +127,6 @@ export class UserProfileComponent implements OnInit {
               updatedUser.firstName
             );
             this.saveForm.controls['lastName'].patchValue(updatedUser.lastName);
-
-            console.log(data);
 
             if (this.profileImage instanceof Blob) {
               const reader = new FileReader();
@@ -162,10 +156,11 @@ export class UserProfileComponent implements OnInit {
     if(event.files.length===0){
       return;
     }
-    console.log(event.files[0]);
-    // show error if file is of type svg
-    if (event.files[0].type === 'image/svg+xml') {
-      this.toast.error('SVG files are not allowed');
+    if (
+      event.files[0].type !== 'image/jpeg' &&
+      event.files[0].type !== 'image/png'
+    ) {
+      this.toast.error('Please upload a jpeg or png file');
       this.imageUpload.clear();
       return;
     }
@@ -176,13 +171,10 @@ export class UserProfileComponent implements OnInit {
       return;
     }
     this.profileImage = event.files[0];
-    // console.log(this.saveForm.controls['profileImage'].value);
   }
 
   onProfileImageClear(event: any) {
-    // console.log(event);
     this.profileImage = '';
     this.uploadedFilename = '';
-    // console.log('Cancel Triggered');
   }
 }

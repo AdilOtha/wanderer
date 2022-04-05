@@ -72,7 +72,6 @@ export class BlogEditorComponent implements OnInit {
   submitBlogForm() {
     this.blogFormSubmitted = true;
     if (this.blogForm.valid) {
-      console.log(this.blogForm.value);
       this.spinner.show();
 
       // if savedBlogImage is not null then convert it to Blob using fetch api
@@ -114,7 +113,6 @@ export class BlogEditorComponent implements OnInit {
       )
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           // if currentBlogId is a not null and a number then show update toast
           if (this.currentBlogId && !isNaN(this.currentBlogId)) {
             this.toast.info('Blog updated successfully');
@@ -164,7 +162,6 @@ export class BlogEditorComponent implements OnInit {
       this.imageUpload.clear();
       return;
     }
-    console.log(event.files[0]);    
     // clear files if number of files is greater than 5
     if (event.files.length > 1) {
       this.toast.error('Please upload a maximum of 1 file');
@@ -176,10 +173,8 @@ export class BlogEditorComponent implements OnInit {
   }
 
   onBlogImageClear(event: any) {
-    // console.log(event);
     this.blogImage = null;
     this.uploadedFilename = '';
-    // console.log('Cancel Triggered');
   }
 
   deleteSavedBlogImage() {
@@ -213,7 +208,6 @@ export class BlogEditorComponent implements OnInit {
               )
               .subscribe({
                 next: (data: any) => {
-                  console.log(data);
                   const blog: any = data?.payload;
 
                   if(blog?.user?.id!==this.currentUserId){
