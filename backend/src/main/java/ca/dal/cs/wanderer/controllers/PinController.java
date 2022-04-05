@@ -35,7 +35,7 @@ public class PinController {
     @Autowired
     private UserProfileService userProfileService;
 
-    private final static int MAX_LOCATION_NAME_LENGTH = 50;
+    private final static int MAX_LOCATION_NAME_LENGTH = 255;
     private final static int MAX_DESCRIPTION_LENGTH = 1000;
     private final static int MIN_LATITUDE = -90;
     private final static int MAX_LATITUDE = 90;
