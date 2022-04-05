@@ -53,7 +53,7 @@
               </ng-template>
             </ng-container>            
             <ng-template pTemplate="footer">
-              <div class="flex justify-content-between">
+              <div class="flex justify-content-around">
                 <p-button
                   label="Edit"
                   icon="pi pi-pencil"
@@ -62,12 +62,19 @@
                   (click)="navigateToBlog(blog?.blogId)"
                 ></p-button>
                 <p-button
+                  label="View"
+                  icon="pi pi-eye"
+                  type="button"
+                  styleClass="p-button-rounded p-button-info p-button-raised"
+                  (click)="navigateToSingleBlog(blog?.blogId)"
+                ></p-button>
+                <p-button
                   label="Delete"
                   icon="pi pi-trash"
-                  styleClass="p-button-danger p-button-rounded p-button-raised p-button-outlined ml-4"
+                  styleClass="p-button-danger p-button-rounded p-button-raised p-button-outlined"
                   (click)="showResponsiveDialog(blog?.blogId)"
                 ></p-button>
-              </div>
+            </div>
             </ng-template>
           </p-card>
         </ng-container>

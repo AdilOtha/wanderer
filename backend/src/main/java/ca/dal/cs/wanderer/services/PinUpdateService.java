@@ -12,11 +12,14 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class PinUpdateService {
-    String DOCUMENT_ID = "0dZ4madili5WE9g9iIqn";
+    private final static String DOCUMENT_ID = "0dZ4madili5WE9g9iIqn";
+    private final static String COLLECTION_NAME = "pin_updates";
+
+    // Sends a pin update to the firestore database
     public String sendPinUpdate() throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         PinUpdate pinUpdate = new PinUpdate(DOCUMENT_ID, new Date());
-        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection("pin_updates").document(DOCUMENT_ID).set(pinUpdate);
+        ApiFuture<WriteResult> collectionApiFuture = dbFirestore.collection(COLLECTION_NAME).document(DOCUMENT_ID).set(pinUpdate);
         return collectionApiFuture.get().getUpdateTime().toString();
     }
 }

@@ -32,7 +32,6 @@ export class BlogFeedComponent implements OnInit {
     )
     .subscribe({
       next: (data: any) => {
-        console.log(data);
         let blogs: any = data?.payload;
         // convert blog image to base64
         blogs?.forEach((blog: any) => {

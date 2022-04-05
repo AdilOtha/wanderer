@@ -63,7 +63,7 @@ public class PinCommentsController {
             throw new InvalidPinId(ErrorMessages.INVALID_PIN_ID);
         }
 
-        Pin pin = pinService.getSinglePin(pinId);
+        Pin pin = pinService.getPinById(pinId);
         if (pin == null) {
             throw new PinNotFound(ErrorMessages.PIN_NOT_FOUND);
         }
@@ -73,7 +73,7 @@ public class PinCommentsController {
         }
 
         PinComment pinComment = pinCommentsService.addComment(user, pin, comment);
-        pinComment.getUser();
+
         return ResponseEntity.ok(new GenericResponse<>(true, "Comment added successfully", pinComment));
     }
 }
