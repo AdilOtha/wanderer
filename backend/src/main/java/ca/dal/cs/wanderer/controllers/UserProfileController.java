@@ -8,6 +8,8 @@ import ca.dal.cs.wanderer.services.UserProfileService;
 import ca.dal.cs.wanderer.util.ErrorMessages;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ public class UserProfileController {
 
     @Autowired
     private ObjectMapper mapper;
+    Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
     //method to get fetch the details of an individual user
     @GetMapping("/getDetails")
@@ -41,6 +44,7 @@ public class UserProfileController {
         String email = principal.getEmail();
 
         if (email == null) {
+            logger.warn("Empty email is captured");
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
         }
 
@@ -77,15 +81,18 @@ public class UserProfileController {
         String email = principal.getEmail();
 
         if (email == null) {
+            logger.warn("Empty email is captured");
             throw new EmailNotFound(ErrorMessages.EMAIL_NOT_FOUND);
         }
 
         User user = service.fetchByEmail(email);
 
         if (fName == null) {
+            logger.info("Fetching first name from Principal");
             fName = principal.getGivenName();
         }
         if (lName == null) {
+            logger.info("Fetching last name from Principal");
             lName = principal.getFamilyName();
         }
         User savedUser = service.updateProfile(file, user, fName, lName);
