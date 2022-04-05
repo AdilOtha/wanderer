@@ -19,6 +19,7 @@ public class UserProfileService {
         return repo.findByEmailId(email);
     }
 
+    //this method sets the existing fields to new fields via request params
     public User updateProfile(MultipartFile file, User user, String fName, String lName) throws IOException {
         // user.setBlogImage();
 

@@ -20,8 +20,10 @@ import java.util.List;
 @Profile("!prod")
 public class SwaggerConf {
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+
+    //method to generate the REST Api info in swagger profile
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Wanderer")
@@ -44,6 +46,7 @@ public class SwaggerConf {
                 .build();
     }
 
+    //below method generates a Authorize button in swagger
     private ApiKey apiKey() {
         return new ApiKey("Token", AUTHORIZATION_HEADER, "header");
     }
@@ -52,6 +55,7 @@ public class SwaggerConf {
         return SecurityContext.builder().securityReferences(defaultAuth()).build();
     }
 
+    //This method accepts the token and passes it into the header using the authorization header
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];

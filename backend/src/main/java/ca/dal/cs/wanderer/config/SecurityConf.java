@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -40,9 +39,15 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuthSuccessHandler oAuthSuccessHandler;
 
-    protected static  final String[] AUTH_WHITE_LIST={
+    protected static final String[] AUTH_WHITE_LIST = {
             "/swagger-ui.html"
     };
+
+    //method to allow swagger bypassing the security, uncomment this while debugging api issues
+ /*   @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(AUTH_WHITE_LIST);
+    }*/
 
     // method for setting application security configuration
     @Override
@@ -71,7 +76,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",
                 "https://wanderergroup21frontend.herokuapp.com/",
                 "https://wanderer-live.herokuapp.com/"));
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://wanderergroup21frontend.herokuapp.com/","https://wanderer-live.com/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://wanderergroup21frontend.herokuapp.com/", "https://wanderer-live.com/"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Authorization", "Cache-Control", "Content-Type", "xsrfheadername", "xsrfcookiename"
