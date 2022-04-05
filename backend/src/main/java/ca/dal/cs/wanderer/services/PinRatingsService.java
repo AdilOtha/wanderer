@@ -18,10 +18,12 @@ public class PinRatingsService {
     @Autowired
     PinRepository pinRepository;
 
+    //Get ratings by pinId
     public List<PinRating> getRatings(Integer pinId) {
         return pinRatingRepository.findAllByPinId(pinId);
     }
 
+    //Add ratings and save the parent object(Pin)
     public List<PinRating> addRatings(Integer userId, Pin pin, Integer pinRating) {
         PinRating pinRatingObject = pinRatingRepository.findPinRatingByUserIdAndPinId(userId, pin.getPinId());
         if(pinRatingObject == null) {
@@ -35,6 +37,7 @@ public class PinRatingsService {
         return this.getRatings(pin.getPinId());
     }
 
+    //Get ratings by pinId for a user
     public PinRating getRatingsByID(Integer userId, Integer pinId) {
         return pinRatingRepository.findPinRatingByUserIdAndPinId(userId, pinId);
     }
