@@ -59,5 +59,7 @@ public class Blog {
         this.user = user;
     }
 
-    public void addBlogComment(BlogComment blogComment) { blogComments.add(blogComment); }
+    public void addBlogComment(BlogComment blogComment) {
+        blogComments.add(blogComment);
+    }
 }

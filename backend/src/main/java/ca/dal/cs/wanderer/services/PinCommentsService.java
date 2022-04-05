@@ -19,10 +19,12 @@ public class PinCommentsService {
     @Autowired
     PinRepository pinRepository;
 
+    //Get comments by pinID
     public List<PinComment> getComments(Integer pinId) {
         return pinCommentRepository.findAllByPinId(pinId);
     }
 
+    //Add comment and the save in the parent object(Pin)
     public PinComment addComment(User user, Pin pin, String comment) {
         PinComment pinComment = new PinComment(user, comment, java.time.LocalDate.now());
         pinComment.setPin(pin);
